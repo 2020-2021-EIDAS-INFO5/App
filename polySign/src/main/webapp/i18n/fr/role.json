@@ -1,0 +1,9 @@
+{
+  "polySignApp": {
+    "Role": {
+      "null": "",
+      "ADMIN": "ADMIN",
+      "USER": "USER"
+    }
+  }
+}

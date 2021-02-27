@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.9.xsd">
+    <!--
+        Added the constraints for entity SignOrder.
+    -->
+    <changeSet id="20210227191051-2" author="jhipster">
+        
+        <addForeignKeyConstraint baseColumnNames="file_id"
+                                 baseTableName="sign_order"
+                                 constraintName="fk_sign_order_file_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="signed_file"/>
+
+        <addForeignKeyConstraint baseColumnNames="signer_id"
+                                 baseTableName="sign_order"
+                                 constraintName="fk_sign_order_signer_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="user_entity"/>
+
+    </changeSet>
+</databaseChangeLog>

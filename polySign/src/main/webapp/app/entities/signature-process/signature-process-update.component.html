@@ -1,0 +1,107 @@
+<div class="row justify-content-center">
+    <div class="col-8">
+        <form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
+            <h2 id="jhi-signature-process-heading" jhiTranslate="polySignApp.signatureProcess.home.createOrEditLabel">Create or edit a Signature Process</h2>
+
+            <div>
+                <jhi-alert-error></jhi-alert-error>
+
+                <div class="form-group" [hidden]="!editForm.get('id')!.value">
+                    <label for="id" jhiTranslate="global.field.id">ID</label>
+                    <input type="text" class="form-control" id="id" name="id" formControlName="id" readonly />
+                </div>
+
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="polySignApp.signatureProcess.emissionDate" for="field_emissionDate">Emission Date</label>
+                    <div class="d-flex">
+                        <input id="field_emissionDate" type="datetime-local" class="form-control" name="emissionDate" formControlName="emissionDate" placeholder="YYYY-MM-DD HH:mm"/>
+                    </div>
+                    <div *ngIf="editForm.get('emissionDate')!.invalid && (editForm.get('emissionDate')!.dirty || editForm.get('emissionDate')!.touched)">
+                        <small class="form-text text-danger"
+                               *ngIf="editForm.get('emissionDate')?.errors?.required" jhiTranslate="entity.validation.required">
+                        This field is required.
+                        </small>
+                        <small class="form-text text-danger"
+                            [hidden]="!editForm.get('emissionDate')?.errors?.ZonedDateTimelocal" jhiTranslate="entity.validation.ZonedDateTimelocal">
+                            This field should be a date and time.
+                        </small>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="polySignApp.signatureProcess.expirationDate" for="field_expirationDate">Expiration Date</label>
+                    <div class="d-flex">
+                        <input id="field_expirationDate" type="datetime-local" class="form-control" name="expirationDate" formControlName="expirationDate" placeholder="YYYY-MM-DD HH:mm"/>
+                    </div>
+                    <div *ngIf="editForm.get('expirationDate')!.invalid && (editForm.get('expirationDate')!.dirty || editForm.get('expirationDate')!.touched)">
+                        <small class="form-text text-danger"
+                               *ngIf="editForm.get('expirationDate')?.errors?.required" jhiTranslate="entity.validation.required">
+                        This field is required.
+                        </small>
+                        <small class="form-text text-danger"
+                            [hidden]="!editForm.get('expirationDate')?.errors?.ZonedDateTimelocal" jhiTranslate="entity.validation.ZonedDateTimelocal">
+                            This field should be a date and time.
+                        </small>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="polySignApp.signatureProcess.title" for="field_title">Title</label>
+                    <input type="text" class="form-control" name="title" id="field_title"
+                           formControlName="title"/>
+                    <div *ngIf="editForm.get('title')!.invalid && (editForm.get('title')!.dirty || editForm.get('title')!.touched)">
+                        <small class="form-text text-danger"
+                               *ngIf="editForm.get('title')?.errors?.required" jhiTranslate="entity.validation.required">
+                        This field is required.
+                        </small>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="polySignApp.signatureProcess.status" for="field_status">Status</label>
+                    <select class="form-control" name="status" formControlName="status" id="field_status">
+                        <option value="COMPLETED">{{ 'polySignApp.Status.COMPLETED' | translate }}</option>
+                        <option value="PENDING">{{ 'polySignApp.Status.PENDING' | translate }}</option>
+                        <option value="CANCELLED">{{ 'polySignApp.Status.CANCELLED' | translate }}</option>
+                    </select>
+                    <div *ngIf="editForm.get('status')!.invalid && (editForm.get('status')!.dirty || editForm.get('status')!.touched)">
+                        <small class="form-text text-danger"
+                               *ngIf="editForm.get('status')?.errors?.required" jhiTranslate="entity.validation.required">
+                        This field is required.
+                        </small>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="polySignApp.signatureProcess.orderedSigning" for="field_orderedSigning">Ordered Signing</label>
+                    <input type="checkbox" class="form-control" name="orderedSigning" id="field_orderedSigning"
+                           formControlName="orderedSigning"/>
+                    <div *ngIf="editForm.get('orderedSigning')!.invalid && (editForm.get('orderedSigning')!.dirty || editForm.get('orderedSigning')!.touched)">
+                        <small class="form-text text-danger"
+                               *ngIf="editForm.get('orderedSigning')?.errors?.required" jhiTranslate="entity.validation.required">
+                        This field is required.
+                        </small>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="polySignApp.signatureProcess.creator" for="field_creator">Creator</label>
+                    <select class="form-control" id="field_creator" name="creator" formControlName="creator">
+                        <option [ngValue]="null"></option>
+                        <option [ngValue]="authenticatedUserOption.id === editForm.get('creator')!.value?.id ? editForm.get('creator')!.value : authenticatedUserOption" *ngFor="let authenticatedUserOption of authenticatedusers; trackBy: trackById">{{ authenticatedUserOption.id }}</option>
+                    </select>
+                </div>
+            </div>
+
+            <div>
+                <button type="button" id="cancel-save" class="btn btn-secondary" (click)="previousState()">
+                    <fa-icon icon="ban"></fa-icon>&nbsp;<span jhiTranslate="entity.action.cancel">Cancel</span>
+                </button>
+
+                <button type="submit" id="save-entity" [disabled]="editForm.invalid || isSaving" class="btn btn-primary">
+                    <fa-icon icon="save"></fa-icon>&nbsp;<span jhiTranslate="entity.action.save">Save</span>
+                </button>
+            </div>
+        </form>
+    </div>
+</div>

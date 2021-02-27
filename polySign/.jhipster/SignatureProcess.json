@@ -1,0 +1,57 @@
+{
+  "name": "SignatureProcess",
+  "fields": [
+    {
+      "fieldName": "emissionDate",
+      "fieldType": "Instant",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "expirationDate",
+      "fieldType": "Instant",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "title",
+      "fieldType": "String",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "status",
+      "fieldType": "Status",
+      "fieldValues": "COMPLETED,PENDING,CANCELLED",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "orderedSigning",
+      "fieldType": "Boolean",
+      "fieldValidateRules": ["required"]
+    }
+  ],
+  "relationships": [
+    {
+      "relationshipType": "one-to-many",
+      "otherEntityName": "signedFile",
+      "otherEntityRelationshipName": "signature",
+      "relationshipName": "file"
+    },
+    {
+      "relationshipType": "many-to-one",
+      "otherEntityName": "authenticatedUser",
+      "otherEntityRelationshipName": "signature",
+      "relationshipName": "creator",
+      "otherEntityField": "id"
+    }
+  ],
+  "changelogDate": "20210227190851",
+  "entityTableName": "signature_process",
+  "dto": "no",
+  "pagination": "pagination",
+  "service": "serviceClass",
+  "jpaMetamodelFiltering": false,
+  "fluentMethods": true,
+  "readOnly": false,
+  "embedded": false,
+  "clientRootFolder": "",
+  "applications": ["polySign"]
+}

@@ -1,0 +1,51 @@
+<div class="row justify-content-center">
+    <div class="col-8">
+        <div *ngIf="signedFile">
+            <h2><span jhiTranslate="polySignApp.signedFile.detail.title">Signed File</span> {{ signedFile.id }}</h2>
+
+            <hr>
+
+            <jhi-alert-error></jhi-alert-error>
+
+            <dl class="row-md jh-entity-details">
+                <dt><span jhiTranslate="polySignApp.signedFile.filename">Filename</span></dt>
+                <dd>
+                    <span>{{ signedFile.filename }}</span>
+                </dd>
+                <dt><span jhiTranslate="polySignApp.signedFile.fileBytes">File Bytes</span></dt>
+                <dd>
+                    <div *ngIf="signedFile.fileBytes">
+                        <a (click)="openFile(signedFile.fileBytesContentType, signedFile.fileBytes)" jhiTranslate="entity.action.open">open</a>
+                        {{ signedFile.fileBytesContentType }}, {{ byteSize(signedFile.fileBytes) }}
+                    </div>
+                </dd>
+                <dt><span jhiTranslate="polySignApp.signedFile.signingDate">Signing Date</span></dt>
+                <dd>
+                    <span>{{ signedFile.signingDate }}</span>
+                </dd>
+                <dt><span jhiTranslate="polySignApp.signedFile.size">Size</span></dt>
+                <dd>
+                    <span>{{ signedFile.size }}</span>
+                </dd>
+                <dt><span jhiTranslate="polySignApp.signedFile.signature">Signature</span></dt>
+                <dd>
+                    <div *ngIf="signedFile.signature">
+                        <a [routerLink]="['/signature-process', signedFile.signature?.id, 'view']">{{ signedFile.signature?.id }}</a>
+                    </div>
+                </dd>
+            </dl>
+
+            <button type="submit"
+                    (click)="previousState()"
+                    class="btn btn-info">
+                <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back">Back</span>
+            </button>
+
+            <button type="button"
+                    [routerLink]="['/signed-file', signedFile.id, 'edit']"
+                    class="btn btn-primary">
+                <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit">Edit</span>
+            </button>
+        </div>
+    </div>
+</div>

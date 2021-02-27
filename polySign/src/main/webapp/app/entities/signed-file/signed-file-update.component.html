@@ -1,0 +1,88 @@
+<div class="row justify-content-center">
+    <div class="col-8">
+        <form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
+            <h2 id="jhi-signed-file-heading" jhiTranslate="polySignApp.signedFile.home.createOrEditLabel">Create or edit a Signed File</h2>
+
+            <div>
+                <jhi-alert-error></jhi-alert-error>
+
+                <div class="form-group" [hidden]="!editForm.get('id')!.value">
+                    <label for="id" jhiTranslate="global.field.id">ID</label>
+                    <input type="text" class="form-control" id="id" name="id" formControlName="id" readonly />
+                </div>
+
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="polySignApp.signedFile.filename" for="field_filename">Filename</label>
+                    <input type="text" class="form-control" name="filename" id="field_filename"
+                           formControlName="filename"/>
+                    <div *ngIf="editForm.get('filename')!.invalid && (editForm.get('filename')!.dirty || editForm.get('filename')!.touched)">
+                        <small class="form-text text-danger"
+                               *ngIf="editForm.get('filename')?.errors?.required" jhiTranslate="entity.validation.required">
+                        This field is required.
+                        </small>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="polySignApp.signedFile.fileBytes" for="field_fileBytes">File Bytes</label>
+                    <div>
+                        <div *ngIf="editForm.get('fileBytes')!.value" class="form-text text-danger clearfix">
+                            <a class="pull-left" (click)="openFile(editForm.get('fileBytesContentType')!.value, editForm.get('fileBytes')!.value)" jhiTranslate="entity.action.open">open</a><br>
+                            <span class="pull-left">{{ editForm.get('fileBytesContentType')!.value }}, {{ byteSize(editForm.get('fileBytes')!.value) }}</span>
+                            <button type="button" (click)="editForm.patchValue({fileBytes: null});editForm.patchValue({fileBytesContentType: null});"
+                                    class="btn btn-secondary btn-xs pull-right">
+                                <fa-icon icon="times"></fa-icon>
+                            </button>
+                        </div>
+                        <input type="file" id="file_fileBytes" (change)="setFileData($event, 'fileBytes', false)" jhiTranslate="entity.action.addblob"/>
+                    </div>
+                    <input type="hidden" class="form-control" name="fileBytes" id="field_fileBytes"
+                           formControlName="fileBytes"/>
+                    <input type="hidden" class="form-control" name="fileBytesContentType" id="field_fileBytesContentType"
+                           formControlName="fileBytesContentType" />
+                </div>
+
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="polySignApp.signedFile.signingDate" for="field_signingDate">Signing Date</label>
+                    <div class="d-flex">
+                        <input id="field_signingDate" type="datetime-local" class="form-control" name="signingDate" formControlName="signingDate" placeholder="YYYY-MM-DD HH:mm"/>
+                    </div>
+                    <div *ngIf="editForm.get('signingDate')!.invalid && (editForm.get('signingDate')!.dirty || editForm.get('signingDate')!.touched)">
+                        <small class="form-text text-danger"
+                               *ngIf="editForm.get('signingDate')?.errors?.required" jhiTranslate="entity.validation.required">
+                        This field is required.
+                        </small>
+                        <small class="form-text text-danger"
+                            [hidden]="!editForm.get('signingDate')?.errors?.ZonedDateTimelocal" jhiTranslate="entity.validation.ZonedDateTimelocal">
+                            This field should be a date and time.
+                        </small>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="polySignApp.signedFile.size" for="field_size">Size</label>
+                    <input type="number" class="form-control" name="size" id="field_size"
+                           formControlName="size"/>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="polySignApp.signedFile.signature" for="field_signature">Signature</label>
+                    <select class="form-control" id="field_signature" name="signature" formControlName="signature">
+                        <option [ngValue]="null"></option>
+                        <option [ngValue]="signatureProcessOption.id === editForm.get('signature')!.value?.id ? editForm.get('signature')!.value : signatureProcessOption" *ngFor="let signatureProcessOption of signatureprocesses; trackBy: trackById">{{ signatureProcessOption.id }}</option>
+                    </select>
+                </div>
+            </div>
+
+            <div>
+                <button type="button" id="cancel-save" class="btn btn-secondary" (click)="previousState()">
+                    <fa-icon icon="ban"></fa-icon>&nbsp;<span jhiTranslate="entity.action.cancel">Cancel</span>
+                </button>
+
+                <button type="submit" id="save-entity" [disabled]="editForm.invalid || isSaving" class="btn btn-primary">
+                    <fa-icon icon="save"></fa-icon>&nbsp;<span jhiTranslate="entity.action.save">Save</span>
+                </button>
+            </div>
+        </form>
+    </div>
+</div>

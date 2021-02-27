@@ -1,0 +1,46 @@
+<div class="row justify-content-center">
+    <div class="col-8">
+        <div *ngIf="signOrder">
+            <h2><span jhiTranslate="polySignApp.signOrder.detail.title">Sign Order</span> {{ signOrder.id }}</h2>
+
+            <hr>
+
+            <jhi-alert-error></jhi-alert-error>
+
+            <dl class="row-md jh-entity-details">
+                <dt><span jhiTranslate="polySignApp.signOrder.rank">Rank</span></dt>
+                <dd>
+                    <span>{{ signOrder.rank }}</span>
+                </dd>
+                <dt><span jhiTranslate="polySignApp.signOrder.signatureMethod">Signature Method</span></dt>
+                <dd>
+                    <span jhiTranslate="{{ 'polySignApp.SignatureMethod.' + signOrder.signatureMethod }}">{{ signOrder.signatureMethod }}</span>
+                </dd>
+                <dt><span jhiTranslate="polySignApp.signOrder.file">File</span></dt>
+                <dd>
+                    <div *ngIf="signOrder.file">
+                        <a [routerLink]="['/signed-file', signOrder.file?.id, 'view']">{{ signOrder.file?.id }}</a>
+                    </div>
+                </dd>
+                <dt><span jhiTranslate="polySignApp.signOrder.signer">Signer</span></dt>
+                <dd>
+                    <div *ngIf="signOrder.signer">
+                        <a [routerLink]="['/user-entity', signOrder.signer?.id, 'view']">{{ signOrder.signer?.id }}</a>
+                    </div>
+                </dd>
+            </dl>
+
+            <button type="submit"
+                    (click)="previousState()"
+                    class="btn btn-info">
+                <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back">Back</span>
+            </button>
+
+            <button type="button"
+                    [routerLink]="['/sign-order', signOrder.id, 'edit']"
+                    class="btn btn-primary">
+                <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit">Edit</span>
+            </button>
+        </div>
+    </div>
+</div>

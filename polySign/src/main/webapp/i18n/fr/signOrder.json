@@ -1,0 +1,25 @@
+{
+  "polySignApp": {
+    "signOrder": {
+      "home": {
+        "title": "SignOrders",
+        "createLabel": "Créer un nouveau Sign Order",
+        "createOrEditLabel": "Créer ou éditer un Sign Order",
+        "notFound": "Aucun Sign Order trouvé"
+      },
+      "created": "Un nouveau Sign Order a été créé avec l'identifiant {{ param }}",
+      "updated": "Le Sign Order avec l'identifiant {{ param }} a été mis à jour",
+      "deleted": "Le Sign Order avec l'identifiant {{ param }} a été supprimé",
+      "delete": {
+        "question": "Etes-vous certain de vouloir supprimer le Sign Order {{ id }} ?"
+      },
+      "detail": {
+        "title": "Sign Order"
+      },
+      "rank": "Rank",
+      "signatureMethod": "Signature Method",
+      "file": "File",
+      "signer": "Signer"
+    }
+  }
+}

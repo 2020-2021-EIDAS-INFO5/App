@@ -1,0 +1,10 @@
+{
+  "polySignApp": {
+    "SignatureMethod": {
+      "null": "",
+      "EMAIL": "EMAIL",
+      "SMS": "SMS",
+      "OTP": "OTP"
+    }
+  }
+}

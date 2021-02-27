@@ -1,0 +1,81 @@
+<div>
+    <h2 id="page-heading">
+        <span jhiTranslate="polySignApp.userEntity.home.title">User Entities</span>
+
+        <button id="jh-create-entity" class="btn btn-primary float-right jh-create-entity create-user-entity" [routerLink]="['/user-entity/new']">
+            <fa-icon icon="plus"></fa-icon>
+            <span  jhiTranslate="polySignApp.userEntity.home.createLabel">
+            Create a new User Entity
+            </span>
+        </button>
+    </h2>
+
+    <jhi-alert-error></jhi-alert-error>
+
+    <jhi-alert></jhi-alert>
+
+    <div class="alert alert-warning" id="no-result" *ngIf="userEntities?.length === 0">
+        <span jhiTranslate="polySignApp.userEntity.home.notFound">No userEntities found</span>
+    </div>
+
+    <div class="table-responsive" id="entities" *ngIf="userEntities && userEntities.length > 0">
+        <table class="table table-striped" aria-describedby="page-heading">
+            <thead>
+                <tr jhiSort [(predicate)]="predicate" [(ascending)]="ascending" [callback]="loadPage.bind(this)">
+                    <th scope="col"  jhiSortBy="id"><span jhiTranslate="global.field.id">ID</span> <fa-icon icon="sort"></fa-icon></th>
+                    <th scope="col"  jhiSortBy="firstName"><span jhiTranslate="polySignApp.userEntity.firstName">First Name</span> <fa-icon icon="sort"></fa-icon></th>
+                    <th scope="col"  jhiSortBy="lastName"><span jhiTranslate="polySignApp.userEntity.lastName">Last Name</span> <fa-icon icon="sort"></fa-icon></th>
+                    <th scope="col"  jhiSortBy="email"><span jhiTranslate="polySignApp.userEntity.email">Email</span> <fa-icon icon="sort"></fa-icon></th>
+                    <th scope="col"  jhiSortBy="phone"><span jhiTranslate="polySignApp.userEntity.phone">Phone</span> <fa-icon icon="sort"></fa-icon></th>
+                    <th scope="col"  jhiSortBy="user.id"><span jhiTranslate="polySignApp.userEntity.user">User</span> <fa-icon icon="sort"></fa-icon></th>
+                    <th scope="col"></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let userEntity of userEntities ;trackBy: trackId">
+                    <td><a [routerLink]="['/user-entity', userEntity.id, 'view']">{{ userEntity.id }}</a></td>
+                    <td>{{ userEntity.firstName }}</td>
+                    <td>{{ userEntity.lastName }}</td>
+                    <td>{{ userEntity.email }}</td>
+                    <td>{{ userEntity.phone }}</td>
+                    <td>
+                        {{ userEntity.user?.id }}
+                    </td>
+                    <td class="text-right">
+                        <div class="btn-group">
+                            <button type="submit"
+                                    [routerLink]="['/user-entity', userEntity.id, 'view']"
+                                    class="btn btn-info btn-sm">
+                                <fa-icon icon="eye"></fa-icon>
+                                <span class="d-none d-md-inline" jhiTranslate="entity.action.view">View</span>
+                            </button>
+
+                            <button type="submit"
+                                    [routerLink]="['/user-entity', userEntity.id, 'edit']"
+                                    class="btn btn-primary btn-sm">
+                                <fa-icon icon="pencil-alt"></fa-icon>
+                                <span class="d-none d-md-inline" jhiTranslate="entity.action.edit">Edit</span>
+                            </button>
+
+                            <button type="submit" (click)="delete(userEntity)"
+                                    class="btn btn-danger btn-sm">
+                                <fa-icon icon="times"></fa-icon>
+                                <span class="d-none d-md-inline" jhiTranslate="entity.action.delete">Delete</span>
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div *ngIf="userEntities && userEntities.length > 0">
+        <div class="row justify-content-center">
+            <jhi-item-count [page]="page" [total]="totalItems" [itemsPerPage]="itemsPerPage"></jhi-item-count>
+        </div>
+
+        <div class="row justify-content-center">
+            <ngb-pagination [collectionSize]="totalItems" [(page)]="ngbPaginationPage" [pageSize]="itemsPerPage" [maxSize]="5" [rotate]="true" [boundaryLinks]="true" (pageChange)="loadPage($event)"></ngb-pagination>
+        </div>
+    </div>
+</div>

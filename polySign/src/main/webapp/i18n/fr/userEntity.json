@@ -1,0 +1,27 @@
+{
+  "polySignApp": {
+    "userEntity": {
+      "home": {
+        "title": "UserEntities",
+        "createLabel": "Créer un nouveau User Entity",
+        "createOrEditLabel": "Créer ou éditer un User Entity",
+        "notFound": "Aucun User Entity trouvé"
+      },
+      "created": "Un nouveau User Entity a été créé avec l'identifiant {{ param }}",
+      "updated": "Le User Entity avec l'identifiant {{ param }} a été mis à jour",
+      "deleted": "Le User Entity avec l'identifiant {{ param }} a été supprimé",
+      "delete": {
+        "question": "Etes-vous certain de vouloir supprimer le User Entity {{ id }} ?"
+      },
+      "detail": {
+        "title": "User Entity"
+      },
+      "firstName": "First Name",
+      "lastName": "Last Name",
+      "email": "Email",
+      "phone": "Phone",
+      "user": "User",
+      "order": "Order"
+    }
+  }
+}

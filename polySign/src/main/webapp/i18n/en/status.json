@@ -1,0 +1,10 @@
+{
+  "polySignApp": {
+    "Status": {
+      "null": "",
+      "COMPLETED": "COMPLETED",
+      "PENDING": "PENDING",
+      "CANCELLED": "CANCELLED"
+    }
+  }
+}

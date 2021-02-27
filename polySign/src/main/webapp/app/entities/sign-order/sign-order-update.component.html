@@ -1,0 +1,57 @@
+<div class="row justify-content-center">
+    <div class="col-8">
+        <form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
+            <h2 id="jhi-sign-order-heading" jhiTranslate="polySignApp.signOrder.home.createOrEditLabel">Create or edit a Sign Order</h2>
+
+            <div>
+                <jhi-alert-error></jhi-alert-error>
+
+                <div class="form-group" [hidden]="!editForm.get('id')!.value">
+                    <label for="id" jhiTranslate="global.field.id">ID</label>
+                    <input type="text" class="form-control" id="id" name="id" formControlName="id" readonly />
+                </div>
+
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="polySignApp.signOrder.rank" for="field_rank">Rank</label>
+                    <input type="number" class="form-control" name="rank" id="field_rank"
+                           formControlName="rank"/>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="polySignApp.signOrder.signatureMethod" for="field_signatureMethod">Signature Method</label>
+                    <select class="form-control" name="signatureMethod" formControlName="signatureMethod" id="field_signatureMethod">
+                        <option value="EMAIL">{{ 'polySignApp.SignatureMethod.EMAIL' | translate }}</option>
+                        <option value="SMS">{{ 'polySignApp.SignatureMethod.SMS' | translate }}</option>
+                        <option value="OTP">{{ 'polySignApp.SignatureMethod.OTP' | translate }}</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="polySignApp.signOrder.file" for="field_file">File</label>
+                    <select class="form-control" id="field_file" name="file" formControlName="file">
+                        <option [ngValue]="null"></option>
+                        <option [ngValue]="signedFileOption.id === editForm.get('file')!.value?.id ? editForm.get('file')!.value : signedFileOption" *ngFor="let signedFileOption of files; trackBy: trackById">{{ signedFileOption.id }}</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="polySignApp.signOrder.signer" for="field_signer">Signer</label>
+                    <select class="form-control" id="field_signer" name="signer" formControlName="signer">
+                        <option [ngValue]="null"></option>
+                        <option [ngValue]="userEntityOption.id === editForm.get('signer')!.value?.id ? editForm.get('signer')!.value : userEntityOption" *ngFor="let userEntityOption of userentities; trackBy: trackById">{{ userEntityOption.id }}</option>
+                    </select>
+                </div>
+            </div>
+
+            <div>
+                <button type="button" id="cancel-save" class="btn btn-secondary" (click)="previousState()">
+                    <fa-icon icon="ban"></fa-icon>&nbsp;<span jhiTranslate="entity.action.cancel">Cancel</span>
+                </button>
+
+                <button type="submit" id="save-entity" [disabled]="editForm.invalid || isSaving" class="btn btn-primary">
+                    <fa-icon icon="save"></fa-icon>&nbsp;<span jhiTranslate="entity.action.save">Save</span>
+                </button>
+            </div>
+        </form>
+    </div>
+</div>

@@ -1,0 +1,28 @@
+{
+  "polySignApp": {
+    "signatureProcess": {
+      "home": {
+        "title": "Signature Processes",
+        "createLabel": "Create a new Signature Process",
+        "createOrEditLabel": "Create or edit a Signature Process",
+        "notFound": "No Signature Processes found"
+      },
+      "created": "A new Signature Process is created with identifier {{ param }}",
+      "updated": "A Signature Process is updated with identifier {{ param }}",
+      "deleted": "A Signature Process is deleted with identifier {{ param }}",
+      "delete": {
+        "question": "Are you sure you want to delete Signature Process {{ id }}?"
+      },
+      "detail": {
+        "title": "Signature Process"
+      },
+      "emissionDate": "Emission Date",
+      "expirationDate": "Expiration Date",
+      "title": "Title",
+      "status": "Status",
+      "orderedSigning": "Ordered Signing",
+      "file": "File",
+      "creator": "Creator"
+    }
+  }
+}

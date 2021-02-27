@@ -1,0 +1,42 @@
+<div class="row justify-content-center">
+    <div class="col-8">
+        <div *ngIf="auth">
+            <h2><span jhiTranslate="polySignApp.auth.detail.title">Auth</span> {{ auth.id }}</h2>
+
+            <hr>
+
+            <jhi-alert-error></jhi-alert-error>
+
+            <dl class="row-md jh-entity-details">
+                <dt><span jhiTranslate="polySignApp.auth.hasRole">Has Role</span></dt>
+                <dd>
+                    <span jhiTranslate="{{ 'polySignApp.Role.' + auth.hasRole }}">{{ auth.hasRole }}</span>
+                </dd>
+                <dt><span jhiTranslate="polySignApp.auth.authenticatedUser">Authenticated User</span></dt>
+                <dd>
+                    <div *ngIf="auth.authenticatedUser">
+                        <a [routerLink]="['/authenticated-user', auth.authenticatedUser?.id, 'view']">{{ auth.authenticatedUser?.id }}</a>
+                    </div>
+                </dd>
+                <dt><span jhiTranslate="polySignApp.auth.organization">Organization</span></dt>
+                <dd>
+                    <div *ngIf="auth.organization">
+                        <a [routerLink]="['/organization', auth.organization?.id, 'view']">{{ auth.organization?.id }}</a>
+                    </div>
+                </dd>
+            </dl>
+
+            <button type="submit"
+                    (click)="previousState()"
+                    class="btn btn-info">
+                <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back">Back</span>
+            </button>
+
+            <button type="button"
+                    [routerLink]="['/auth', auth.id, 'edit']"
+                    class="btn btn-primary">
+                <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit">Edit</span>
+            </button>
+        </div>
+    </div>
+</div>

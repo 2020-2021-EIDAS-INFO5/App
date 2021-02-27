@@ -1,0 +1,98 @@
+application {
+  config {
+    baseName polySign,
+    applicationType monolith,
+    packageName com.polytech.polysign,
+    languages [fr, en],
+    nativeLanguage fr,
+    authenticationType oauth2,
+    prodDatabaseType mysql,
+    clientFramework angular
+  }
+    entities *
+    service * with serviceClass
+    paginate UserEntity with pagination 
+    paginate Organization with pagination 
+    paginate SignatureProcess with pagination 
+    paginate SignOrder with pagination 
+    paginate SignedFile with pagination 
+    paginate AuthenticatedUser with pagination 
+    
+}
+
+entity UserEntity{
+	firstName String required
+	lastName String required
+    email String required pattern(/^[^@\s]+@[^@\s]+\.[^@\s]+$/)
+    phone String required maxlength(15)  
+}
+
+
+entity Organization{
+    streetAddress String required
+	postalCode String required
+	city String required
+    country String required
+    vatNumber String required
+    name String required
+}
+
+entity AuthenticatedUser{
+}
+
+entity Auth{
+	hasRole Role required
+}
+
+enum Role{
+	ADMIN, USER 
+} 
+
+entity SignatureProcess {
+	emissionDate Instant required
+	expirationDate Instant required
+	title String required
+    status Status required 
+    orderedSigning Boolean required
+}
+
+
+entity SignedFile {
+    filename String required
+    fileBytes Blob
+    signingDate Instant required
+    size Integer 
+}
+
+enum Status {
+COMPLETED, PENDING, CANCELLED
+}
+
+
+entity SignOrder {
+    rank Integer 
+    signatureMethod SignatureMethod
+}
+
+enum SignatureMethod {
+EMAIL, SMS, OTP
+}
+
+relationship OneToOne {
+    UserEntity{user} to User
+    AuthenticatedUser{user} to UserEntity 
+    SignOrder{file} to SignedFile 
+}
+
+
+relationship ManyToOne {
+	Auth to AuthenticatedUser{authority}
+    //SignOrder{signature} to SignedFile{order}
+}
+
+relationship OneToMany {
+	AuthenticatedUser{signature} to SignatureProcess{creator},
+    Organization to Auth{organization},
+    UserEntity{order} to SignOrder{signer},
+    SignatureProcess{file} to SignedFile{signature}
+}

@@ -1,0 +1,44 @@
+{
+  "name": "SignedFile",
+  "fields": [
+    {
+      "fieldName": "filename",
+      "fieldType": "String",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "fileBytes",
+      "fieldType": "byte[]",
+      "fieldTypeBlobContent": "any"
+    },
+    {
+      "fieldName": "signingDate",
+      "fieldType": "Instant",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "size",
+      "fieldType": "Integer"
+    }
+  ],
+  "relationships": [
+    {
+      "relationshipType": "many-to-one",
+      "otherEntityName": "signatureProcess",
+      "otherEntityRelationshipName": "file",
+      "relationshipName": "signature",
+      "otherEntityField": "id"
+    }
+  ],
+  "changelogDate": "20210227190951",
+  "entityTableName": "signed_file",
+  "dto": "no",
+  "pagination": "pagination",
+  "service": "serviceClass",
+  "jpaMetamodelFiltering": false,
+  "fluentMethods": true,
+  "readOnly": false,
+  "embedded": false,
+  "clientRootFolder": "",
+  "applications": ["polySign"]
+}

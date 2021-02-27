@@ -1,0 +1,42 @@
+{
+  "name": "SignOrder",
+  "fields": [
+    {
+      "fieldName": "rank",
+      "fieldType": "Integer"
+    },
+    {
+      "fieldName": "signatureMethod",
+      "fieldType": "SignatureMethod",
+      "fieldValues": "EMAIL,SMS,OTP"
+    }
+  ],
+  "relationships": [
+    {
+      "relationshipType": "one-to-one",
+      "otherEntityName": "signedFile",
+      "otherEntityRelationshipName": "signOrder",
+      "relationshipName": "file",
+      "otherEntityField": "id",
+      "ownerSide": true
+    },
+    {
+      "relationshipType": "many-to-one",
+      "otherEntityName": "userEntity",
+      "otherEntityRelationshipName": "order",
+      "relationshipName": "signer",
+      "otherEntityField": "id"
+    }
+  ],
+  "changelogDate": "20210227191051",
+  "entityTableName": "sign_order",
+  "dto": "no",
+  "pagination": "pagination",
+  "service": "serviceClass",
+  "jpaMetamodelFiltering": false,
+  "fluentMethods": true,
+  "readOnly": false,
+  "embedded": false,
+  "clientRootFolder": "",
+  "applications": ["polySign"]
+}

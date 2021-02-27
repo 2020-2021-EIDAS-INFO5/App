@@ -1,0 +1,52 @@
+<div class="row justify-content-center">
+    <div class="col-8">
+        <div *ngIf="signatureProcess">
+            <h2><span jhiTranslate="polySignApp.signatureProcess.detail.title">Signature Process</span> {{ signatureProcess.id }}</h2>
+
+            <hr>
+
+            <jhi-alert-error></jhi-alert-error>
+
+            <dl class="row-md jh-entity-details">
+                <dt><span jhiTranslate="polySignApp.signatureProcess.emissionDate">Emission Date</span></dt>
+                <dd>
+                    <span>{{ signatureProcess.emissionDate }}</span>
+                </dd>
+                <dt><span jhiTranslate="polySignApp.signatureProcess.expirationDate">Expiration Date</span></dt>
+                <dd>
+                    <span>{{ signatureProcess.expirationDate }}</span>
+                </dd>
+                <dt><span jhiTranslate="polySignApp.signatureProcess.title">Title</span></dt>
+                <dd>
+                    <span>{{ signatureProcess.title }}</span>
+                </dd>
+                <dt><span jhiTranslate="polySignApp.signatureProcess.status">Status</span></dt>
+                <dd>
+                    <span jhiTranslate="{{ 'polySignApp.Status.' + signatureProcess.status }}">{{ signatureProcess.status }}</span>
+                </dd>
+                <dt><span jhiTranslate="polySignApp.signatureProcess.orderedSigning">Ordered Signing</span></dt>
+                <dd>
+                    <span>{{ signatureProcess.orderedSigning }}</span>
+                </dd>
+                <dt><span jhiTranslate="polySignApp.signatureProcess.creator">Creator</span></dt>
+                <dd>
+                    <div *ngIf="signatureProcess.creator">
+                        <a [routerLink]="['/authenticated-user', signatureProcess.creator?.id, 'view']">{{ signatureProcess.creator?.id }}</a>
+                    </div>
+                </dd>
+            </dl>
+
+            <button type="submit"
+                    (click)="previousState()"
+                    class="btn btn-info">
+                <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back">Back</span>
+            </button>
+
+            <button type="button"
+                    [routerLink]="['/signature-process', signatureProcess.id, 'edit']"
+                    class="btn btn-primary">
+                <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit">Edit</span>
+            </button>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,26 @@
+{
+  "polySignApp": {
+    "signedFile": {
+      "home": {
+        "title": "SignedFiles",
+        "createLabel": "Créer un nouveau Signed File",
+        "createOrEditLabel": "Créer ou éditer un Signed File",
+        "notFound": "Aucun Signed File trouvé"
+      },
+      "created": "Un nouveau Signed File a été créé avec l'identifiant {{ param }}",
+      "updated": "Le Signed File avec l'identifiant {{ param }} a été mis à jour",
+      "deleted": "Le Signed File avec l'identifiant {{ param }} a été supprimé",
+      "delete": {
+        "question": "Etes-vous certain de vouloir supprimer le Signed File {{ id }} ?"
+      },
+      "detail": {
+        "title": "Signed File"
+      },
+      "filename": "Filename",
+      "fileBytes": "File Bytes",
+      "signingDate": "Signing Date",
+      "size": "Size",
+      "signature": "Signature"
+    }
+  }
+}

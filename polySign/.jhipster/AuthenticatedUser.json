@@ -1,0 +1,37 @@
+{
+  "name": "AuthenticatedUser",
+  "fields": [],
+  "relationships": [
+    {
+      "relationshipType": "one-to-one",
+      "otherEntityName": "userEntity",
+      "otherEntityRelationshipName": "authenticatedUser",
+      "relationshipName": "user",
+      "otherEntityField": "id",
+      "ownerSide": true
+    },
+    {
+      "relationshipType": "one-to-many",
+      "otherEntityName": "signatureProcess",
+      "otherEntityRelationshipName": "creator",
+      "relationshipName": "signature"
+    },
+    {
+      "relationshipType": "one-to-many",
+      "otherEntityName": "auth",
+      "otherEntityRelationshipName": "authenticatedUser",
+      "relationshipName": "authority"
+    }
+  ],
+  "changelogDate": "20210227190651",
+  "entityTableName": "authenticated_user",
+  "dto": "no",
+  "pagination": "pagination",
+  "service": "serviceClass",
+  "jpaMetamodelFiltering": false,
+  "fluentMethods": true,
+  "readOnly": false,
+  "embedded": false,
+  "clientRootFolder": "",
+  "applications": ["polySign"]
+}
