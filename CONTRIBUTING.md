@@ -28,10 +28,7 @@ So the general format of the commit is :
 
 ```
 <Ticket number> <tag>: <description>
-If your change is too small, you can skip this part. Because the subject line is enough to describe your change.
 
-    The body should be separated from the subject line with a blank line.
-    The body should briefly summarize the changes you have made, explaining what those changes were, why.
 [optional body]
 
 [optional footer(s)]
