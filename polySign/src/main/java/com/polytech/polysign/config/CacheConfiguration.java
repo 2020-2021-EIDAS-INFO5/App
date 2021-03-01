@@ -49,15 +49,14 @@ public class CacheConfiguration {
             createCache(cm, com.polytech.polysign.domain.Authority.class.getName());
             createCache(cm, com.polytech.polysign.domain.User.class.getName() + ".authorities");
             createCache(cm, com.polytech.polysign.domain.UserEntity.class.getName());
+            createCache(cm, com.polytech.polysign.domain.UserEntity.class.getName() + ".signatures");
             createCache(cm, com.polytech.polysign.domain.UserEntity.class.getName() + ".orders");
+            createCache(cm, com.polytech.polysign.domain.UserEntity.class.getName() + ".authorities");
             createCache(cm, com.polytech.polysign.domain.Organization.class.getName());
-            createCache(cm, com.polytech.polysign.domain.Organization.class.getName() + ".auths");
-            createCache(cm, com.polytech.polysign.domain.AuthenticatedUser.class.getName());
-            createCache(cm, com.polytech.polysign.domain.AuthenticatedUser.class.getName() + ".signatures");
-            createCache(cm, com.polytech.polysign.domain.AuthenticatedUser.class.getName() + ".authorities");
-            createCache(cm, com.polytech.polysign.domain.Auth.class.getName());
+            createCache(cm, com.polytech.polysign.domain.Organization.class.getName() + ".authorits");
+            createCache(cm, com.polytech.polysign.domain.Authorit.class.getName());
             createCache(cm, com.polytech.polysign.domain.SignatureProcess.class.getName());
-            createCache(cm, com.polytech.polysign.domain.SignatureProcess.class.getName() + ".files");
+            createCache(cm, com.polytech.polysign.domain.SignatureProcess.class.getName() + ".signOrders");
             createCache(cm, com.polytech.polysign.domain.SignedFile.class.getName());
             createCache(cm, com.polytech.polysign.domain.SignOrder.class.getName());
             // jhipster-needle-ehcache-add-entry

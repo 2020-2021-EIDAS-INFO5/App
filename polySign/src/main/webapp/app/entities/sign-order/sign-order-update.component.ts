@@ -12,8 +12,10 @@ import { ISignedFile } from 'app/shared/model/signed-file.model';
 import { SignedFileService } from 'app/entities/signed-file/signed-file.service';
 import { IUserEntity } from 'app/shared/model/user-entity.model';
 import { UserEntityService } from 'app/entities/user-entity/user-entity.service';
+import { ISignatureProcess } from 'app/shared/model/signature-process.model';
+import { SignatureProcessService } from 'app/entities/signature-process/signature-process.service';
 
-type SelectableEntity = ISignedFile | IUserEntity;
+type SelectableEntity = ISignedFile | IUserEntity | ISignatureProcess;
 
 @Component({
   selector: 'jhi-sign-order-update',
@@ -23,19 +25,22 @@ export class SignOrderUpdateComponent implements OnInit {
   isSaving = false;
   files: ISignedFile[] = [];
   userentities: IUserEntity[] = [];
+  signatureprocesses: ISignatureProcess[] = [];
 
   editForm = this.fb.group({
     id: [],
     rank: [],
-    signatureMethod: [],
+    signed: [],
     file: [],
     signer: [],
+    signature: [],
   });
 
   constructor(
     protected signOrderService: SignOrderService,
     protected signedFileService: SignedFileService,
     protected userEntityService: UserEntityService,
+    protected signatureProcessService: SignatureProcessService,
     protected activatedRoute: ActivatedRoute,
     private fb: FormBuilder
   ) {}
@@ -67,6 +72,10 @@ export class SignOrderUpdateComponent implements OnInit {
         });
 
       this.userEntityService.query().subscribe((res: HttpResponse<IUserEntity[]>) => (this.userentities = res.body || []));
+
+      this.signatureProcessService
+        .query()
+        .subscribe((res: HttpResponse<ISignatureProcess[]>) => (this.signatureprocesses = res.body || []));
     });
   }
 
@@ -74,9 +83,10 @@ export class SignOrderUpdateComponent implements OnInit {
     this.editForm.patchValue({
       id: signOrder.id,
       rank: signOrder.rank,
-      signatureMethod: signOrder.signatureMethod,
+      signed: signOrder.signed,
       file: signOrder.file,
       signer: signOrder.signer,
+      signature: signOrder.signature,
     });
   }
 
@@ -99,9 +109,10 @@ export class SignOrderUpdateComponent implements OnInit {
       ...new SignOrder(),
       id: this.editForm.get(['id'])!.value,
       rank: this.editForm.get(['rank'])!.value,
-      signatureMethod: this.editForm.get(['signatureMethod'])!.value,
+      signed: this.editForm.get(['signed'])!.value,
       file: this.editForm.get(['file'])!.value,
       signer: this.editForm.get(['signer'])!.value,
+      signature: this.editForm.get(['signature'])!.value,
     };
   }
 

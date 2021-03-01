@@ -18,19 +18,16 @@
                 </div>
 
                 <div class="form-group">
-                    <label class="form-control-label" jhiTranslate="polySignApp.signOrder.signatureMethod" for="field_signatureMethod">Signature Method</label>
-                    <select class="form-control" name="signatureMethod" formControlName="signatureMethod" id="field_signatureMethod">
-                        <option value="EMAIL">{{ 'polySignApp.SignatureMethod.EMAIL' | translate }}</option>
-                        <option value="SMS">{{ 'polySignApp.SignatureMethod.SMS' | translate }}</option>
-                        <option value="OTP">{{ 'polySignApp.SignatureMethod.OTP' | translate }}</option>
-                    </select>
+                    <label class="form-control-label" jhiTranslate="polySignApp.signOrder.signed" for="field_signed">Signed</label>
+                    <input type="checkbox" class="form-control" name="signed" id="field_signed"
+                           formControlName="signed"/>
                 </div>
 
                 <div class="form-group">
                     <label class="form-control-label" jhiTranslate="polySignApp.signOrder.file" for="field_file">File</label>
                     <select class="form-control" id="field_file" name="file" formControlName="file">
                         <option [ngValue]="null"></option>
-                        <option [ngValue]="signedFileOption.id === editForm.get('file')!.value?.id ? editForm.get('file')!.value : signedFileOption" *ngFor="let signedFileOption of files; trackBy: trackById">{{ signedFileOption.id }}</option>
+                        <option [ngValue]="signedFileOption.id === editForm.get('file')!.value?.id ? editForm.get('file')!.value : signedFileOption" *ngFor="let signedFileOption of files; trackBy: trackById">{{ signedFileOption.filename }}</option>
                     </select>
                 </div>
 
@@ -38,7 +35,15 @@
                     <label class="form-control-label" jhiTranslate="polySignApp.signOrder.signer" for="field_signer">Signer</label>
                     <select class="form-control" id="field_signer" name="signer" formControlName="signer">
                         <option [ngValue]="null"></option>
-                        <option [ngValue]="userEntityOption.id === editForm.get('signer')!.value?.id ? editForm.get('signer')!.value : userEntityOption" *ngFor="let userEntityOption of userentities; trackBy: trackById">{{ userEntityOption.id }}</option>
+                        <option [ngValue]="userEntityOption.id === editForm.get('signer')!.value?.id ? editForm.get('signer')!.value : userEntityOption" *ngFor="let userEntityOption of userentities; trackBy: trackById">{{ userEntityOption.firstname }}</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="polySignApp.signOrder.signature" for="field_signature">Signature</label>
+                    <select class="form-control" id="field_signature" name="signature" formControlName="signature">
+                        <option [ngValue]="null"></option>
+                        <option [ngValue]="signatureProcessOption.id === editForm.get('signature')!.value?.id ? editForm.get('signature')!.value : signatureProcessOption" *ngFor="let signatureProcessOption of signatureprocesses; trackBy: trackById">{{ signatureProcessOption.title }}</option>
                     </select>
                 </div>
             </div>

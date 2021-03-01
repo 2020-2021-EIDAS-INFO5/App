@@ -29,16 +29,16 @@ public class SignatureProcess implements Serializable {
     private Long id;
 
     @NotNull
+    @Column(name = "title", nullable = false)
+    private String title;
+
+    @NotNull
     @Column(name = "emission_date", nullable = false)
     private Instant emissionDate;
 
     @NotNull
     @Column(name = "expiration_date", nullable = false)
     private Instant expirationDate;
-
-    @NotNull
-    @Column(name = "title", nullable = false)
-    private String title;
 
     @NotNull
     @Enumerated(EnumType.STRING)
@@ -49,13 +49,17 @@ public class SignatureProcess implements Serializable {
     @Column(name = "ordered_signing", nullable = false)
     private Boolean orderedSigning;
 
+    @OneToOne
+    @JoinColumn(unique = true)
+    private SignedFile finalFile;
+
     @OneToMany(mappedBy = "signature")
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-    private Set<SignedFile> files = new HashSet<>();
+    private Set<SignOrder> signOrders = new HashSet<>();
 
     @ManyToOne
     @JsonIgnoreProperties(value = "signatures", allowSetters = true)
-    private AuthenticatedUser creator;
+    private UserEntity creator;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
     public Long getId() {
@@ -64,6 +68,19 @@ public class SignatureProcess implements Serializable {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public SignatureProcess title(String title) {
+        this.title = title;
+        return this;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
     }
 
     public Instant getEmissionDate() {
@@ -92,19 +109,6 @@ public class SignatureProcess implements Serializable {
         this.expirationDate = expirationDate;
     }
 
-    public String getTitle() {
-        return title;
-    }
-
-    public SignatureProcess title(String title) {
-        this.title = title;
-        return this;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
     public Status getStatus() {
         return status;
     }
@@ -131,42 +135,55 @@ public class SignatureProcess implements Serializable {
         this.orderedSigning = orderedSigning;
     }
 
-    public Set<SignedFile> getFiles() {
-        return files;
+    public SignedFile getFinalFile() {
+        return finalFile;
     }
 
-    public SignatureProcess files(Set<SignedFile> signedFiles) {
-        this.files = signedFiles;
+    public SignatureProcess finalFile(SignedFile signedFile) {
+        this.finalFile = signedFile;
         return this;
     }
 
-    public SignatureProcess addFile(SignedFile signedFile) {
-        this.files.add(signedFile);
-        signedFile.setSignature(this);
+    public void setFinalFile(SignedFile signedFile) {
+        this.finalFile = signedFile;
+    }
+
+    public Set<SignOrder> getSignOrders() {
+        return signOrders;
+    }
+
+    public SignatureProcess signOrders(Set<SignOrder> signOrders) {
+        this.signOrders = signOrders;
         return this;
     }
 
-    public SignatureProcess removeFile(SignedFile signedFile) {
-        this.files.remove(signedFile);
-        signedFile.setSignature(null);
+    public SignatureProcess addSignOrder(SignOrder signOrder) {
+        this.signOrders.add(signOrder);
+        signOrder.setSignature(this);
         return this;
     }
 
-    public void setFiles(Set<SignedFile> signedFiles) {
-        this.files = signedFiles;
+    public SignatureProcess removeSignOrder(SignOrder signOrder) {
+        this.signOrders.remove(signOrder);
+        signOrder.setSignature(null);
+        return this;
     }
 
-    public AuthenticatedUser getCreator() {
+    public void setSignOrders(Set<SignOrder> signOrders) {
+        this.signOrders = signOrders;
+    }
+
+    public UserEntity getCreator() {
         return creator;
     }
 
-    public SignatureProcess creator(AuthenticatedUser authenticatedUser) {
-        this.creator = authenticatedUser;
+    public SignatureProcess creator(UserEntity userEntity) {
+        this.creator = userEntity;
         return this;
     }
 
-    public void setCreator(AuthenticatedUser authenticatedUser) {
-        this.creator = authenticatedUser;
+    public void setCreator(UserEntity userEntity) {
+        this.creator = userEntity;
     }
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here
 
@@ -191,9 +208,9 @@ public class SignatureProcess implements Serializable {
     public String toString() {
         return "SignatureProcess{" +
             "id=" + getId() +
+            ", title='" + getTitle() + "'" +
             ", emissionDate='" + getEmissionDate() + "'" +
             ", expirationDate='" + getExpirationDate() + "'" +
-            ", title='" + getTitle() + "'" +
             ", status='" + getStatus() + "'" +
             ", orderedSigning='" + isOrderedSigning() + "'" +
             "}";

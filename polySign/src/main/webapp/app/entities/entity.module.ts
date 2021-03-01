@@ -13,12 +13,8 @@ import { RouterModule } from '@angular/router';
         loadChildren: () => import('./organization/organization.module').then(m => m.PolySignOrganizationModule),
       },
       {
-        path: 'authenticated-user',
-        loadChildren: () => import('./authenticated-user/authenticated-user.module').then(m => m.PolySignAuthenticatedUserModule),
-      },
-      {
-        path: 'auth',
-        loadChildren: () => import('./auth/auth.module').then(m => m.PolySignAuthModule),
+        path: 'authorit',
+        loadChildren: () => import('./authorit/authorit.module').then(m => m.PolySignAuthoritModule),
       },
       {
         path: 'signature-process',

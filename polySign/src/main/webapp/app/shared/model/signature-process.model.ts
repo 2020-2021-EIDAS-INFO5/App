@@ -1,29 +1,32 @@
 import { Moment } from 'moment';
 import { ISignedFile } from 'app/shared/model/signed-file.model';
-import { IAuthenticatedUser } from 'app/shared/model/authenticated-user.model';
+import { ISignOrder } from 'app/shared/model/sign-order.model';
+import { IUserEntity } from 'app/shared/model/user-entity.model';
 import { Status } from 'app/shared/model/enumerations/status.model';
 
 export interface ISignatureProcess {
   id?: number;
+  title?: string;
   emissionDate?: Moment;
   expirationDate?: Moment;
-  title?: string;
   status?: Status;
   orderedSigning?: boolean;
-  files?: ISignedFile[];
-  creator?: IAuthenticatedUser;
+  finalFile?: ISignedFile;
+  signOrders?: ISignOrder[];
+  creator?: IUserEntity;
 }
 
 export class SignatureProcess implements ISignatureProcess {
   constructor(
     public id?: number,
+    public title?: string,
     public emissionDate?: Moment,
     public expirationDate?: Moment,
-    public title?: string,
     public status?: Status,
     public orderedSigning?: boolean,
-    public files?: ISignedFile[],
-    public creator?: IAuthenticatedUser
+    public finalFile?: ISignedFile,
+    public signOrders?: ISignOrder[],
+    public creator?: IUserEntity
   ) {
     this.orderedSigning = this.orderedSigning || false;
   }

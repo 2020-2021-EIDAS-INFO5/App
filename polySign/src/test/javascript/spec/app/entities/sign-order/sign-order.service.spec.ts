@@ -2,7 +2,6 @@ import { TestBed, getTestBed } from '@angular/core/testing';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { SignOrderService } from 'app/entities/sign-order/sign-order.service';
 import { ISignOrder, SignOrder } from 'app/shared/model/sign-order.model';
-import { SignatureMethod } from 'app/shared/model/enumerations/signature-method.model';
 
 describe('Service Tests', () => {
   describe('SignOrder Service', () => {
@@ -21,7 +20,7 @@ describe('Service Tests', () => {
       service = injector.get(SignOrderService);
       httpMock = injector.get(HttpTestingController);
 
-      elemDefault = new SignOrder(0, 0, SignatureMethod.EMAIL);
+      elemDefault = new SignOrder(0, 0, false);
     });
 
     describe('Service methods', () => {
@@ -56,7 +55,7 @@ describe('Service Tests', () => {
         const returnedFromService = Object.assign(
           {
             rank: 1,
-            signatureMethod: 'BBBBBB',
+            signed: true,
           },
           elemDefault
         );
@@ -74,7 +73,7 @@ describe('Service Tests', () => {
         const returnedFromService = Object.assign(
           {
             rank: 1,
-            signatureMethod: 'BBBBBB',
+            signed: true,
           },
           elemDefault
         );

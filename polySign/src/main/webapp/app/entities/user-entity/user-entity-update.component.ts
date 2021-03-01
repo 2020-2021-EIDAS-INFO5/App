@@ -20,8 +20,8 @@ export class UserEntityUpdateComponent implements OnInit {
 
   editForm = this.fb.group({
     id: [],
-    firstName: [null, [Validators.required]],
-    lastName: [null, [Validators.required]],
+    firstname: [null, [Validators.required]],
+    lastname: [null, [Validators.required]],
     email: [null, [Validators.required, Validators.pattern('^[^@\\s]+@[^@\\s]+\\.[^@\\s]+$')]],
     phone: [null, [Validators.required, Validators.maxLength(15)]],
     user: [],
@@ -45,8 +45,8 @@ export class UserEntityUpdateComponent implements OnInit {
   updateForm(userEntity: IUserEntity): void {
     this.editForm.patchValue({
       id: userEntity.id,
-      firstName: userEntity.firstName,
-      lastName: userEntity.lastName,
+      firstname: userEntity.firstname,
+      lastname: userEntity.lastname,
       email: userEntity.email,
       phone: userEntity.phone,
       user: userEntity.user,
@@ -71,8 +71,8 @@ export class UserEntityUpdateComponent implements OnInit {
     return {
       ...new UserEntity(),
       id: this.editForm.get(['id'])!.value,
-      firstName: this.editForm.get(['firstName'])!.value,
-      lastName: this.editForm.get(['lastName'])!.value,
+      firstname: this.editForm.get(['firstname'])!.value,
+      lastname: this.editForm.get(['lastname'])!.value,
       email: this.editForm.get(['email'])!.value,
       phone: this.editForm.get(['phone'])!.value,
       user: this.editForm.get(['user'])!.value,

@@ -16,12 +16,14 @@
       "detail": {
         "title": "User Entity"
       },
-      "firstName": "First Name",
-      "lastName": "Last Name",
+      "firstname": "Firstname",
+      "lastname": "Lastname",
       "email": "Email",
       "phone": "Phone",
       "user": "User",
-      "order": "Order"
+      "signature": "Signature",
+      "order": "Order",
+      "authority": "Authority"
     }
   }
 }

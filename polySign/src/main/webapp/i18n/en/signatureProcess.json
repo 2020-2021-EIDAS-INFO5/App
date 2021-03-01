@@ -16,12 +16,13 @@
       "detail": {
         "title": "Signature Process"
       },
+      "title": "Title",
       "emissionDate": "Emission Date",
       "expirationDate": "Expiration Date",
-      "title": "Title",
       "status": "Status",
       "orderedSigning": "Ordered Signing",
-      "file": "File",
+      "finalFile": "Final File",
+      "signOrder": "Sign Order",
       "creator": "Creator"
     }
   }

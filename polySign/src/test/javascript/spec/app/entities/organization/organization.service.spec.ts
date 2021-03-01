@@ -54,12 +54,12 @@ describe('Service Tests', () => {
       it('should update a Organization', () => {
         const returnedFromService = Object.assign(
           {
+            name: 'BBBBBB',
             streetAddress: 'BBBBBB',
             postalCode: 'BBBBBB',
             city: 'BBBBBB',
             country: 'BBBBBB',
             vatNumber: 'BBBBBB',
-            name: 'BBBBBB',
           },
           elemDefault
         );
@@ -76,12 +76,12 @@ describe('Service Tests', () => {
       it('should return a list of Organization', () => {
         const returnedFromService = Object.assign(
           {
+            name: 'BBBBBB',
             streetAddress: 'BBBBBB',
             postalCode: 'BBBBBB',
             city: 'BBBBBB',
             country: 'BBBBBB',
             vatNumber: 'BBBBBB',
-            name: 'BBBBBB',
           },
           elemDefault
         );

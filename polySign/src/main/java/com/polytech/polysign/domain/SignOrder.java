@@ -8,8 +8,6 @@ import javax.persistence.*;
 
 import java.io.Serializable;
 
-import com.polytech.polysign.domain.enumeration.SignatureMethod;
-
 /**
  * A SignOrder.
  */
@@ -27,9 +25,8 @@ public class SignOrder implements Serializable {
     @Column(name = "jhi_rank")
     private Integer rank;
 
-    @Enumerated(EnumType.STRING)
-    @Column(name = "signature_method")
-    private SignatureMethod signatureMethod;
+    @Column(name = "signed")
+    private Boolean signed;
 
     @OneToOne
     @JoinColumn(unique = true)
@@ -38,6 +35,10 @@ public class SignOrder implements Serializable {
     @ManyToOne
     @JsonIgnoreProperties(value = "orders", allowSetters = true)
     private UserEntity signer;
+
+    @ManyToOne
+    @JsonIgnoreProperties(value = "signOrders", allowSetters = true)
+    private SignatureProcess signature;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
     public Long getId() {
@@ -61,17 +62,17 @@ public class SignOrder implements Serializable {
         this.rank = rank;
     }
 
-    public SignatureMethod getSignatureMethod() {
-        return signatureMethod;
+    public Boolean isSigned() {
+        return signed;
     }
 
-    public SignOrder signatureMethod(SignatureMethod signatureMethod) {
-        this.signatureMethod = signatureMethod;
+    public SignOrder signed(Boolean signed) {
+        this.signed = signed;
         return this;
     }
 
-    public void setSignatureMethod(SignatureMethod signatureMethod) {
-        this.signatureMethod = signatureMethod;
+    public void setSigned(Boolean signed) {
+        this.signed = signed;
     }
 
     public SignedFile getFile() {
@@ -99,6 +100,19 @@ public class SignOrder implements Serializable {
     public void setSigner(UserEntity userEntity) {
         this.signer = userEntity;
     }
+
+    public SignatureProcess getSignature() {
+        return signature;
+    }
+
+    public SignOrder signature(SignatureProcess signatureProcess) {
+        this.signature = signatureProcess;
+        return this;
+    }
+
+    public void setSignature(SignatureProcess signatureProcess) {
+        this.signature = signatureProcess;
+    }
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here
 
     @Override
@@ -123,7 +137,7 @@ public class SignOrder implements Serializable {
         return "SignOrder{" +
             "id=" + getId() +
             ", rank=" + getRank() +
-            ", signatureMethod='" + getSignatureMethod() + "'" +
+            ", signed='" + isSigned() + "'" +
             "}";
     }
 }

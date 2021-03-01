@@ -24,7 +24,7 @@ describe('Service Tests', () => {
       httpMock = injector.get(HttpTestingController);
       currentDate = moment();
 
-      elemDefault = new SignedFile(0, 'AAAAAAA', 'image/png', 'AAAAAAA', currentDate, 0);
+      elemDefault = new SignedFile(0, 'AAAAAAA', 'image/png', 'AAAAAAA', currentDate, 0, 'AAAAAAA');
     });
 
     describe('Service methods', () => {
@@ -73,6 +73,7 @@ describe('Service Tests', () => {
             fileBytes: 'BBBBBB',
             signingDate: currentDate.format(DATE_TIME_FORMAT),
             size: 1,
+            sha256: 'BBBBBB',
           },
           elemDefault
         );
@@ -98,6 +99,7 @@ describe('Service Tests', () => {
             fileBytes: 'BBBBBB',
             signingDate: currentDate.format(DATE_TIME_FORMAT),
             size: 1,
+            sha256: 'BBBBBB',
           },
           elemDefault
         );

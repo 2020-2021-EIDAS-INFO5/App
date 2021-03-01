@@ -54,8 +54,8 @@ describe('Service Tests', () => {
       it('should update a UserEntity', () => {
         const returnedFromService = Object.assign(
           {
-            firstName: 'BBBBBB',
-            lastName: 'BBBBBB',
+            firstname: 'BBBBBB',
+            lastname: 'BBBBBB',
             email: 'BBBBBB',
             phone: 'BBBBBB',
           },
@@ -74,8 +74,8 @@ describe('Service Tests', () => {
       it('should return a list of UserEntity', () => {
         const returnedFromService = Object.assign(
           {
-            firstName: 'BBBBBB',
-            lastName: 'BBBBBB',
+            firstname: 'BBBBBB',
+            lastname: 'BBBBBB',
             email: 'BBBBBB',
             phone: 'BBBBBB',
           },

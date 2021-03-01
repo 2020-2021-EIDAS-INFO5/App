@@ -27,7 +27,7 @@
                     <th scope="col"  jhiSortBy="fileBytes"><span jhiTranslate="polySignApp.signedFile.fileBytes">File Bytes</span> <fa-icon icon="sort"></fa-icon></th>
                     <th scope="col"  jhiSortBy="signingDate"><span jhiTranslate="polySignApp.signedFile.signingDate">Signing Date</span> <fa-icon icon="sort"></fa-icon></th>
                     <th scope="col"  jhiSortBy="size"><span jhiTranslate="polySignApp.signedFile.size">Size</span> <fa-icon icon="sort"></fa-icon></th>
-                    <th scope="col"  jhiSortBy="signature.id"><span jhiTranslate="polySignApp.signedFile.signature">Signature</span> <fa-icon icon="sort"></fa-icon></th>
+                    <th scope="col"  jhiSortBy="sha256"><span jhiTranslate="polySignApp.signedFile.sha256">Sha 256</span> <fa-icon icon="sort"></fa-icon></th>
                     <th scope="col"></th>
                 </tr>
             </thead>
@@ -41,11 +41,7 @@
                     </td>
                     <td>{{ signedFile.signingDate | date:'medium' }}</td>
                     <td>{{ signedFile.size }}</td>
-                    <td>
-                        <div *ngIf="signedFile.signature">
-                            <a [routerLink]="['/signature-process', signedFile.signature?.id, 'view']" >{{ signedFile.signature?.id }}</a>
-                        </div>
-                    </td>
+                    <td>{{ signedFile.sha256 }}</td>
                     <td class="text-right">
                         <div class="btn-group">
                             <button type="submit"

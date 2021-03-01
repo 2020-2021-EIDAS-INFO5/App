@@ -23,24 +23,24 @@
             <thead>
                 <tr jhiSort [(predicate)]="predicate" [(ascending)]="ascending" [callback]="loadPage.bind(this)">
                     <th scope="col"  jhiSortBy="id"><span jhiTranslate="global.field.id">ID</span> <fa-icon icon="sort"></fa-icon></th>
+                    <th scope="col"  jhiSortBy="name"><span jhiTranslate="polySignApp.organization.name">Name</span> <fa-icon icon="sort"></fa-icon></th>
                     <th scope="col"  jhiSortBy="streetAddress"><span jhiTranslate="polySignApp.organization.streetAddress">Street Address</span> <fa-icon icon="sort"></fa-icon></th>
                     <th scope="col"  jhiSortBy="postalCode"><span jhiTranslate="polySignApp.organization.postalCode">Postal Code</span> <fa-icon icon="sort"></fa-icon></th>
                     <th scope="col"  jhiSortBy="city"><span jhiTranslate="polySignApp.organization.city">City</span> <fa-icon icon="sort"></fa-icon></th>
                     <th scope="col"  jhiSortBy="country"><span jhiTranslate="polySignApp.organization.country">Country</span> <fa-icon icon="sort"></fa-icon></th>
                     <th scope="col"  jhiSortBy="vatNumber"><span jhiTranslate="polySignApp.organization.vatNumber">Vat Number</span> <fa-icon icon="sort"></fa-icon></th>
-                    <th scope="col"  jhiSortBy="name"><span jhiTranslate="polySignApp.organization.name">Name</span> <fa-icon icon="sort"></fa-icon></th>
                     <th scope="col"></th>
                 </tr>
             </thead>
             <tbody>
                 <tr *ngFor="let organization of organizations ;trackBy: trackId">
                     <td><a [routerLink]="['/organization', organization.id, 'view']">{{ organization.id }}</a></td>
+                    <td>{{ organization.name }}</td>
                     <td>{{ organization.streetAddress }}</td>
                     <td>{{ organization.postalCode }}</td>
                     <td>{{ organization.city }}</td>
                     <td>{{ organization.country }}</td>
                     <td>{{ organization.vatNumber }}</td>
-                    <td>{{ organization.name }}</td>
                     <td class="text-right">
                         <div class="btn-group">
                             <button type="submit"

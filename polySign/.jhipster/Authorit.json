@@ -1,0 +1,38 @@
+{
+  "name": "Authorit",
+  "fields": [
+    {
+      "fieldName": "hasRole",
+      "fieldType": "Role",
+      "fieldValues": "ADMIN_ORGANIZATION,USER_ORGANIZATION,SIGNER",
+      "fieldValidateRules": ["required"]
+    }
+  ],
+  "relationships": [
+    {
+      "relationshipType": "many-to-one",
+      "otherEntityName": "organization",
+      "otherEntityRelationshipName": "authorit",
+      "relationshipName": "organization",
+      "otherEntityField": "name"
+    },
+    {
+      "relationshipType": "many-to-one",
+      "otherEntityName": "userEntity",
+      "otherEntityRelationshipName": "authority",
+      "relationshipName": "user",
+      "otherEntityField": "firstname"
+    }
+  ],
+  "changelogDate": "20210301094952",
+  "entityTableName": "authorit",
+  "dto": "no",
+  "pagination": "pagination",
+  "service": "serviceClass",
+  "jpaMetamodelFiltering": false,
+  "fluentMethods": true,
+  "readOnly": false,
+  "embedded": false,
+  "clientRootFolder": "",
+  "applications": ["polySign"]
+}

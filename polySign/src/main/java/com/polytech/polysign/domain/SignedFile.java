@@ -1,6 +1,5 @@
 package com.polytech.polysign.domain;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
@@ -42,9 +41,8 @@ public class SignedFile implements Serializable {
     @Column(name = "size")
     private Integer size;
 
-    @ManyToOne
-    @JsonIgnoreProperties(value = "files", allowSetters = true)
-    private SignatureProcess signature;
+    @Column(name = "sha_256")
+    private String sha256;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
     public Long getId() {
@@ -120,17 +118,17 @@ public class SignedFile implements Serializable {
         this.size = size;
     }
 
-    public SignatureProcess getSignature() {
-        return signature;
+    public String getSha256() {
+        return sha256;
     }
 
-    public SignedFile signature(SignatureProcess signatureProcess) {
-        this.signature = signatureProcess;
+    public SignedFile sha256(String sha256) {
+        this.sha256 = sha256;
         return this;
     }
 
-    public void setSignature(SignatureProcess signatureProcess) {
-        this.signature = signatureProcess;
+    public void setSha256(String sha256) {
+        this.sha256 = sha256;
     }
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here
 
@@ -160,6 +158,7 @@ public class SignedFile implements Serializable {
             ", fileBytesContentType='" + getFileBytesContentType() + "'" +
             ", signingDate='" + getSigningDate() + "'" +
             ", size=" + getSize() +
+            ", sha256='" + getSha256() + "'" +
             "}";
     }
 }

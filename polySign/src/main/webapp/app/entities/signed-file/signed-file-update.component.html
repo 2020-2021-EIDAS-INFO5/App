@@ -66,11 +66,9 @@
                 </div>
 
                 <div class="form-group">
-                    <label class="form-control-label" jhiTranslate="polySignApp.signedFile.signature" for="field_signature">Signature</label>
-                    <select class="form-control" id="field_signature" name="signature" formControlName="signature">
-                        <option [ngValue]="null"></option>
-                        <option [ngValue]="signatureProcessOption.id === editForm.get('signature')!.value?.id ? editForm.get('signature')!.value : signatureProcessOption" *ngFor="let signatureProcessOption of signatureprocesses; trackBy: trackById">{{ signatureProcessOption.id }}</option>
-                    </select>
+                    <label class="form-control-label" jhiTranslate="polySignApp.signedFile.sha256" for="field_sha256">Sha 256</label>
+                    <input type="text" class="form-control" name="sha256" id="field_sha256"
+                           formControlName="sha256"/>
                 </div>
             </div>
 

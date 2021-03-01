@@ -25,7 +25,7 @@ describe('Service Tests', () => {
       httpMock = injector.get(HttpTestingController);
       currentDate = moment();
 
-      elemDefault = new SignatureProcess(0, currentDate, currentDate, 'AAAAAAA', Status.COMPLETED, false);
+      elemDefault = new SignatureProcess(0, 'AAAAAAA', currentDate, currentDate, Status.COMPLETED, false);
     });
 
     describe('Service methods', () => {
@@ -73,9 +73,9 @@ describe('Service Tests', () => {
       it('should update a SignatureProcess', () => {
         const returnedFromService = Object.assign(
           {
+            title: 'BBBBBB',
             emissionDate: currentDate.format(DATE_TIME_FORMAT),
             expirationDate: currentDate.format(DATE_TIME_FORMAT),
-            title: 'BBBBBB',
             status: 'BBBBBB',
             orderedSigning: true,
           },
@@ -100,9 +100,9 @@ describe('Service Tests', () => {
       it('should return a list of SignatureProcess', () => {
         const returnedFromService = Object.assign(
           {
+            title: 'BBBBBB',
             emissionDate: currentDate.format(DATE_TIME_FORMAT),
             expirationDate: currentDate.format(DATE_TIME_FORMAT),
-            title: 'BBBBBB',
             status: 'BBBBBB',
             orderedSigning: true,
           },

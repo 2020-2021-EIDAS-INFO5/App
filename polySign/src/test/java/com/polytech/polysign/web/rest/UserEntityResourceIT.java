@@ -32,14 +32,14 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @WithMockUser
 public class UserEntityResourceIT {
 
-    private static final String DEFAULT_FIRST_NAME = "AAAAAAAAAA";
-    private static final String UPDATED_FIRST_NAME = "BBBBBBBBBB";
+    private static final String DEFAULT_FIRSTNAME = "AAAAAAAAAA";
+    private static final String UPDATED_FIRSTNAME = "BBBBBBBBBB";
 
-    private static final String DEFAULT_LAST_NAME = "AAAAAAAAAA";
-    private static final String UPDATED_LAST_NAME = "BBBBBBBBBB";
+    private static final String DEFAULT_LASTNAME = "AAAAAAAAAA";
+    private static final String UPDATED_LASTNAME = "BBBBBBBBBB";
 
-    private static final String DEFAULT_EMAIL = "{d@,x7ocG.(u.T";
-    private static final String UPDATED_EMAIL = "><_BF[@c!1zQh.4t2";
+    private static final String DEFAULT_EMAIL = ",S~tNu@Up!O.<2y(TK";
+    private static final String UPDATED_EMAIL = "n@^d3imF.M,";
 
     private static final String DEFAULT_PHONE = "AAAAAAAAAA";
     private static final String UPDATED_PHONE = "BBBBBBBBBB";
@@ -66,8 +66,8 @@ public class UserEntityResourceIT {
      */
     public static UserEntity createEntity(EntityManager em) {
         UserEntity userEntity = new UserEntity()
-            .firstName(DEFAULT_FIRST_NAME)
-            .lastName(DEFAULT_LAST_NAME)
+            .firstname(DEFAULT_FIRSTNAME)
+            .lastname(DEFAULT_LASTNAME)
             .email(DEFAULT_EMAIL)
             .phone(DEFAULT_PHONE);
         return userEntity;
@@ -80,8 +80,8 @@ public class UserEntityResourceIT {
      */
     public static UserEntity createUpdatedEntity(EntityManager em) {
         UserEntity userEntity = new UserEntity()
-            .firstName(UPDATED_FIRST_NAME)
-            .lastName(UPDATED_LAST_NAME)
+            .firstname(UPDATED_FIRSTNAME)
+            .lastname(UPDATED_LASTNAME)
             .email(UPDATED_EMAIL)
             .phone(UPDATED_PHONE);
         return userEntity;
@@ -106,8 +106,8 @@ public class UserEntityResourceIT {
         List<UserEntity> userEntityList = userEntityRepository.findAll();
         assertThat(userEntityList).hasSize(databaseSizeBeforeCreate + 1);
         UserEntity testUserEntity = userEntityList.get(userEntityList.size() - 1);
-        assertThat(testUserEntity.getFirstName()).isEqualTo(DEFAULT_FIRST_NAME);
-        assertThat(testUserEntity.getLastName()).isEqualTo(DEFAULT_LAST_NAME);
+        assertThat(testUserEntity.getFirstname()).isEqualTo(DEFAULT_FIRSTNAME);
+        assertThat(testUserEntity.getLastname()).isEqualTo(DEFAULT_LASTNAME);
         assertThat(testUserEntity.getEmail()).isEqualTo(DEFAULT_EMAIL);
         assertThat(testUserEntity.getPhone()).isEqualTo(DEFAULT_PHONE);
     }
@@ -134,10 +134,10 @@ public class UserEntityResourceIT {
 
     @Test
     @Transactional
-    public void checkFirstNameIsRequired() throws Exception {
+    public void checkFirstnameIsRequired() throws Exception {
         int databaseSizeBeforeTest = userEntityRepository.findAll().size();
         // set the field null
-        userEntity.setFirstName(null);
+        userEntity.setFirstname(null);
 
         // Create the UserEntity, which fails.
 
@@ -153,10 +153,10 @@ public class UserEntityResourceIT {
 
     @Test
     @Transactional
-    public void checkLastNameIsRequired() throws Exception {
+    public void checkLastnameIsRequired() throws Exception {
         int databaseSizeBeforeTest = userEntityRepository.findAll().size();
         // set the field null
-        userEntity.setLastName(null);
+        userEntity.setLastname(null);
 
         // Create the UserEntity, which fails.
 
@@ -219,8 +219,8 @@ public class UserEntityResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(userEntity.getId().intValue())))
-            .andExpect(jsonPath("$.[*].firstName").value(hasItem(DEFAULT_FIRST_NAME)))
-            .andExpect(jsonPath("$.[*].lastName").value(hasItem(DEFAULT_LAST_NAME)))
+            .andExpect(jsonPath("$.[*].firstname").value(hasItem(DEFAULT_FIRSTNAME)))
+            .andExpect(jsonPath("$.[*].lastname").value(hasItem(DEFAULT_LASTNAME)))
             .andExpect(jsonPath("$.[*].email").value(hasItem(DEFAULT_EMAIL)))
             .andExpect(jsonPath("$.[*].phone").value(hasItem(DEFAULT_PHONE)));
     }
@@ -236,8 +236,8 @@ public class UserEntityResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.id").value(userEntity.getId().intValue()))
-            .andExpect(jsonPath("$.firstName").value(DEFAULT_FIRST_NAME))
-            .andExpect(jsonPath("$.lastName").value(DEFAULT_LAST_NAME))
+            .andExpect(jsonPath("$.firstname").value(DEFAULT_FIRSTNAME))
+            .andExpect(jsonPath("$.lastname").value(DEFAULT_LASTNAME))
             .andExpect(jsonPath("$.email").value(DEFAULT_EMAIL))
             .andExpect(jsonPath("$.phone").value(DEFAULT_PHONE));
     }
@@ -262,8 +262,8 @@ public class UserEntityResourceIT {
         // Disconnect from session so that the updates on updatedUserEntity are not directly saved in db
         em.detach(updatedUserEntity);
         updatedUserEntity
-            .firstName(UPDATED_FIRST_NAME)
-            .lastName(UPDATED_LAST_NAME)
+            .firstname(UPDATED_FIRSTNAME)
+            .lastname(UPDATED_LASTNAME)
             .email(UPDATED_EMAIL)
             .phone(UPDATED_PHONE);
 
@@ -276,8 +276,8 @@ public class UserEntityResourceIT {
         List<UserEntity> userEntityList = userEntityRepository.findAll();
         assertThat(userEntityList).hasSize(databaseSizeBeforeUpdate);
         UserEntity testUserEntity = userEntityList.get(userEntityList.size() - 1);
-        assertThat(testUserEntity.getFirstName()).isEqualTo(UPDATED_FIRST_NAME);
-        assertThat(testUserEntity.getLastName()).isEqualTo(UPDATED_LAST_NAME);
+        assertThat(testUserEntity.getFirstname()).isEqualTo(UPDATED_FIRSTNAME);
+        assertThat(testUserEntity.getLastname()).isEqualTo(UPDATED_LASTNAME);
         assertThat(testUserEntity.getEmail()).isEqualTo(UPDATED_EMAIL);
         assertThat(testUserEntity.getPhone()).isEqualTo(UPDATED_PHONE);
     }

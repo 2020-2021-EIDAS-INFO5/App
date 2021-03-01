@@ -19,18 +19,14 @@
     {
       "fieldName": "size",
       "fieldType": "Integer"
-    }
-  ],
-  "relationships": [
+    },
     {
-      "relationshipType": "many-to-one",
-      "otherEntityName": "signatureProcess",
-      "otherEntityRelationshipName": "file",
-      "relationshipName": "signature",
-      "otherEntityField": "id"
+      "fieldName": "sha256",
+      "fieldType": "String"
     }
   ],
-  "changelogDate": "20210227190951",
+  "relationships": [],
+  "changelogDate": "20210301095152",
   "entityTableName": "signed_file",
   "dto": "no",
   "pagination": "pagination",

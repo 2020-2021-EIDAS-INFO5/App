@@ -17,9 +17,10 @@
         "title": "Sign Order"
       },
       "rank": "Rank",
-      "signatureMethod": "Signature Method",
+      "signed": "Signed",
       "file": "File",
-      "signer": "Signer"
+      "signer": "Signer",
+      "signature": "Signature"
     }
   }
 }

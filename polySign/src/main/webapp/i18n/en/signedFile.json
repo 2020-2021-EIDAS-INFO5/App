@@ -20,7 +20,7 @@
       "fileBytes": "File Bytes",
       "signingDate": "Signing Date",
       "size": "Size",
-      "signature": "Signature"
+      "sha256": "Sha 256"
     }
   }
 }

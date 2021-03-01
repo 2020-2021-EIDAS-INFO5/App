@@ -1,0 +1,24 @@
+{
+  "polySignApp": {
+    "authorit": {
+      "home": {
+        "title": "Authorits",
+        "createLabel": "Créer un nouveau Authorit",
+        "createOrEditLabel": "Créer ou éditer un Authorit",
+        "notFound": "Aucun Authorit trouvé"
+      },
+      "created": "Un nouveau Authorit a été créé avec l'identifiant {{ param }}",
+      "updated": "Le Authorit avec l'identifiant {{ param }} a été mis à jour",
+      "deleted": "Le Authorit avec l'identifiant {{ param }} a été supprimé",
+      "delete": {
+        "question": "Etes-vous certain de vouloir supprimer le Authorit {{ id }} ?"
+      },
+      "detail": {
+        "title": "Authorit"
+      },
+      "hasRole": "Has Role",
+      "organization": "Organization",
+      "user": "User"
+    }
+  }
+}

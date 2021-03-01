@@ -8,13 +8,13 @@
             <jhi-alert-error></jhi-alert-error>
 
             <dl class="row-md jh-entity-details">
-                <dt><span jhiTranslate="polySignApp.userEntity.firstName">First Name</span></dt>
+                <dt><span jhiTranslate="polySignApp.userEntity.firstname">Firstname</span></dt>
                 <dd>
-                    <span>{{ userEntity.firstName }}</span>
+                    <span>{{ userEntity.firstname }}</span>
                 </dd>
-                <dt><span jhiTranslate="polySignApp.userEntity.lastName">Last Name</span></dt>
+                <dt><span jhiTranslate="polySignApp.userEntity.lastname">Lastname</span></dt>
                 <dd>
-                    <span>{{ userEntity.lastName }}</span>
+                    <span>{{ userEntity.lastname }}</span>
                 </dd>
                 <dt><span jhiTranslate="polySignApp.userEntity.email">Email</span></dt>
                 <dd>
@@ -26,7 +26,7 @@
                 </dd>
                 <dt><span jhiTranslate="polySignApp.userEntity.user">User</span></dt>
                 <dd>
-                    {{ userEntity.user?.id }}
+                    {{ userEntity.user?.firstName }}
                 </dd>
             </dl>
 

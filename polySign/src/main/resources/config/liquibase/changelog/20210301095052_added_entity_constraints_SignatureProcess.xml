@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.9.xsd">
+    <!--
+        Added the constraints for entity SignatureProcess.
+    -->
+    <changeSet id="20210301095052-2" author="jhipster">
+        
+        <addForeignKeyConstraint baseColumnNames="final_file_id"
+                                 baseTableName="signature_process"
+                                 constraintName="fk_signature_process_final_file_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="signed_file"/>
+
+        <addForeignKeyConstraint baseColumnNames="creator_id"
+                                 baseTableName="signature_process"
+                                 constraintName="fk_signature_process_creator_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="user_entity"/>
+
+    </changeSet>
+</databaseChangeLog>

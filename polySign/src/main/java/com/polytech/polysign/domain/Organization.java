@@ -25,6 +25,10 @@ public class Organization implements Serializable {
     private Long id;
 
     @NotNull
+    @Column(name = "name", nullable = false)
+    private String name;
+
+    @NotNull
     @Column(name = "street_address", nullable = false)
     private String streetAddress;
 
@@ -44,13 +48,9 @@ public class Organization implements Serializable {
     @Column(name = "vat_number", nullable = false)
     private String vatNumber;
 
-    @NotNull
-    @Column(name = "name", nullable = false)
-    private String name;
-
     @OneToMany(mappedBy = "organization")
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-    private Set<Auth> auths = new HashSet<>();
+    private Set<Authorit> authorits = new HashSet<>();
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
     public Long getId() {
@@ -59,6 +59,19 @@ public class Organization implements Serializable {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public Organization name(String name) {
+        this.name = name;
+        return this;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getStreetAddress() {
@@ -126,42 +139,29 @@ public class Organization implements Serializable {
         this.vatNumber = vatNumber;
     }
 
-    public String getName() {
-        return name;
+    public Set<Authorit> getAuthorits() {
+        return authorits;
     }
 
-    public Organization name(String name) {
-        this.name = name;
+    public Organization authorits(Set<Authorit> authorits) {
+        this.authorits = authorits;
         return this;
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public Set<Auth> getAuths() {
-        return auths;
-    }
-
-    public Organization auths(Set<Auth> auths) {
-        this.auths = auths;
+    public Organization addAuthorit(Authorit authorit) {
+        this.authorits.add(authorit);
+        authorit.setOrganization(this);
         return this;
     }
 
-    public Organization addAuth(Auth auth) {
-        this.auths.add(auth);
-        auth.setOrganization(this);
+    public Organization removeAuthorit(Authorit authorit) {
+        this.authorits.remove(authorit);
+        authorit.setOrganization(null);
         return this;
     }
 
-    public Organization removeAuth(Auth auth) {
-        this.auths.remove(auth);
-        auth.setOrganization(null);
-        return this;
-    }
-
-    public void setAuths(Set<Auth> auths) {
-        this.auths = auths;
+    public void setAuthorits(Set<Authorit> authorits) {
+        this.authorits = authorits;
     }
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here
 
@@ -186,12 +186,12 @@ public class Organization implements Serializable {
     public String toString() {
         return "Organization{" +
             "id=" + getId() +
+            ", name='" + getName() + "'" +
             ", streetAddress='" + getStreetAddress() + "'" +
             ", postalCode='" + getPostalCode() + "'" +
             ", city='" + getCity() + "'" +
             ", country='" + getCountry() + "'" +
             ", vatNumber='" + getVatNumber() + "'" +
-            ", name='" + getName() + "'" +
             "}";
     }
 }

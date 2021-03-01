@@ -26,7 +26,7 @@
     "packageName": "com.polytech.polysign",
     "packageFolder": "com/polytech/polysign",
     "jhipsterVersion": "6.10.3",
-    "creationTimestamp": 1614452580977,
+    "creationTimestamp": 1614591960588,
     "skipServer": false,
     "clientPackageManager": "npm",
     "clientTheme": "none",
@@ -38,5 +38,5 @@
     "otherModules": [],
     "blueprints": []
   },
-  "entities": ["UserEntity", "Organization", "AuthenticatedUser", "Auth", "SignatureProcess", "SignedFile", "SignOrder"]
+  "entities": ["UserEntity", "Organization", "Authorit", "SignatureProcess", "SignedFile", "SignOrder"]
 }

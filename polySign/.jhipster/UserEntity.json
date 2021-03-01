@@ -2,12 +2,12 @@
   "name": "UserEntity",
   "fields": [
     {
-      "fieldName": "firstName",
+      "fieldName": "firstname",
       "fieldType": "String",
       "fieldValidateRules": ["required"]
     },
     {
-      "fieldName": "lastName",
+      "fieldName": "lastname",
       "fieldType": "String",
       "fieldValidateRules": ["required"]
     },
@@ -30,17 +30,29 @@
       "otherEntityName": "user",
       "otherEntityRelationshipName": "userEntity",
       "relationshipName": "user",
-      "otherEntityField": "id",
+      "otherEntityField": "firstName",
       "ownerSide": true
+    },
+    {
+      "relationshipType": "one-to-many",
+      "otherEntityName": "signatureProcess",
+      "otherEntityRelationshipName": "creator",
+      "relationshipName": "signature"
     },
     {
       "relationshipType": "one-to-many",
       "otherEntityName": "signOrder",
       "otherEntityRelationshipName": "signer",
       "relationshipName": "order"
+    },
+    {
+      "relationshipType": "one-to-many",
+      "otherEntityName": "authorit",
+      "otherEntityRelationshipName": "user",
+      "relationshipName": "authority"
     }
   ],
-  "changelogDate": "20210227190451",
+  "changelogDate": "20210301094752",
   "entityTableName": "user_entity",
   "dto": "no",
   "pagination": "pagination",

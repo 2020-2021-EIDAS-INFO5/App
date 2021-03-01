@@ -2,6 +2,11 @@
   "name": "SignatureProcess",
   "fields": [
     {
+      "fieldName": "title",
+      "fieldType": "String",
+      "fieldValidateRules": ["required"]
+    },
+    {
       "fieldName": "emissionDate",
       "fieldType": "Instant",
       "fieldValidateRules": ["required"]
@@ -9,11 +14,6 @@
     {
       "fieldName": "expirationDate",
       "fieldType": "Instant",
-      "fieldValidateRules": ["required"]
-    },
-    {
-      "fieldName": "title",
-      "fieldType": "String",
       "fieldValidateRules": ["required"]
     },
     {
@@ -30,20 +30,28 @@
   ],
   "relationships": [
     {
-      "relationshipType": "one-to-many",
+      "relationshipType": "one-to-one",
       "otherEntityName": "signedFile",
+      "otherEntityRelationshipName": "signatureProcess",
+      "relationshipName": "finalFile",
+      "otherEntityField": "filename",
+      "ownerSide": true
+    },
+    {
+      "relationshipType": "one-to-many",
+      "otherEntityName": "signOrder",
       "otherEntityRelationshipName": "signature",
-      "relationshipName": "file"
+      "relationshipName": "signOrder"
     },
     {
       "relationshipType": "many-to-one",
-      "otherEntityName": "authenticatedUser",
+      "otherEntityName": "userEntity",
       "otherEntityRelationshipName": "signature",
       "relationshipName": "creator",
       "otherEntityField": "id"
     }
   ],
-  "changelogDate": "20210227190851",
+  "changelogDate": "20210301095052",
   "entityTableName": "signature_process",
   "dto": "no",
   "pagination": "pagination",

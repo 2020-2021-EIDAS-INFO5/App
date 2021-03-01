@@ -12,20 +12,26 @@
                 <dd>
                     <span>{{ signOrder.rank }}</span>
                 </dd>
-                <dt><span jhiTranslate="polySignApp.signOrder.signatureMethod">Signature Method</span></dt>
+                <dt><span jhiTranslate="polySignApp.signOrder.signed">Signed</span></dt>
                 <dd>
-                    <span jhiTranslate="{{ 'polySignApp.SignatureMethod.' + signOrder.signatureMethod }}">{{ signOrder.signatureMethod }}</span>
+                    <span>{{ signOrder.signed }}</span>
                 </dd>
                 <dt><span jhiTranslate="polySignApp.signOrder.file">File</span></dt>
                 <dd>
                     <div *ngIf="signOrder.file">
-                        <a [routerLink]="['/signed-file', signOrder.file?.id, 'view']">{{ signOrder.file?.id }}</a>
+                        <a [routerLink]="['/signed-file', signOrder.file?.id, 'view']">{{ signOrder.file?.filename }}</a>
                     </div>
                 </dd>
                 <dt><span jhiTranslate="polySignApp.signOrder.signer">Signer</span></dt>
                 <dd>
                     <div *ngIf="signOrder.signer">
-                        <a [routerLink]="['/user-entity', signOrder.signer?.id, 'view']">{{ signOrder.signer?.id }}</a>
+                        <a [routerLink]="['/user-entity', signOrder.signer?.id, 'view']">{{ signOrder.signer?.firstname }}</a>
+                    </div>
+                </dd>
+                <dt><span jhiTranslate="polySignApp.signOrder.signature">Signature</span></dt>
+                <dd>
+                    <div *ngIf="signOrder.signature">
+                        <a [routerLink]="['/signature-process', signOrder.signature?.id, 'view']">{{ signOrder.signature?.title }}</a>
                     </div>
                 </dd>
             </dl>

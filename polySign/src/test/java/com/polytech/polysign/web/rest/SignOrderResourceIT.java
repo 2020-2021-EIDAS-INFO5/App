@@ -24,7 +24,6 @@ import static org.springframework.security.test.web.servlet.request.SecurityMock
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-import com.polytech.polysign.domain.enumeration.SignatureMethod;
 /**
  * Integration tests for the {@link SignOrderResource} REST controller.
  */
@@ -36,8 +35,8 @@ public class SignOrderResourceIT {
     private static final Integer DEFAULT_RANK = 1;
     private static final Integer UPDATED_RANK = 2;
 
-    private static final SignatureMethod DEFAULT_SIGNATURE_METHOD = SignatureMethod.EMAIL;
-    private static final SignatureMethod UPDATED_SIGNATURE_METHOD = SignatureMethod.SMS;
+    private static final Boolean DEFAULT_SIGNED = false;
+    private static final Boolean UPDATED_SIGNED = true;
 
     @Autowired
     private SignOrderRepository signOrderRepository;
@@ -62,7 +61,7 @@ public class SignOrderResourceIT {
     public static SignOrder createEntity(EntityManager em) {
         SignOrder signOrder = new SignOrder()
             .rank(DEFAULT_RANK)
-            .signatureMethod(DEFAULT_SIGNATURE_METHOD);
+            .signed(DEFAULT_SIGNED);
         return signOrder;
     }
     /**
@@ -74,7 +73,7 @@ public class SignOrderResourceIT {
     public static SignOrder createUpdatedEntity(EntityManager em) {
         SignOrder signOrder = new SignOrder()
             .rank(UPDATED_RANK)
-            .signatureMethod(UPDATED_SIGNATURE_METHOD);
+            .signed(UPDATED_SIGNED);
         return signOrder;
     }
 
@@ -98,7 +97,7 @@ public class SignOrderResourceIT {
         assertThat(signOrderList).hasSize(databaseSizeBeforeCreate + 1);
         SignOrder testSignOrder = signOrderList.get(signOrderList.size() - 1);
         assertThat(testSignOrder.getRank()).isEqualTo(DEFAULT_RANK);
-        assertThat(testSignOrder.getSignatureMethod()).isEqualTo(DEFAULT_SIGNATURE_METHOD);
+        assertThat(testSignOrder.isSigned()).isEqualTo(DEFAULT_SIGNED);
     }
 
     @Test
@@ -133,7 +132,7 @@ public class SignOrderResourceIT {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(signOrder.getId().intValue())))
             .andExpect(jsonPath("$.[*].rank").value(hasItem(DEFAULT_RANK)))
-            .andExpect(jsonPath("$.[*].signatureMethod").value(hasItem(DEFAULT_SIGNATURE_METHOD.toString())));
+            .andExpect(jsonPath("$.[*].signed").value(hasItem(DEFAULT_SIGNED.booleanValue())));
     }
     
     @Test
@@ -148,7 +147,7 @@ public class SignOrderResourceIT {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.id").value(signOrder.getId().intValue()))
             .andExpect(jsonPath("$.rank").value(DEFAULT_RANK))
-            .andExpect(jsonPath("$.signatureMethod").value(DEFAULT_SIGNATURE_METHOD.toString()));
+            .andExpect(jsonPath("$.signed").value(DEFAULT_SIGNED.booleanValue()));
     }
     @Test
     @Transactional
@@ -172,7 +171,7 @@ public class SignOrderResourceIT {
         em.detach(updatedSignOrder);
         updatedSignOrder
             .rank(UPDATED_RANK)
-            .signatureMethod(UPDATED_SIGNATURE_METHOD);
+            .signed(UPDATED_SIGNED);
 
         restSignOrderMockMvc.perform(put("/api/sign-orders").with(csrf())
             .contentType(MediaType.APPLICATION_JSON)
@@ -184,7 +183,7 @@ public class SignOrderResourceIT {
         assertThat(signOrderList).hasSize(databaseSizeBeforeUpdate);
         SignOrder testSignOrder = signOrderList.get(signOrderList.size() - 1);
         assertThat(testSignOrder.getRank()).isEqualTo(UPDATED_RANK);
-        assertThat(testSignOrder.getSignatureMethod()).isEqualTo(UPDATED_SIGNATURE_METHOD);
+        assertThat(testSignOrder.isSigned()).isEqualTo(UPDATED_SIGNED);
     }
 
     @Test

@@ -49,6 +49,9 @@ public class SignedFileResourceIT {
     private static final Integer DEFAULT_SIZE = 1;
     private static final Integer UPDATED_SIZE = 2;
 
+    private static final String DEFAULT_SHA_256 = "AAAAAAAAAA";
+    private static final String UPDATED_SHA_256 = "BBBBBBBBBB";
+
     @Autowired
     private SignedFileRepository signedFileRepository;
 
@@ -75,7 +78,8 @@ public class SignedFileResourceIT {
             .fileBytes(DEFAULT_FILE_BYTES)
             .fileBytesContentType(DEFAULT_FILE_BYTES_CONTENT_TYPE)
             .signingDate(DEFAULT_SIGNING_DATE)
-            .size(DEFAULT_SIZE);
+            .size(DEFAULT_SIZE)
+            .sha256(DEFAULT_SHA_256);
         return signedFile;
     }
     /**
@@ -90,7 +94,8 @@ public class SignedFileResourceIT {
             .fileBytes(UPDATED_FILE_BYTES)
             .fileBytesContentType(UPDATED_FILE_BYTES_CONTENT_TYPE)
             .signingDate(UPDATED_SIGNING_DATE)
-            .size(UPDATED_SIZE);
+            .size(UPDATED_SIZE)
+            .sha256(UPDATED_SHA_256);
         return signedFile;
     }
 
@@ -118,6 +123,7 @@ public class SignedFileResourceIT {
         assertThat(testSignedFile.getFileBytesContentType()).isEqualTo(DEFAULT_FILE_BYTES_CONTENT_TYPE);
         assertThat(testSignedFile.getSigningDate()).isEqualTo(DEFAULT_SIGNING_DATE);
         assertThat(testSignedFile.getSize()).isEqualTo(DEFAULT_SIZE);
+        assertThat(testSignedFile.getSha256()).isEqualTo(DEFAULT_SHA_256);
     }
 
     @Test
@@ -193,7 +199,8 @@ public class SignedFileResourceIT {
             .andExpect(jsonPath("$.[*].fileBytesContentType").value(hasItem(DEFAULT_FILE_BYTES_CONTENT_TYPE)))
             .andExpect(jsonPath("$.[*].fileBytes").value(hasItem(Base64Utils.encodeToString(DEFAULT_FILE_BYTES))))
             .andExpect(jsonPath("$.[*].signingDate").value(hasItem(DEFAULT_SIGNING_DATE.toString())))
-            .andExpect(jsonPath("$.[*].size").value(hasItem(DEFAULT_SIZE)));
+            .andExpect(jsonPath("$.[*].size").value(hasItem(DEFAULT_SIZE)))
+            .andExpect(jsonPath("$.[*].sha256").value(hasItem(DEFAULT_SHA_256)));
     }
     
     @Test
@@ -211,7 +218,8 @@ public class SignedFileResourceIT {
             .andExpect(jsonPath("$.fileBytesContentType").value(DEFAULT_FILE_BYTES_CONTENT_TYPE))
             .andExpect(jsonPath("$.fileBytes").value(Base64Utils.encodeToString(DEFAULT_FILE_BYTES)))
             .andExpect(jsonPath("$.signingDate").value(DEFAULT_SIGNING_DATE.toString()))
-            .andExpect(jsonPath("$.size").value(DEFAULT_SIZE));
+            .andExpect(jsonPath("$.size").value(DEFAULT_SIZE))
+            .andExpect(jsonPath("$.sha256").value(DEFAULT_SHA_256));
     }
     @Test
     @Transactional
@@ -238,7 +246,8 @@ public class SignedFileResourceIT {
             .fileBytes(UPDATED_FILE_BYTES)
             .fileBytesContentType(UPDATED_FILE_BYTES_CONTENT_TYPE)
             .signingDate(UPDATED_SIGNING_DATE)
-            .size(UPDATED_SIZE);
+            .size(UPDATED_SIZE)
+            .sha256(UPDATED_SHA_256);
 
         restSignedFileMockMvc.perform(put("/api/signed-files").with(csrf())
             .contentType(MediaType.APPLICATION_JSON)
@@ -254,6 +263,7 @@ public class SignedFileResourceIT {
         assertThat(testSignedFile.getFileBytesContentType()).isEqualTo(UPDATED_FILE_BYTES_CONTENT_TYPE);
         assertThat(testSignedFile.getSigningDate()).isEqualTo(UPDATED_SIGNING_DATE);
         assertThat(testSignedFile.getSize()).isEqualTo(UPDATED_SIZE);
+        assertThat(testSignedFile.getSha256()).isEqualTo(UPDATED_SHA_256);
     }
 
     @Test

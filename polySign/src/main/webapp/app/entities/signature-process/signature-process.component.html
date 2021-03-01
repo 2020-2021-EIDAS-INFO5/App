@@ -23,11 +23,12 @@
             <thead>
                 <tr jhiSort [(predicate)]="predicate" [(ascending)]="ascending" [callback]="loadPage.bind(this)">
                     <th scope="col"  jhiSortBy="id"><span jhiTranslate="global.field.id">ID</span> <fa-icon icon="sort"></fa-icon></th>
+                    <th scope="col"  jhiSortBy="title"><span jhiTranslate="polySignApp.signatureProcess.title">Title</span> <fa-icon icon="sort"></fa-icon></th>
                     <th scope="col"  jhiSortBy="emissionDate"><span jhiTranslate="polySignApp.signatureProcess.emissionDate">Emission Date</span> <fa-icon icon="sort"></fa-icon></th>
                     <th scope="col"  jhiSortBy="expirationDate"><span jhiTranslate="polySignApp.signatureProcess.expirationDate">Expiration Date</span> <fa-icon icon="sort"></fa-icon></th>
-                    <th scope="col"  jhiSortBy="title"><span jhiTranslate="polySignApp.signatureProcess.title">Title</span> <fa-icon icon="sort"></fa-icon></th>
                     <th scope="col"  jhiSortBy="status"><span jhiTranslate="polySignApp.signatureProcess.status">Status</span> <fa-icon icon="sort"></fa-icon></th>
                     <th scope="col"  jhiSortBy="orderedSigning"><span jhiTranslate="polySignApp.signatureProcess.orderedSigning">Ordered Signing</span> <fa-icon icon="sort"></fa-icon></th>
+                    <th scope="col"  jhiSortBy="finalFile.filename"><span jhiTranslate="polySignApp.signatureProcess.finalFile">Final File</span> <fa-icon icon="sort"></fa-icon></th>
                     <th scope="col"  jhiSortBy="creator.id"><span jhiTranslate="polySignApp.signatureProcess.creator">Creator</span> <fa-icon icon="sort"></fa-icon></th>
                     <th scope="col"></th>
                 </tr>
@@ -35,14 +36,19 @@
             <tbody>
                 <tr *ngFor="let signatureProcess of signatureProcesses ;trackBy: trackId">
                     <td><a [routerLink]="['/signature-process', signatureProcess.id, 'view']">{{ signatureProcess.id }}</a></td>
+                    <td>{{ signatureProcess.title }}</td>
                     <td>{{ signatureProcess.emissionDate | date:'medium' }}</td>
                     <td>{{ signatureProcess.expirationDate | date:'medium' }}</td>
-                    <td>{{ signatureProcess.title }}</td>
                     <td jhiTranslate="{{ 'polySignApp.Status.' + signatureProcess.status }}">{{ signatureProcess.status }}</td>
                     <td>{{ signatureProcess.orderedSigning }}</td>
                     <td>
+                        <div *ngIf="signatureProcess.finalFile">
+                            <a [routerLink]="['/signed-file', signatureProcess.finalFile?.id, 'view']" >{{ signatureProcess.finalFile?.filename }}</a>
+                        </div>
+                    </td>
+                    <td>
                         <div *ngIf="signatureProcess.creator">
-                            <a [routerLink]="['/authenticated-user', signatureProcess.creator?.id, 'view']" >{{ signatureProcess.creator?.id }}</a>
+                            <a [routerLink]="['/user-entity', signatureProcess.creator?.id, 'view']" >{{ signatureProcess.creator?.id }}</a>
                         </div>
                     </td>
                     <td class="text-right">

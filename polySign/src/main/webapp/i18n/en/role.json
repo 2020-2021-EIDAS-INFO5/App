@@ -2,8 +2,9 @@
   "polySignApp": {
     "Role": {
       "null": "",
-      "ADMIN": "ADMIN",
-      "USER": "USER"
+      "ADMIN_ORGANIZATION": "ADMIN_ORGANIZATION",
+      "USER_ORGANIZATION": "USER_ORGANIZATION",
+      "SIGNER": "SIGNER"
     }
   }
 }

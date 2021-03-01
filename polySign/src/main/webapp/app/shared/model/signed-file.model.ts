@@ -1,5 +1,4 @@
 import { Moment } from 'moment';
-import { ISignatureProcess } from 'app/shared/model/signature-process.model';
 
 export interface ISignedFile {
   id?: number;
@@ -8,7 +7,7 @@ export interface ISignedFile {
   fileBytes?: any;
   signingDate?: Moment;
   size?: number;
-  signature?: ISignatureProcess;
+  sha256?: string;
 }
 
 export class SignedFile implements ISignedFile {
@@ -19,6 +18,6 @@ export class SignedFile implements ISignedFile {
     public fileBytes?: any,
     public signingDate?: Moment,
     public size?: number,
-    public signature?: ISignatureProcess
+    public sha256?: string
   ) {}
 }

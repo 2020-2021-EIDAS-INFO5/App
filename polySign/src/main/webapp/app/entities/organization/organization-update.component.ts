@@ -17,12 +17,12 @@ export class OrganizationUpdateComponent implements OnInit {
 
   editForm = this.fb.group({
     id: [],
+    name: [null, [Validators.required]],
     streetAddress: [null, [Validators.required]],
     postalCode: [null, [Validators.required]],
     city: [null, [Validators.required]],
     country: [null, [Validators.required]],
     vatNumber: [null, [Validators.required]],
-    name: [null, [Validators.required]],
   });
 
   constructor(protected organizationService: OrganizationService, protected activatedRoute: ActivatedRoute, private fb: FormBuilder) {}
@@ -36,12 +36,12 @@ export class OrganizationUpdateComponent implements OnInit {
   updateForm(organization: IOrganization): void {
     this.editForm.patchValue({
       id: organization.id,
+      name: organization.name,
       streetAddress: organization.streetAddress,
       postalCode: organization.postalCode,
       city: organization.city,
       country: organization.country,
       vatNumber: organization.vatNumber,
-      name: organization.name,
     });
   }
 
@@ -63,12 +63,12 @@ export class OrganizationUpdateComponent implements OnInit {
     return {
       ...new Organization(),
       id: this.editForm.get(['id'])!.value,
+      name: this.editForm.get(['name'])!.value,
       streetAddress: this.editForm.get(['streetAddress'])!.value,
       postalCode: this.editForm.get(['postalCode'])!.value,
       city: this.editForm.get(['city'])!.value,
       country: this.editForm.get(['country'])!.value,
       vatNumber: this.editForm.get(['vatNumber'])!.value,
-      name: this.editForm.get(['name'])!.value,
     };
   }
 

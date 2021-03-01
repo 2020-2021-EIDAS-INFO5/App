@@ -23,23 +23,23 @@
             <thead>
                 <tr jhiSort [(predicate)]="predicate" [(ascending)]="ascending" [callback]="loadPage.bind(this)">
                     <th scope="col"  jhiSortBy="id"><span jhiTranslate="global.field.id">ID</span> <fa-icon icon="sort"></fa-icon></th>
-                    <th scope="col"  jhiSortBy="firstName"><span jhiTranslate="polySignApp.userEntity.firstName">First Name</span> <fa-icon icon="sort"></fa-icon></th>
-                    <th scope="col"  jhiSortBy="lastName"><span jhiTranslate="polySignApp.userEntity.lastName">Last Name</span> <fa-icon icon="sort"></fa-icon></th>
+                    <th scope="col"  jhiSortBy="firstname"><span jhiTranslate="polySignApp.userEntity.firstname">Firstname</span> <fa-icon icon="sort"></fa-icon></th>
+                    <th scope="col"  jhiSortBy="lastname"><span jhiTranslate="polySignApp.userEntity.lastname">Lastname</span> <fa-icon icon="sort"></fa-icon></th>
                     <th scope="col"  jhiSortBy="email"><span jhiTranslate="polySignApp.userEntity.email">Email</span> <fa-icon icon="sort"></fa-icon></th>
                     <th scope="col"  jhiSortBy="phone"><span jhiTranslate="polySignApp.userEntity.phone">Phone</span> <fa-icon icon="sort"></fa-icon></th>
-                    <th scope="col"  jhiSortBy="user.id"><span jhiTranslate="polySignApp.userEntity.user">User</span> <fa-icon icon="sort"></fa-icon></th>
+                    <th scope="col"  jhiSortBy="user.firstName"><span jhiTranslate="polySignApp.userEntity.user">User</span> <fa-icon icon="sort"></fa-icon></th>
                     <th scope="col"></th>
                 </tr>
             </thead>
             <tbody>
                 <tr *ngFor="let userEntity of userEntities ;trackBy: trackId">
                     <td><a [routerLink]="['/user-entity', userEntity.id, 'view']">{{ userEntity.id }}</a></td>
-                    <td>{{ userEntity.firstName }}</td>
-                    <td>{{ userEntity.lastName }}</td>
+                    <td>{{ userEntity.firstname }}</td>
+                    <td>{{ userEntity.lastname }}</td>
                     <td>{{ userEntity.email }}</td>
                     <td>{{ userEntity.phone }}</td>
                     <td>
-                        {{ userEntity.user?.id }}
+                        {{ userEntity.user?.firstName }}
                     </td>
                     <td class="text-right">
                         <div class="btn-group">

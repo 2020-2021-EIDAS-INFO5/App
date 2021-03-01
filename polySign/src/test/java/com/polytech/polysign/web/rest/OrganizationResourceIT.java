@@ -32,6 +32,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @WithMockUser
 public class OrganizationResourceIT {
 
+    private static final String DEFAULT_NAME = "AAAAAAAAAA";
+    private static final String UPDATED_NAME = "BBBBBBBBBB";
+
     private static final String DEFAULT_STREET_ADDRESS = "AAAAAAAAAA";
     private static final String UPDATED_STREET_ADDRESS = "BBBBBBBBBB";
 
@@ -46,9 +49,6 @@ public class OrganizationResourceIT {
 
     private static final String DEFAULT_VAT_NUMBER = "AAAAAAAAAA";
     private static final String UPDATED_VAT_NUMBER = "BBBBBBBBBB";
-
-    private static final String DEFAULT_NAME = "AAAAAAAAAA";
-    private static final String UPDATED_NAME = "BBBBBBBBBB";
 
     @Autowired
     private OrganizationRepository organizationRepository;
@@ -72,12 +72,12 @@ public class OrganizationResourceIT {
      */
     public static Organization createEntity(EntityManager em) {
         Organization organization = new Organization()
+            .name(DEFAULT_NAME)
             .streetAddress(DEFAULT_STREET_ADDRESS)
             .postalCode(DEFAULT_POSTAL_CODE)
             .city(DEFAULT_CITY)
             .country(DEFAULT_COUNTRY)
-            .vatNumber(DEFAULT_VAT_NUMBER)
-            .name(DEFAULT_NAME);
+            .vatNumber(DEFAULT_VAT_NUMBER);
         return organization;
     }
     /**
@@ -88,12 +88,12 @@ public class OrganizationResourceIT {
      */
     public static Organization createUpdatedEntity(EntityManager em) {
         Organization organization = new Organization()
+            .name(UPDATED_NAME)
             .streetAddress(UPDATED_STREET_ADDRESS)
             .postalCode(UPDATED_POSTAL_CODE)
             .city(UPDATED_CITY)
             .country(UPDATED_COUNTRY)
-            .vatNumber(UPDATED_VAT_NUMBER)
-            .name(UPDATED_NAME);
+            .vatNumber(UPDATED_VAT_NUMBER);
         return organization;
     }
 
@@ -116,12 +116,12 @@ public class OrganizationResourceIT {
         List<Organization> organizationList = organizationRepository.findAll();
         assertThat(organizationList).hasSize(databaseSizeBeforeCreate + 1);
         Organization testOrganization = organizationList.get(organizationList.size() - 1);
+        assertThat(testOrganization.getName()).isEqualTo(DEFAULT_NAME);
         assertThat(testOrganization.getStreetAddress()).isEqualTo(DEFAULT_STREET_ADDRESS);
         assertThat(testOrganization.getPostalCode()).isEqualTo(DEFAULT_POSTAL_CODE);
         assertThat(testOrganization.getCity()).isEqualTo(DEFAULT_CITY);
         assertThat(testOrganization.getCountry()).isEqualTo(DEFAULT_COUNTRY);
         assertThat(testOrganization.getVatNumber()).isEqualTo(DEFAULT_VAT_NUMBER);
-        assertThat(testOrganization.getName()).isEqualTo(DEFAULT_NAME);
     }
 
     @Test
@@ -143,6 +143,25 @@ public class OrganizationResourceIT {
         assertThat(organizationList).hasSize(databaseSizeBeforeCreate);
     }
 
+
+    @Test
+    @Transactional
+    public void checkNameIsRequired() throws Exception {
+        int databaseSizeBeforeTest = organizationRepository.findAll().size();
+        // set the field null
+        organization.setName(null);
+
+        // Create the Organization, which fails.
+
+
+        restOrganizationMockMvc.perform(post("/api/organizations").with(csrf())
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(TestUtil.convertObjectToJsonBytes(organization)))
+            .andExpect(status().isBadRequest());
+
+        List<Organization> organizationList = organizationRepository.findAll();
+        assertThat(organizationList).hasSize(databaseSizeBeforeTest);
+    }
 
     @Test
     @Transactional
@@ -241,25 +260,6 @@ public class OrganizationResourceIT {
 
     @Test
     @Transactional
-    public void checkNameIsRequired() throws Exception {
-        int databaseSizeBeforeTest = organizationRepository.findAll().size();
-        // set the field null
-        organization.setName(null);
-
-        // Create the Organization, which fails.
-
-
-        restOrganizationMockMvc.perform(post("/api/organizations").with(csrf())
-            .contentType(MediaType.APPLICATION_JSON)
-            .content(TestUtil.convertObjectToJsonBytes(organization)))
-            .andExpect(status().isBadRequest());
-
-        List<Organization> organizationList = organizationRepository.findAll();
-        assertThat(organizationList).hasSize(databaseSizeBeforeTest);
-    }
-
-    @Test
-    @Transactional
     public void getAllOrganizations() throws Exception {
         // Initialize the database
         organizationRepository.saveAndFlush(organization);
@@ -269,12 +269,12 @@ public class OrganizationResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(organization.getId().intValue())))
+            .andExpect(jsonPath("$.[*].name").value(hasItem(DEFAULT_NAME)))
             .andExpect(jsonPath("$.[*].streetAddress").value(hasItem(DEFAULT_STREET_ADDRESS)))
             .andExpect(jsonPath("$.[*].postalCode").value(hasItem(DEFAULT_POSTAL_CODE)))
             .andExpect(jsonPath("$.[*].city").value(hasItem(DEFAULT_CITY)))
             .andExpect(jsonPath("$.[*].country").value(hasItem(DEFAULT_COUNTRY)))
-            .andExpect(jsonPath("$.[*].vatNumber").value(hasItem(DEFAULT_VAT_NUMBER)))
-            .andExpect(jsonPath("$.[*].name").value(hasItem(DEFAULT_NAME)));
+            .andExpect(jsonPath("$.[*].vatNumber").value(hasItem(DEFAULT_VAT_NUMBER)));
     }
     
     @Test
@@ -288,12 +288,12 @@ public class OrganizationResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.id").value(organization.getId().intValue()))
+            .andExpect(jsonPath("$.name").value(DEFAULT_NAME))
             .andExpect(jsonPath("$.streetAddress").value(DEFAULT_STREET_ADDRESS))
             .andExpect(jsonPath("$.postalCode").value(DEFAULT_POSTAL_CODE))
             .andExpect(jsonPath("$.city").value(DEFAULT_CITY))
             .andExpect(jsonPath("$.country").value(DEFAULT_COUNTRY))
-            .andExpect(jsonPath("$.vatNumber").value(DEFAULT_VAT_NUMBER))
-            .andExpect(jsonPath("$.name").value(DEFAULT_NAME));
+            .andExpect(jsonPath("$.vatNumber").value(DEFAULT_VAT_NUMBER));
     }
     @Test
     @Transactional
@@ -316,12 +316,12 @@ public class OrganizationResourceIT {
         // Disconnect from session so that the updates on updatedOrganization are not directly saved in db
         em.detach(updatedOrganization);
         updatedOrganization
+            .name(UPDATED_NAME)
             .streetAddress(UPDATED_STREET_ADDRESS)
             .postalCode(UPDATED_POSTAL_CODE)
             .city(UPDATED_CITY)
             .country(UPDATED_COUNTRY)
-            .vatNumber(UPDATED_VAT_NUMBER)
-            .name(UPDATED_NAME);
+            .vatNumber(UPDATED_VAT_NUMBER);
 
         restOrganizationMockMvc.perform(put("/api/organizations").with(csrf())
             .contentType(MediaType.APPLICATION_JSON)
@@ -332,12 +332,12 @@ public class OrganizationResourceIT {
         List<Organization> organizationList = organizationRepository.findAll();
         assertThat(organizationList).hasSize(databaseSizeBeforeUpdate);
         Organization testOrganization = organizationList.get(organizationList.size() - 1);
+        assertThat(testOrganization.getName()).isEqualTo(UPDATED_NAME);
         assertThat(testOrganization.getStreetAddress()).isEqualTo(UPDATED_STREET_ADDRESS);
         assertThat(testOrganization.getPostalCode()).isEqualTo(UPDATED_POSTAL_CODE);
         assertThat(testOrganization.getCity()).isEqualTo(UPDATED_CITY);
         assertThat(testOrganization.getCountry()).isEqualTo(UPDATED_COUNTRY);
         assertThat(testOrganization.getVatNumber()).isEqualTo(UPDATED_VAT_NUMBER);
-        assertThat(testOrganization.getName()).isEqualTo(UPDATED_NAME);
     }
 
     @Test

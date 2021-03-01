@@ -6,9 +6,8 @@
       "fieldType": "Integer"
     },
     {
-      "fieldName": "signatureMethod",
-      "fieldType": "SignatureMethod",
-      "fieldValues": "EMAIL,SMS,OTP"
+      "fieldName": "signed",
+      "fieldType": "Boolean"
     }
   ],
   "relationships": [
@@ -17,7 +16,7 @@
       "otherEntityName": "signedFile",
       "otherEntityRelationshipName": "signOrder",
       "relationshipName": "file",
-      "otherEntityField": "id",
+      "otherEntityField": "filename",
       "ownerSide": true
     },
     {
@@ -25,10 +24,17 @@
       "otherEntityName": "userEntity",
       "otherEntityRelationshipName": "order",
       "relationshipName": "signer",
-      "otherEntityField": "id"
+      "otherEntityField": "firstname"
+    },
+    {
+      "relationshipType": "many-to-one",
+      "otherEntityName": "signatureProcess",
+      "otherEntityRelationshipName": "signOrder",
+      "relationshipName": "signature",
+      "otherEntityField": "title"
     }
   ],
-  "changelogDate": "20210227191051",
+  "changelogDate": "20210301095252",
   "entityTableName": "sign_order",
   "dto": "no",
   "pagination": "pagination",

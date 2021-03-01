@@ -9,49 +9,47 @@ application {
     prodDatabaseType mysql,
     clientFramework angular
   }
-    entities *
+    entities * 
     service * with serviceClass
     paginate UserEntity with pagination 
     paginate Organization with pagination 
     paginate SignatureProcess with pagination 
     paginate SignOrder with pagination 
     paginate SignedFile with pagination 
-    paginate AuthenticatedUser with pagination 
-    
+    paginate Authorit with pagination
 }
 
 entity UserEntity{
-	firstName String required
-	lastName String required
+	firstname String required
+	lastname String required
     email String required pattern(/^[^@\s]+@[^@\s]+\.[^@\s]+$/)
     phone String required maxlength(15)  
 }
 
 
 entity Organization{
+    name String required
     streetAddress String required
 	postalCode String required
 	city String required
     country String required
     vatNumber String required
-    name String required
 }
 
-entity AuthenticatedUser{
-}
 
-entity Auth{
+
+entity Authorit{
 	hasRole Role required
 }
 
 enum Role{
-	ADMIN, USER 
+	ADMIN_ORGANIZATION, USER_ORGANIZATION, SIGNER
 } 
 
 entity SignatureProcess {
+	title String required
 	emissionDate Instant required
 	expirationDate Instant required
-	title String required
     status Status required 
     orderedSigning Boolean required
 }
@@ -62,6 +60,7 @@ entity SignedFile {
     fileBytes Blob
     signingDate Instant required
     size Integer 
+    sha256 String 
 }
 
 enum Status {
@@ -71,28 +70,21 @@ COMPLETED, PENDING, CANCELLED
 
 entity SignOrder {
     rank Integer 
-    signatureMethod SignatureMethod
-}
-
-enum SignatureMethod {
-EMAIL, SMS, OTP
+    signed Boolean
 }
 
 relationship OneToOne {
-    UserEntity{user} to User
-    AuthenticatedUser{user} to UserEntity 
-    SignOrder{file} to SignedFile 
+    UserEntity{user(firstName)} to User
+    SignOrder{file(filename)} to SignedFile 
+    SignatureProcess{finalFile(filename)} to SignedFile 
 }
 
 
-relationship ManyToOne {
-	Auth to AuthenticatedUser{authority}
-    //SignOrder{signature} to SignedFile{order}
-}
 
 relationship OneToMany {
-	AuthenticatedUser{signature} to SignatureProcess{creator},
-    Organization to Auth{organization},
-    UserEntity{order} to SignOrder{signer},
-    SignatureProcess{file} to SignedFile{signature}
+	UserEntity{signature(title)} to SignatureProcess{creator},
+    Organization to Authorit{organization(name)},
+    UserEntity{order} to SignOrder{signer(firstname)},
+    SignatureProcess{signOrder} to SignOrder{signature(title)}
+    UserEntity{authority(hasRole)} to Authorit{user(firstname)}
 }

@@ -1,0 +1,42 @@
+<div class="row justify-content-center">
+    <div class="col-8">
+        <div *ngIf="authorit">
+            <h2><span jhiTranslate="polySignApp.authorit.detail.title">Authorit</span> {{ authorit.id }}</h2>
+
+            <hr>
+
+            <jhi-alert-error></jhi-alert-error>
+
+            <dl class="row-md jh-entity-details">
+                <dt><span jhiTranslate="polySignApp.authorit.hasRole">Has Role</span></dt>
+                <dd>
+                    <span jhiTranslate="{{ 'polySignApp.Role.' + authorit.hasRole }}">{{ authorit.hasRole }}</span>
+                </dd>
+                <dt><span jhiTranslate="polySignApp.authorit.organization">Organization</span></dt>
+                <dd>
+                    <div *ngIf="authorit.organization">
+                        <a [routerLink]="['/organization', authorit.organization?.id, 'view']">{{ authorit.organization?.name }}</a>
+                    </div>
+                </dd>
+                <dt><span jhiTranslate="polySignApp.authorit.user">User</span></dt>
+                <dd>
+                    <div *ngIf="authorit.user">
+                        <a [routerLink]="['/user-entity', authorit.user?.id, 'view']">{{ authorit.user?.firstname }}</a>
+                    </div>
+                </dd>
+            </dl>
+
+            <button type="submit"
+                    (click)="previousState()"
+                    class="btn btn-info">
+                <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back">Back</span>
+            </button>
+
+            <button type="button"
+                    [routerLink]="['/authorit', authorit.id, 'edit']"
+                    class="btn btn-primary">
+                <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit">Edit</span>
+            </button>
+        </div>
+    </div>
+</div>

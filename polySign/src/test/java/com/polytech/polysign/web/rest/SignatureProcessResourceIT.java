@@ -35,14 +35,14 @@ import com.polytech.polysign.domain.enumeration.Status;
 @WithMockUser
 public class SignatureProcessResourceIT {
 
+    private static final String DEFAULT_TITLE = "AAAAAAAAAA";
+    private static final String UPDATED_TITLE = "BBBBBBBBBB";
+
     private static final Instant DEFAULT_EMISSION_DATE = Instant.ofEpochMilli(0L);
     private static final Instant UPDATED_EMISSION_DATE = Instant.now().truncatedTo(ChronoUnit.MILLIS);
 
     private static final Instant DEFAULT_EXPIRATION_DATE = Instant.ofEpochMilli(0L);
     private static final Instant UPDATED_EXPIRATION_DATE = Instant.now().truncatedTo(ChronoUnit.MILLIS);
-
-    private static final String DEFAULT_TITLE = "AAAAAAAAAA";
-    private static final String UPDATED_TITLE = "BBBBBBBBBB";
 
     private static final Status DEFAULT_STATUS = Status.COMPLETED;
     private static final Status UPDATED_STATUS = Status.PENDING;
@@ -72,9 +72,9 @@ public class SignatureProcessResourceIT {
      */
     public static SignatureProcess createEntity(EntityManager em) {
         SignatureProcess signatureProcess = new SignatureProcess()
+            .title(DEFAULT_TITLE)
             .emissionDate(DEFAULT_EMISSION_DATE)
             .expirationDate(DEFAULT_EXPIRATION_DATE)
-            .title(DEFAULT_TITLE)
             .status(DEFAULT_STATUS)
             .orderedSigning(DEFAULT_ORDERED_SIGNING);
         return signatureProcess;
@@ -87,9 +87,9 @@ public class SignatureProcessResourceIT {
      */
     public static SignatureProcess createUpdatedEntity(EntityManager em) {
         SignatureProcess signatureProcess = new SignatureProcess()
+            .title(UPDATED_TITLE)
             .emissionDate(UPDATED_EMISSION_DATE)
             .expirationDate(UPDATED_EXPIRATION_DATE)
-            .title(UPDATED_TITLE)
             .status(UPDATED_STATUS)
             .orderedSigning(UPDATED_ORDERED_SIGNING);
         return signatureProcess;
@@ -114,9 +114,9 @@ public class SignatureProcessResourceIT {
         List<SignatureProcess> signatureProcessList = signatureProcessRepository.findAll();
         assertThat(signatureProcessList).hasSize(databaseSizeBeforeCreate + 1);
         SignatureProcess testSignatureProcess = signatureProcessList.get(signatureProcessList.size() - 1);
+        assertThat(testSignatureProcess.getTitle()).isEqualTo(DEFAULT_TITLE);
         assertThat(testSignatureProcess.getEmissionDate()).isEqualTo(DEFAULT_EMISSION_DATE);
         assertThat(testSignatureProcess.getExpirationDate()).isEqualTo(DEFAULT_EXPIRATION_DATE);
-        assertThat(testSignatureProcess.getTitle()).isEqualTo(DEFAULT_TITLE);
         assertThat(testSignatureProcess.getStatus()).isEqualTo(DEFAULT_STATUS);
         assertThat(testSignatureProcess.isOrderedSigning()).isEqualTo(DEFAULT_ORDERED_SIGNING);
     }
@@ -143,6 +143,25 @@ public class SignatureProcessResourceIT {
 
     @Test
     @Transactional
+    public void checkTitleIsRequired() throws Exception {
+        int databaseSizeBeforeTest = signatureProcessRepository.findAll().size();
+        // set the field null
+        signatureProcess.setTitle(null);
+
+        // Create the SignatureProcess, which fails.
+
+
+        restSignatureProcessMockMvc.perform(post("/api/signature-processes").with(csrf())
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(TestUtil.convertObjectToJsonBytes(signatureProcess)))
+            .andExpect(status().isBadRequest());
+
+        List<SignatureProcess> signatureProcessList = signatureProcessRepository.findAll();
+        assertThat(signatureProcessList).hasSize(databaseSizeBeforeTest);
+    }
+
+    @Test
+    @Transactional
     public void checkEmissionDateIsRequired() throws Exception {
         int databaseSizeBeforeTest = signatureProcessRepository.findAll().size();
         // set the field null
@@ -166,25 +185,6 @@ public class SignatureProcessResourceIT {
         int databaseSizeBeforeTest = signatureProcessRepository.findAll().size();
         // set the field null
         signatureProcess.setExpirationDate(null);
-
-        // Create the SignatureProcess, which fails.
-
-
-        restSignatureProcessMockMvc.perform(post("/api/signature-processes").with(csrf())
-            .contentType(MediaType.APPLICATION_JSON)
-            .content(TestUtil.convertObjectToJsonBytes(signatureProcess)))
-            .andExpect(status().isBadRequest());
-
-        List<SignatureProcess> signatureProcessList = signatureProcessRepository.findAll();
-        assertThat(signatureProcessList).hasSize(databaseSizeBeforeTest);
-    }
-
-    @Test
-    @Transactional
-    public void checkTitleIsRequired() throws Exception {
-        int databaseSizeBeforeTest = signatureProcessRepository.findAll().size();
-        // set the field null
-        signatureProcess.setTitle(null);
 
         // Create the SignatureProcess, which fails.
 
@@ -247,9 +247,9 @@ public class SignatureProcessResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(signatureProcess.getId().intValue())))
+            .andExpect(jsonPath("$.[*].title").value(hasItem(DEFAULT_TITLE)))
             .andExpect(jsonPath("$.[*].emissionDate").value(hasItem(DEFAULT_EMISSION_DATE.toString())))
             .andExpect(jsonPath("$.[*].expirationDate").value(hasItem(DEFAULT_EXPIRATION_DATE.toString())))
-            .andExpect(jsonPath("$.[*].title").value(hasItem(DEFAULT_TITLE)))
             .andExpect(jsonPath("$.[*].status").value(hasItem(DEFAULT_STATUS.toString())))
             .andExpect(jsonPath("$.[*].orderedSigning").value(hasItem(DEFAULT_ORDERED_SIGNING.booleanValue())));
     }
@@ -265,9 +265,9 @@ public class SignatureProcessResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.id").value(signatureProcess.getId().intValue()))
+            .andExpect(jsonPath("$.title").value(DEFAULT_TITLE))
             .andExpect(jsonPath("$.emissionDate").value(DEFAULT_EMISSION_DATE.toString()))
             .andExpect(jsonPath("$.expirationDate").value(DEFAULT_EXPIRATION_DATE.toString()))
-            .andExpect(jsonPath("$.title").value(DEFAULT_TITLE))
             .andExpect(jsonPath("$.status").value(DEFAULT_STATUS.toString()))
             .andExpect(jsonPath("$.orderedSigning").value(DEFAULT_ORDERED_SIGNING.booleanValue()));
     }
@@ -292,9 +292,9 @@ public class SignatureProcessResourceIT {
         // Disconnect from session so that the updates on updatedSignatureProcess are not directly saved in db
         em.detach(updatedSignatureProcess);
         updatedSignatureProcess
+            .title(UPDATED_TITLE)
             .emissionDate(UPDATED_EMISSION_DATE)
             .expirationDate(UPDATED_EXPIRATION_DATE)
-            .title(UPDATED_TITLE)
             .status(UPDATED_STATUS)
             .orderedSigning(UPDATED_ORDERED_SIGNING);
 
@@ -307,9 +307,9 @@ public class SignatureProcessResourceIT {
         List<SignatureProcess> signatureProcessList = signatureProcessRepository.findAll();
         assertThat(signatureProcessList).hasSize(databaseSizeBeforeUpdate);
         SignatureProcess testSignatureProcess = signatureProcessList.get(signatureProcessList.size() - 1);
+        assertThat(testSignatureProcess.getTitle()).isEqualTo(UPDATED_TITLE);
         assertThat(testSignatureProcess.getEmissionDate()).isEqualTo(UPDATED_EMISSION_DATE);
         assertThat(testSignatureProcess.getExpirationDate()).isEqualTo(UPDATED_EXPIRATION_DATE);
-        assertThat(testSignatureProcess.getTitle()).isEqualTo(UPDATED_TITLE);
         assertThat(testSignatureProcess.getStatus()).isEqualTo(UPDATED_STATUS);
         assertThat(testSignatureProcess.isOrderedSigning()).isEqualTo(UPDATED_ORDERED_SIGNING);
     }

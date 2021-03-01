@@ -27,11 +27,9 @@
                 <dd>
                     <span>{{ signedFile.size }}</span>
                 </dd>
-                <dt><span jhiTranslate="polySignApp.signedFile.signature">Signature</span></dt>
+                <dt><span jhiTranslate="polySignApp.signedFile.sha256">Sha 256</span></dt>
                 <dd>
-                    <div *ngIf="signedFile.signature">
-                        <a [routerLink]="['/signature-process', signedFile.signature?.id, 'view']">{{ signedFile.signature?.id }}</a>
-                    </div>
+                    <span>{{ signedFile.sha256 }}</span>
                 </dd>
             </dl>
 

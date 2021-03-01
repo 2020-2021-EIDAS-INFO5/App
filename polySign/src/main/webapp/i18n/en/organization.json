@@ -16,13 +16,13 @@
       "detail": {
         "title": "Organization"
       },
+      "name": "Name",
       "streetAddress": "Street Address",
       "postalCode": "Postal Code",
       "city": "City",
       "country": "Country",
       "vatNumber": "Vat Number",
-      "name": "Name",
-      "auth": "Auth"
+      "authorit": "Authorit"
     }
   }
 }

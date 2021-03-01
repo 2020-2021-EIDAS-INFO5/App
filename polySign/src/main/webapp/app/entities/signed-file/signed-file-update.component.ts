@@ -11,8 +11,6 @@ import { JhiDataUtils, JhiFileLoadError, JhiEventManager, JhiEventWithContent } 
 import { ISignedFile, SignedFile } from 'app/shared/model/signed-file.model';
 import { SignedFileService } from './signed-file.service';
 import { AlertError } from 'app/shared/alert/alert-error.model';
-import { ISignatureProcess } from 'app/shared/model/signature-process.model';
-import { SignatureProcessService } from 'app/entities/signature-process/signature-process.service';
 
 @Component({
   selector: 'jhi-signed-file-update',
@@ -20,7 +18,6 @@ import { SignatureProcessService } from 'app/entities/signature-process/signatur
 })
 export class SignedFileUpdateComponent implements OnInit {
   isSaving = false;
-  signatureprocesses: ISignatureProcess[] = [];
 
   editForm = this.fb.group({
     id: [],
@@ -29,14 +26,13 @@ export class SignedFileUpdateComponent implements OnInit {
     fileBytesContentType: [],
     signingDate: [null, [Validators.required]],
     size: [],
-    signature: [],
+    sha256: [],
   });
 
   constructor(
     protected dataUtils: JhiDataUtils,
     protected eventManager: JhiEventManager,
     protected signedFileService: SignedFileService,
-    protected signatureProcessService: SignatureProcessService,
     protected activatedRoute: ActivatedRoute,
     private fb: FormBuilder
   ) {}
@@ -49,10 +45,6 @@ export class SignedFileUpdateComponent implements OnInit {
       }
 
       this.updateForm(signedFile);
-
-      this.signatureProcessService
-        .query()
-        .subscribe((res: HttpResponse<ISignatureProcess[]>) => (this.signatureprocesses = res.body || []));
     });
   }
 
@@ -64,7 +56,7 @@ export class SignedFileUpdateComponent implements OnInit {
       fileBytesContentType: signedFile.fileBytesContentType,
       signingDate: signedFile.signingDate ? signedFile.signingDate.format(DATE_TIME_FORMAT) : null,
       size: signedFile.size,
-      signature: signedFile.signature,
+      sha256: signedFile.sha256,
     });
   }
 
@@ -109,7 +101,7 @@ export class SignedFileUpdateComponent implements OnInit {
         ? moment(this.editForm.get(['signingDate'])!.value, DATE_TIME_FORMAT)
         : undefined,
       size: this.editForm.get(['size'])!.value,
-      signature: this.editForm.get(['signature'])!.value,
+      sha256: this.editForm.get(['sha256'])!.value,
     };
   }
 
@@ -127,9 +119,5 @@ export class SignedFileUpdateComponent implements OnInit {
 
   protected onSaveError(): void {
     this.isSaving = false;
-  }
-
-  trackById(index: number, item: ISignatureProcess): any {
-    return item.id;
   }
 }

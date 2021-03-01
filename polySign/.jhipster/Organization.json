@@ -2,6 +2,11 @@
   "name": "Organization",
   "fields": [
     {
+      "fieldName": "name",
+      "fieldType": "String",
+      "fieldValidateRules": ["required"]
+    },
+    {
       "fieldName": "streetAddress",
       "fieldType": "String",
       "fieldValidateRules": ["required"]
@@ -25,22 +30,17 @@
       "fieldName": "vatNumber",
       "fieldType": "String",
       "fieldValidateRules": ["required"]
-    },
-    {
-      "fieldName": "name",
-      "fieldType": "String",
-      "fieldValidateRules": ["required"]
     }
   ],
   "relationships": [
     {
       "relationshipType": "one-to-many",
-      "otherEntityName": "auth",
+      "otherEntityName": "authorit",
       "otherEntityRelationshipName": "organization",
-      "relationshipName": "auth"
+      "relationshipName": "authorit"
     }
   ],
-  "changelogDate": "20210227190551",
+  "changelogDate": "20210301094852",
   "entityTableName": "organization",
   "dto": "no",
   "pagination": "pagination",

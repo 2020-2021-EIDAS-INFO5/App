@@ -25,12 +25,12 @@ public class UserEntity implements Serializable {
     private Long id;
 
     @NotNull
-    @Column(name = "first_name", nullable = false)
-    private String firstName;
+    @Column(name = "firstname", nullable = false)
+    private String firstname;
 
     @NotNull
-    @Column(name = "last_name", nullable = false)
-    private String lastName;
+    @Column(name = "lastname", nullable = false)
+    private String lastname;
 
     @NotNull
     @Pattern(regexp = "^[^@\\s]+@[^@\\s]+\\.[^@\\s]+$")
@@ -46,9 +46,17 @@ public class UserEntity implements Serializable {
     @JoinColumn(unique = true)
     private User user;
 
+    @OneToMany(mappedBy = "creator")
+    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+    private Set<SignatureProcess> signatures = new HashSet<>();
+
     @OneToMany(mappedBy = "signer")
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     private Set<SignOrder> orders = new HashSet<>();
+
+    @OneToMany(mappedBy = "user")
+    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+    private Set<Authorit> authorities = new HashSet<>();
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
     public Long getId() {
@@ -59,30 +67,30 @@ public class UserEntity implements Serializable {
         this.id = id;
     }
 
-    public String getFirstName() {
-        return firstName;
+    public String getFirstname() {
+        return firstname;
     }
 
-    public UserEntity firstName(String firstName) {
-        this.firstName = firstName;
+    public UserEntity firstname(String firstname) {
+        this.firstname = firstname;
         return this;
     }
 
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
+    public void setFirstname(String firstname) {
+        this.firstname = firstname;
     }
 
-    public String getLastName() {
-        return lastName;
+    public String getLastname() {
+        return lastname;
     }
 
-    public UserEntity lastName(String lastName) {
-        this.lastName = lastName;
+    public UserEntity lastname(String lastname) {
+        this.lastname = lastname;
         return this;
     }
 
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
+    public void setLastname(String lastname) {
+        this.lastname = lastname;
     }
 
     public String getEmail() {
@@ -124,6 +132,31 @@ public class UserEntity implements Serializable {
         this.user = user;
     }
 
+    public Set<SignatureProcess> getSignatures() {
+        return signatures;
+    }
+
+    public UserEntity signatures(Set<SignatureProcess> signatureProcesses) {
+        this.signatures = signatureProcesses;
+        return this;
+    }
+
+    public UserEntity addSignature(SignatureProcess signatureProcess) {
+        this.signatures.add(signatureProcess);
+        signatureProcess.setCreator(this);
+        return this;
+    }
+
+    public UserEntity removeSignature(SignatureProcess signatureProcess) {
+        this.signatures.remove(signatureProcess);
+        signatureProcess.setCreator(null);
+        return this;
+    }
+
+    public void setSignatures(Set<SignatureProcess> signatureProcesses) {
+        this.signatures = signatureProcesses;
+    }
+
     public Set<SignOrder> getOrders() {
         return orders;
     }
@@ -148,6 +181,31 @@ public class UserEntity implements Serializable {
     public void setOrders(Set<SignOrder> signOrders) {
         this.orders = signOrders;
     }
+
+    public Set<Authorit> getAuthorities() {
+        return authorities;
+    }
+
+    public UserEntity authorities(Set<Authorit> authorits) {
+        this.authorities = authorits;
+        return this;
+    }
+
+    public UserEntity addAuthority(Authorit authorit) {
+        this.authorities.add(authorit);
+        authorit.setUser(this);
+        return this;
+    }
+
+    public UserEntity removeAuthority(Authorit authorit) {
+        this.authorities.remove(authorit);
+        authorit.setUser(null);
+        return this;
+    }
+
+    public void setAuthorities(Set<Authorit> authorits) {
+        this.authorities = authorits;
+    }
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here
 
     @Override
@@ -171,8 +229,8 @@ public class UserEntity implements Serializable {
     public String toString() {
         return "UserEntity{" +
             "id=" + getId() +
-            ", firstName='" + getFirstName() + "'" +
-            ", lastName='" + getLastName() + "'" +
+            ", firstname='" + getFirstname() + "'" +
+            ", lastname='" + getLastname() + "'" +
             ", email='" + getEmail() + "'" +
             ", phone='" + getPhone() + "'" +
             "}";

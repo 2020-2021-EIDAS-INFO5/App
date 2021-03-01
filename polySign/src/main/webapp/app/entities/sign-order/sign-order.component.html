@@ -24,9 +24,10 @@
                 <tr jhiSort [(predicate)]="predicate" [(ascending)]="ascending" [callback]="loadPage.bind(this)">
                     <th scope="col"  jhiSortBy="id"><span jhiTranslate="global.field.id">ID</span> <fa-icon icon="sort"></fa-icon></th>
                     <th scope="col"  jhiSortBy="rank"><span jhiTranslate="polySignApp.signOrder.rank">Rank</span> <fa-icon icon="sort"></fa-icon></th>
-                    <th scope="col"  jhiSortBy="signatureMethod"><span jhiTranslate="polySignApp.signOrder.signatureMethod">Signature Method</span> <fa-icon icon="sort"></fa-icon></th>
-                    <th scope="col"  jhiSortBy="file.id"><span jhiTranslate="polySignApp.signOrder.file">File</span> <fa-icon icon="sort"></fa-icon></th>
-                    <th scope="col"  jhiSortBy="signer.id"><span jhiTranslate="polySignApp.signOrder.signer">Signer</span> <fa-icon icon="sort"></fa-icon></th>
+                    <th scope="col"  jhiSortBy="signed"><span jhiTranslate="polySignApp.signOrder.signed">Signed</span> <fa-icon icon="sort"></fa-icon></th>
+                    <th scope="col"  jhiSortBy="file.filename"><span jhiTranslate="polySignApp.signOrder.file">File</span> <fa-icon icon="sort"></fa-icon></th>
+                    <th scope="col"  jhiSortBy="signer.firstname"><span jhiTranslate="polySignApp.signOrder.signer">Signer</span> <fa-icon icon="sort"></fa-icon></th>
+                    <th scope="col"  jhiSortBy="signature.title"><span jhiTranslate="polySignApp.signOrder.signature">Signature</span> <fa-icon icon="sort"></fa-icon></th>
                     <th scope="col"></th>
                 </tr>
             </thead>
@@ -34,15 +35,20 @@
                 <tr *ngFor="let signOrder of signOrders ;trackBy: trackId">
                     <td><a [routerLink]="['/sign-order', signOrder.id, 'view']">{{ signOrder.id }}</a></td>
                     <td>{{ signOrder.rank }}</td>
-                    <td jhiTranslate="{{ 'polySignApp.SignatureMethod.' + signOrder.signatureMethod }}">{{ signOrder.signatureMethod }}</td>
+                    <td>{{ signOrder.signed }}</td>
                     <td>
                         <div *ngIf="signOrder.file">
-                            <a [routerLink]="['/signed-file', signOrder.file?.id, 'view']" >{{ signOrder.file?.id }}</a>
+                            <a [routerLink]="['/signed-file', signOrder.file?.id, 'view']" >{{ signOrder.file?.filename }}</a>
                         </div>
                     </td>
                     <td>
                         <div *ngIf="signOrder.signer">
-                            <a [routerLink]="['/user-entity', signOrder.signer?.id, 'view']" >{{ signOrder.signer?.id }}</a>
+                            <a [routerLink]="['/user-entity', signOrder.signer?.id, 'view']" >{{ signOrder.signer?.firstname }}</a>
+                        </div>
+                    </td>
+                    <td>
+                        <div *ngIf="signOrder.signature">
+                            <a [routerLink]="['/signature-process', signOrder.signature?.id, 'view']" >{{ signOrder.signature?.title }}</a>
                         </div>
                     </td>
                     <td class="text-right">
