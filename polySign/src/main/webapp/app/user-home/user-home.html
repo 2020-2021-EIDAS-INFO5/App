@@ -1,0 +1,88 @@
+<div>
+    <h2 id="page-heading">
+        <span jhiTranslate="polySignApp.signatureProcess.home.title">Signature Processes</span>
+
+        <button id="jh-create-entity" class="btn btn-primary float-right jh-create-entity create-signature-process" [routerLink]="['/signature-process/new']">
+            <fa-icon icon="plus"></fa-icon>
+            <span  jhiTranslate="polySignApp.signatureProcess.home.createLabel">
+            Create a new Signature Process
+            </span>
+        </button>
+    </h2>
+
+
+    <div class="alert alert-warning" id="no-result" *ngIf="signatureProcesses?.length === 0">
+        <span jhiTranslate="polySignApp.signatureProcess.home.notFound">No signatureProcesses found</span>
+    </div>
+
+    <div class="table-responsive" id="entities" *ngIf="signatureProcesses && signatureProcesses.length > 0">
+        <table class="table table-striped" aria-describedby="page-heading">
+            <thead>
+            <tr ><!--jhiSort [(predicate)]="predicate" [(ascending)]="ascending" [callback]="loadPage.bind(this)"-->
+                <th scope="col"  ><span jhiTranslate="global.field.id">ID</span> <fa-icon icon="sort"></fa-icon></th> <!--jhiSortBy="id"-->
+                <th scope="col"  ><span jhiTranslate="polySignApp.signatureProcess.title">Title</span> <fa-icon icon="sort"></fa-icon></th> <!-- jhiSortBy="title" -->
+                <th scope="col"  ><span jhiTranslate="polySignApp.signatureProcess.emissionDate">Emission Date</span> <fa-icon icon="sort"></fa-icon></th>  <!--jhiSortBy="emissionDate"-->
+                <th scope="col"  ><span jhiTranslate="polySignApp.signatureProcess.expirationDate">Expiration Date</span> <fa-icon icon="sort"></fa-icon></th> <!-- jhiSortBy="expirationDate"-->
+                <th scope="col"  ><span jhiTranslate="polySignApp.signatureProcess.status">Status</span> <fa-icon icon="sort"></fa-icon></th> <!--jhiSortBy="status"-->
+                <th scope="col"  ><span jhiTranslate="polySignApp.signatureProcess.orderedSigning">Ordered Signing</span> <fa-icon icon="sort"></fa-icon></th> <!--jhiSortBy="orderedSigning" -->
+                <th scope="col"  ><span jhiTranslate="polySignApp.signatureProcess.finalFile">Final File</span> <fa-icon icon="sort"></fa-icon></th> <!-- jhiSortBy="finalFile.filename" -->
+                <th scope="col"  ><span jhiTranslate="polySignApp.signatureProcess.creator">Creator</span> <fa-icon icon="sort"></fa-icon></th> <!--jhiSortBy="creator.id"-->
+                <th scope="col"></th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr *ngFor="let signatureProcess of signatureProcesses ;trackBy: trackId">
+                <td><a [routerLink]="['/signature-process', signatureProcess.id, 'view']">{{ signatureProcess.id }}</a></td>
+                <td>{{ signatureProcess.title }}</td>
+                <td>{{ signatureProcess.emissionDate | date:'medium' }}</td>
+                <td>{{ signatureProcess.expirationDate | date:'medium' }}</td>
+                <td jhiTranslate="{{ 'polySignApp.Status.' + signatureProcess.status }}">{{ signatureProcess.status }}</td>
+                <td>{{ signatureProcess.orderedSigning }}</td>
+                <td>
+                    <div *ngIf="signatureProcess.finalFile">
+                        <a [routerLink]="['/signed-file', signatureProcess.finalFile?.id, 'view']" >{{ signatureProcess.finalFile?.filename }}</a>
+                    </div>
+                </td>
+                <td>
+                    <div *ngIf="signatureProcess.creator">
+                        <a [routerLink]="['/user-entity', signatureProcess.creator?.id, 'view']" >{{ signatureProcess.creator?.id }}</a>
+                    </div>
+                </td>
+                <td class="text-right">
+                    <div class="btn-group">
+                        <button type="submit"
+                                [routerLink]="['/signature-process', signatureProcess.id, 'view']"
+                                class="btn btn-info btn-sm">
+                            <fa-icon icon="eye"></fa-icon>
+                            <span class="d-none d-md-inline" jhiTranslate="entity.action.view">View</span>
+                        </button>
+
+                        <button type="submit"
+                                [routerLink]="['/signature-process', signatureProcess.id, 'edit']"
+                                class="btn btn-primary btn-sm">
+                            <fa-icon icon="pencil-alt"></fa-icon>
+                            <span class="d-none d-md-inline" jhiTranslate="entity.action.edit">Edit</span>
+                        </button>
+
+                        <button type="submit" (click)="delete(signatureProcess)"
+                                class="btn btn-danger btn-sm">
+                            <fa-icon icon="times"></fa-icon>
+                            <span class="d-none d-md-inline" jhiTranslate="entity.action.delete">Delete</span>
+                        </button>
+                    </div>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div *ngIf="signatureProcesses && signatureProcesses.length > 0">
+        <div class="row justify-content-center">
+            <jhi-item-count [page]="page" [total]="totalItems" [itemsPerPage]="itemsPerPage"></jhi-item-count>
+        </div>
+
+        <div class="row justify-content-center">
+           <!-- <ngb-pagination [collectionSize]="totalItems" [(page)]="ngbPaginationPage" [pageSize]="itemsPerPage" [maxSize]="5" [rotate]="true" [boundaryLinks]="true" (pageChange)="loadPage($event)"></ngb-pagination> -->
+        </div>
+    </div>
+</div>
