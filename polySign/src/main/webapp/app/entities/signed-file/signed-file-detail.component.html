@@ -36,11 +36,15 @@
                 <div class="col-md-12">
                 <ngx-extended-pdf-viewer [base64Src]="signedFile.fileBytes"
                 backgroundColor="#ffffff"
-                [height]="'90vh'"
+                [height]="'80vh'"
                 [useBrowserLocale]="true"
                 [handTool]="false"
                 [showHandToolButton]="true"></ngx-extended-pdf-viewer>               
              </div>
+             <div class="example-box" cdkDrag>
+                Signer 1
+             </div>
+              
             </div>
             <button type="submit"
                     (click)="previousState()"

@@ -7,6 +7,7 @@ import { ISignedFile } from 'app/shared/model/signed-file.model';
 @Component({
   selector: 'jhi-signed-file-detail',
   templateUrl: './signed-file-detail.component.html',
+  styleUrls: ['./rect.scss'],
 })
 export class SignedFileDetailComponent implements OnInit {
   signedFile: ISignedFile | null = null;
