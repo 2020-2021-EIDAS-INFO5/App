@@ -1,7 +1,7 @@
 <div>
     <h2 id="page-heading">
         <span jhiTranslate="polySignApp.signOrder.home.title">Sign Orders</span>
-
+        <canvas #canvas width="200" height="100"></canvas>
         <button id="jh-create-entity" class="btn btn-primary float-right jh-create-entity create-sign-order" [routerLink]="['/sign-order/new']">
             <fa-icon icon="plus"></fa-icon>
             <span  jhiTranslate="polySignApp.signOrder.home.createLabel">
@@ -72,6 +72,7 @@
                                 <fa-icon icon="times"></fa-icon>
                                 <span class="d-none d-md-inline" jhiTranslate="entity.action.delete">Delete</span>
                             </button>
+
                         </div>
                     </td>
                 </tr>

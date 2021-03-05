@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, ElementRef, OnInit, OnDestroy } from '@angular/core';
 import { HttpHeaders, HttpResponse } from '@angular/common/http';
 import { ActivatedRoute, ParamMap, Router, Data } from '@angular/router';
 import { Subscription, combineLatest } from 'rxjs';
@@ -10,6 +10,8 @@ import { ISignOrder } from 'app/shared/model/sign-order.model';
 import { ITEMS_PER_PAGE } from 'app/shared/constants/pagination.constants';
 import { SignOrderService } from './sign-order.service';
 import { SignOrderDeleteDialogComponent } from './sign-order-delete-dialog.component';
+import SignaturePad from 'signature_pad';
+import { ViewChild } from '@angular/core';
 
 @Component({
   selector: 'jhi-sign-order',
@@ -24,6 +26,8 @@ export class SignOrderComponent implements OnInit, OnDestroy {
   predicate!: string;
   ascending!: boolean;
   ngbPaginationPage = 1;
+  public signaturePad: SignaturePad;
+  @ViewChild('canvas', { static: true }) public canvas: ElementRef;
 
   constructor(
     protected signOrderService: SignOrderService,
@@ -51,6 +55,7 @@ export class SignOrderComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.handleNavigation();
     this.registerChangeInSignOrders();
+    this.signaturePad = new SignaturePad(this.canvas.nativeElement);
   }
 
   protected handleNavigation(): void {

@@ -29,6 +29,7 @@
     "ngx-infinite-scroll": "9.0.0",
     "ngx-webstorage": "5.0.0",
     "rxjs": "6.5.5",
+    "signature_pad": "^3.0.0-beta.4",
     "swagger-ui-dist": "3.25.1",
     "tslib": "2.0.0",
     "zone.js": "0.10.3"
