@@ -32,7 +32,16 @@
                     <span>{{ signedFile.sha256 }}</span>
                 </dd>
             </dl>
-
+            <div class="row">
+                <div class="col-md-12">
+                <ngx-extended-pdf-viewer [base64Src]="signedFile.fileBytes"
+                backgroundColor="#ffffff"
+                [height]="'90vh'"
+                [useBrowserLocale]="true"
+                [handTool]="false"
+                [showHandToolButton]="true"></ngx-extended-pdf-viewer>               
+             </div>
+            </div>
             <button type="submit"
                     (click)="previousState()"
                     class="btn btn-info">

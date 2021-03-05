@@ -7,9 +7,10 @@ import { SignedFileDetailComponent } from './signed-file-detail.component';
 import { SignedFileUpdateComponent } from './signed-file-update.component';
 import { SignedFileDeleteDialogComponent } from './signed-file-delete-dialog.component';
 import { signedFileRoute } from './signed-file.route';
+import { NgxExtendedPdfViewerModule } from 'ngx-extended-pdf-viewer';
 
 @NgModule({
-  imports: [PolySignSharedModule, RouterModule.forChild(signedFileRoute)],
+  imports: [PolySignSharedModule, RouterModule.forChild(signedFileRoute), NgxExtendedPdfViewerModule],
   declarations: [SignedFileComponent, SignedFileDetailComponent, SignedFileUpdateComponent, SignedFileDeleteDialogComponent],
   entryComponents: [SignedFileDeleteDialogComponent],
 })
