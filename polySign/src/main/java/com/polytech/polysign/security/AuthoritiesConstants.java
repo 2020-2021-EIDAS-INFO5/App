@@ -13,6 +13,8 @@ public final class AuthoritiesConstants {
 
     public static final String SIGNER = "ROLE_SIGNER";
 
+
+
     private AuthoritiesConstants() {
     }
 }
