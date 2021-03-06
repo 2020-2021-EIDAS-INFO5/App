@@ -1,6 +1,7 @@
 package com.polytech.polysign.service;
 
 import com.polytech.polysign.domain.UserEntity;
+import com.polytech.polysign.domain.UserKeycloak;
 import com.polytech.polysign.repository.UserEntityRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,8 +24,12 @@ public class UserEntityService {
 
     private final UserEntityRepository userEntityRepository;
 
-    public UserEntityService(UserEntityRepository userEntityRepository) {
+    private final KeycloakAdminClientService kcAdminClient;
+
+
+    public UserEntityService(UserEntityRepository userEntityRepository,KeycloakAdminClientService kcAdminClient) {
         this.userEntityRepository = userEntityRepository;
+        this.kcAdminClient=kcAdminClient;
     }
 
     /**
@@ -35,6 +40,19 @@ public class UserEntityService {
      */
     public UserEntity save(UserEntity userEntity) {
         log.debug("Request to save UserEntity : {}", userEntity);
+
+        UserKeycloak userKeycloak =new UserKeycloak();
+
+        userKeycloak.setEmail(userEntity.getEmail());
+
+        userKeycloak.setFirstName(userEntity.getFirstname());
+
+        userKeycloak.setPassword("1234"); //need password
+
+        userKeycloak.setLastName(userEntity.getLastname());
+
+        kcAdminClient.addUserTest(userKeycloak);
+
         return userEntityRepository.save(userEntity);
     }
 
