@@ -192,6 +192,65 @@ public class KeycloakUserRessource {
         user.roles().realmLevel().add(roleToAdd);
 
        }
+
+
+
+       @GetMapping("/deleteUser")
+       public void deleteUser(String userName)  {
+      
+          Keycloak keycloak = KeycloakConfig.getInstance();
+      
+          String userId = keycloak
+          .realm(realm)
+          .users()
+          .search(userName)
+          .get(0)
+          .getId();
+      
+          keycloak.realm(realm).users().delete(userId);
+      }
+
+      @GetMapping("/removeRoleOfUser")
+      public void removeRoleOfUser(String userName, String role_name)  {
+        Keycloak keycloak = KeycloakConfig.getInstance();
+
+        String client_id = keycloak
+                          .realm(realm)
+                          .clients()
+                          .findByClientId(clientId)
+                          .get(0)
+                          .getId();
+
+         String userId = keycloak
+                      .realm(realm)
+                      .users()
+                      .search(userName)
+                      .get(0)
+                      .getId();
+
+
+        System.out.println(client_id);
+
+        System.out.println(userId);
+
+
+         UserResource user = keycloak
+                            .realm(realm)
+                            .users()
+                            .get(userId);
+
+        List<RoleRepresentation> roleToAdd = new LinkedList<RoleRepresentation>();
+
+         roleToAdd.add(keycloak
+                      .realm(realm)
+                      .roles()
+                      .get(role_name)
+                      .toRepresentation()
+                     );
+
+        user.roles().realmLevel().remove(roleToAdd);
+        
+     }
        
 }
 
