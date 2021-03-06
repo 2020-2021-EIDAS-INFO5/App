@@ -4,12 +4,18 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.LinkedHashMap;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
-
+import com.polytech.polysign.config.KeycloakConfig;
 import com.polytech.polysign.domain.UserKeycloak;
 import com.polytech.polysign.service.KeycloakAdminClientService;
+import org.keycloak.admin.client.Keycloak;
+import org.keycloak.admin.client.resource.UserResource;
 import org.keycloak.authorization.client.AuthzClient;
 import org.keycloak.authorization.client.Configuration;
+import org.keycloak.representations.idm.GroupRepresentation;
+import org.keycloak.representations.idm.RoleRepresentation;
 import org.keycloak.representations.idm.UserRepresentation;
 import org.keycloak.representations.idm.authorization.AuthorizationRequest;
 import org.keycloak.representations.idm.authorization.AuthorizationResponse;
@@ -22,7 +28,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import springfox.documentation.spring.web.json.Json;
+
+import static com.polytech.polysign.config.Constants.*;
 
 @RestController
 @RequestMapping("/api")
@@ -140,6 +147,52 @@ public class KeycloakUserRessource {
     public UserRepresentation createUser(@RequestBody UserKeycloak user) {
             return kcAdminClient.addUser(user);
         }
-    }
+
+
+
+    @GetMapping("/assignRoleToUser")
+    public void addRealmRoleToUser(String userName, String role_name){
+        Keycloak keycloak = KeycloakConfig.getInstance();
+
+        String client_id = keycloak
+                          .realm(realm)
+                          .clients()
+                          .findByClientId(clientId)
+                          .get(0)
+                          .getId();
+
+         String userId = keycloak
+                      .realm(realm)
+                      .users()
+                      .search(userName)
+                      .get(0)
+                      .getId();
+
+
+        System.out.println(client_id);
+
+        System.out.println(userId);
+
+
+         UserResource user = keycloak
+                            .realm(realm)
+                            .users()
+                            .get(userId);
+
+        List<RoleRepresentation> roleToAdd = new LinkedList<RoleRepresentation>();
+
+         roleToAdd.add(keycloak
+                      .realm(realm)
+                      .roles()
+                      .get(role_name)
+                      .toRepresentation()
+                     );
+        
+
+        user.roles().realmLevel().add(roleToAdd);
+
+       }
+       
+}
 
 
