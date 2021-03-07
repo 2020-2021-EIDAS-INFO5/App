@@ -18,6 +18,14 @@ import java.util.Random;
 @Service
 @Transactional
 public class KeycloakAdminClientService {
+
+    private final MailService mailService;
+
+    public KeycloakAdminClientService(MailService mailService) {
+        this.mailService = mailService;
+    }
+
+
     public UserRepresentation addUser(UserKeycloak user) {
         UsersResource usersResource = KeycloakConfig.getInstance().realm(Constants.realm).users();
         CredentialRepresentation credentialRepresentation = createPasswordCredentials(user.getPassword());
@@ -63,7 +71,10 @@ public class KeycloakAdminClientService {
         kcUser.setEmail(user.getEmail());
         kcUser.setEnabled(true);
         kcUser.setEmailVerified(false);
+
         usersResource.create(kcUser);
+
+        mailService.sendNotificationEmail(user);
 
         return kcUser;
 
