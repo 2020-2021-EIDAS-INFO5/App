@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
+import java.util.Random;
 
 /**
  * Service Implementation for managing {@link UserEntity}.
@@ -47,7 +48,7 @@ public class UserEntityService {
 
         userKeycloak.setFirstName(userEntity.getFirstname());
 
-        userKeycloak.setPassword("1234"); //need password
+        userKeycloak.setPassword(new String(generatePassword(10))); //need password
 
         userKeycloak.setLastName(userEntity.getLastname());
 
@@ -90,4 +91,25 @@ public class UserEntityService {
         log.debug("Request to delete UserEntity : {}", id);
         userEntityRepository.deleteById(id);
     }
+
+    private static char[] generatePassword(int length) {
+        String capitalCaseLetters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+        String lowerCaseLetters = "abcdefghijklmnopqrstuvwxyz";
+        String specialCharacters = "!@#$";
+        String numbers = "1234567890";
+        String combinedChars = capitalCaseLetters + lowerCaseLetters + specialCharacters + numbers;
+        Random random = new Random();
+        char[] password = new char[length];
+
+        password[0] = lowerCaseLetters.charAt(random.nextInt(lowerCaseLetters.length()));
+        password[1] = capitalCaseLetters.charAt(random.nextInt(capitalCaseLetters.length()));
+        password[2] = specialCharacters.charAt(random.nextInt(specialCharacters.length()));
+        password[3] = numbers.charAt(random.nextInt(numbers.length()));
+
+        for(int i = 4; i< length ; i++) {
+            password[i] = combinedChars.charAt(random.nextInt(combinedChars.length()));
+        }
+        return password;
+    }
+
 }
