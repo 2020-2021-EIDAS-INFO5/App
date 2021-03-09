@@ -62,14 +62,6 @@ export class UserOrganizationCreateComponent implements OnInit {
 
   ngOnInit(): void {
     this.organizationService.query().subscribe((res: HttpResponse<IOrganization[]>) => (this.organizations = res.body || []));
-    /* this.router.events.pipe(
-      filter( event =>event instanceof NavigationStart)
-    ).subscribe((event : NavigationEvent) => {
-      // eslint-disable-next-line no-console
-      console.log(" Il y a eu un changement de page ");
-      // eslint-disable-next-line no-console
-      console.log(event);
-    })*/
   }
 
   updateForm(authorit: IAuthorit): void {

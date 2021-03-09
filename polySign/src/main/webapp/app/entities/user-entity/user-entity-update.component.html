@@ -70,14 +70,14 @@
                         </small>
                     </div>
                 </div>
-
+                  <!--
                 <div class="form-group">
                     <label class="form-control-label" jhiTranslate="polySignApp.userEntity.user" for="field_user">User</label>
                     <select class="form-control" id="field_user" name="user" formControlName="user">
                         <option [ngValue]="null"></option>
                         <option [ngValue]="userOption.id === editForm.get('user')!.value?.id ? editForm.get('user')!.value : userOption" *ngFor="let userOption of users; trackBy: trackById">{{ userOption.firstName }}</option>
                     </select>
-                </div>
+                </div>-->
             </div>
 
             <div>
@@ -90,64 +90,5 @@
             </div>
         </form>
     </div>
-    <!--<div class="col-8" *ngIf="showRoleForm">
-        <form name="editFormRole" role="form" novalidate (ngSubmit)="saveRole()" [formGroup]="editFormRole">-->
-            <!--<h2 id="jhi-authorit-heading" jhiTranslate="polySignApp.authorit.home.createOrEditLabel">Create or edit a Authorit</h2>-->
-            <!--
-            <div>
-                <jhi-alert-error></jhi-alert-error>
-
-                <div class="form-group" [hidden]="!editFormRole.get('id')!.value">
-                    <label for="idRole" jhiTranslate="global.field.id">ID</label>
-                    <input type="text" class="form-control" id="idRole" name="idRole" formControlName="idRole" readonly />
-                </div>
-
-                <div class="form-group">
-                    <label class="form-control-label" jhiTranslate="polySignApp.authorit.hasRole" for="field_hasRole">Has Role</label>
-                    <select class="form-control" name="hasRole" formControlName="hasRole" id="field_hasRole">
-                        <option value="ADMIN_ORGANIZATION">{{ 'polySignApp.Role.ADMIN_ORGANIZATION' | translate }}</option>
-                        <option value="USER_ORGANIZATION">{{ 'polySignApp.Role.USER_ORGANIZATION' | translate }}</option>
-                        <option value="SIGNER">{{ 'polySignApp.Role.SIGNER' | translate }}</option>
-                    </select>
-                    <div *ngIf="editFormRole.get('hasRole')!.invalid && (editFormRole.get('hasRole')!.dirty || editFormRole.get('hasRole')!.touched)">
-                        <small class="form-text text-danger"
-                               *ngIf="editFormRole.get('hasRole')?.errors?.required" jhiTranslate="entity.validation.required">
-                            This field is required.
-                        </small>
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <label class="form-control-label" jhiTranslate="polySignApp.authorit.organization" for="field_organization">Organization</label>
-                    <select class="form-control" id="field_organization" name="organization" formControlName="organization">
-                        <option [ngValue]="null"></option>
-                        <option [ngValue]="organizationOption.id === editFormRole.get('organization')!.value?.id ? editFormRole.get('organization')!.value : organizationOption" *ngFor="let organizationOption of organizations; trackBy: trackById">{{ organizationOption.name }}</option>
-                    </select>
-                </div>
-
-                <div class="form-group">
-                    <label class="form-control-label" jhiTranslate="polySignApp.authorit.user" for="field_userRole">User</label>
-                    <select class="form-control" id="field_userRole" name="user" formControlName="user">
-                        <option [ngValue]="null"></option>
-                        <option [ngValue]="userEntityOption.id === editFormRole.get('user')!.value?.id ? editFormRole.get('user')!.value : userEntityOption" *ngFor="let userEntityOption of userEntities; trackBy: trackById">{{ userEntityOption.firstname }}</option>
-                    </select>
-                </div>
-            </div>
-
-            <div>
-                <button type="button" id="cancel-saveRole" class="btn btn-danger" (click)="previousStateRole()">
-                    <fa-icon icon="ban"></fa-icon>&nbsp;<span jhiTranslate="entity.action.cancel">Cancel</span>
-                </button>
-                <button type="button" id="resetRole" class="btn btn-secondary" (click)="showForm()">
-                    <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span jhiTranslate="polySignApp.userEntity.button.previous">Previous</span>
-                </button>
-                <button type="submit" id="save-entityRole" [disabled]="editFormRole.invalid || isSavingRole" class="btn btn-primary">
-                    <fa-icon icon="save"></fa-icon>&nbsp;<span jhiTranslate="polySignApp.userEntity.button.finish">Finish</span>
-                </button>
-            </div>
-        </form>
-    </div>-->
-    <!--[userEntities]="this.userEntities"-->
-    <!--<jhi-user-organization-create *ngIf="showRoleForm" [userEntities]="this.userEntities" (showForm)="onShowForm($event)"></jhi-user-organization-create>-->
 </div>
 <jhi-user-organization-create *ngIf="showRoleForm" [userEntities]="this.userEntities" (showForm)="onShowForm($event)"></jhi-user-organization-create>
