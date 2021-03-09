@@ -123,4 +123,26 @@ public class OrganizationResource {
         organizationService.delete(id);
         return ResponseEntity.noContent().headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString())).build();
     }
+
+
+      /**
+     * {@code GET  /organizations/:username} : get the "username" organization.
+     *
+     * @param id the id of the organization to retrieve.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the organization, or with status {@code 404 (Not Found)}.
+     */
+    @GetMapping("/organizations/all/{username}")
+    public List<Organization> getAllMyOrganization(@PathVariable String username) {
+        log.debug("REST request to get Organization : {}", username);
+        List<Organization> myOrganizations = organizationService.getAllOrganizationsByUserName(username);
+        return myOrganizations;
+    }
+
+    @GetMapping("/organizations/my/{username}")
+    public List<Organization> getMyOrganization(@PathVariable String username) {
+        log.debug("REST request to get Organization : {}", username);
+        List<Organization> myOrganizations = organizationService.getMyOrganizationByUserName(username);
+        return myOrganizations;
+    }
+
 }

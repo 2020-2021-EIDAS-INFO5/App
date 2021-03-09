@@ -59,7 +59,7 @@ spring:
         registration:
           oidc:
             client-id: web_app
-            client-secret: web_app
+            client-secret: 602d720f-3058-49aa-8480-64f77aac54f7
 ```
 
 ### Okta
@@ -80,7 +80,7 @@ spring:
         registration:
           oidc:
             client-id: {clientId}
-            client-secret: {clientSecret}
+            client-: {clientSecret}
 security:
 ```
 
