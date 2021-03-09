@@ -122,7 +122,7 @@ export class UserOrganizationCreateComponent implements OnInit {
 
   protected onSaveSuccess(): void {
     this.isSaving = false;
-    this.previousState();
+    window.history.back();
   }
 
   protected onSaveError(): void {
