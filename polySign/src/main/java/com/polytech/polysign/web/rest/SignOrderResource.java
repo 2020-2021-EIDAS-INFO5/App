@@ -122,4 +122,35 @@ public class SignOrderResource {
         signOrderService.delete(id);
         return ResponseEntity.noContent().headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString())).build();
     }
+
+      /**
+     * {@code GET  /sign-orders} : get all the signOrders by username.
+     *
+     * @param pageable the pagination information.
+     * @param username the pagination information.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of signOrders in body.
+     */
+  /*  @GetMapping("/sign-orders/ofUser/{username}")
+    public ResponseEntity<List<SignOrder>> getAllSignOrdersOfUser(Pageable pageable, @PathVariable String username) {
+        log.debug("REST request to get a page of SignOrders");
+        Page<SignOrder> page = signOrderService.findAllSignatureOfSigner(pageable, username);
+        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
+        return ResponseEntity.ok().headers(headers).body(page.getContent());
+    }*/
+
+
+      /**
+     * {@code GET  /sign-orders} : get all the signOrders by username.
+     *
+     * @param pageable the pagination information.
+     * @param username the pagination information.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of signOrders in body.
+     */
+    @GetMapping("/sign-orders/ofUser/{username}")
+    public List<SignOrder> getAllSignOrdersOfUserTest(@PathVariable String username) {
+        log.debug("REST request to get a page of SignOrders");
+        return  signOrderService.findAllSignatureOfSigner(username);
+    }
+
+
 }

@@ -6,11 +6,17 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Optional;
+import java.util.function.Function;
 
 /**
  * Service Implementation for managing {@link SignOrder}.
@@ -72,4 +78,31 @@ public class SignOrderService {
         log.debug("Request to delete SignOrder : {}", id);
         signOrderRepository.deleteById(id);
     }
+
+    /**
+     * Get the signOrders of user.
+     *
+     * @param pageable the pagination information.
+     * @param username the username of the user
+     * @return the list of entities.
+     */
+    @Transactional(readOnly = true)
+    public List<SignOrder> findAllSignatureOfSigner(String username) {
+        log.debug("Request to get all SignOrders");
+        List<SignOrder> mySignatures= new ArrayList<SignOrder>();
+        List<SignOrder> allSignatures=  signOrderRepository.findAll();
+        for(SignOrder signOrder : allSignatures){
+            if(signOrder.getSigner()!=null){
+                if(signOrder.getSigner().getEmail()!=null){
+                    if(signOrder.getSigner().getEmail().equals(username)){
+                        mySignatures.add(signOrder);
+                    }
+                }
+            }
+        }
+
+        return mySignatures;
+    }
+
+
 }
