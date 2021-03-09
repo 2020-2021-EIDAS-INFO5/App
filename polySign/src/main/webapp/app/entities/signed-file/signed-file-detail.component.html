@@ -6,7 +6,7 @@
             <hr>
 
             <jhi-alert-error></jhi-alert-error>
-
+             
             <dl class="row-md jh-entity-details">
                 <dt><span jhiTranslate="polySignApp.signedFile.filename">Filename</span></dt>
                 <dd>
@@ -32,19 +32,30 @@
                     <span>{{ signedFile.sha256 }}</span>
                 </dd>
             </dl>
+
             <div class="row">
                 <div class="col-md-12">
-                <ngx-extended-pdf-viewer [base64Src]="signedFile.fileBytes"
+                <ngx-extended-pdf-viewer 
+                [base64Src]="signedFile.fileBytes"
                 backgroundColor="#ffffff"
                 [height]="'80vh'"
                 [useBrowserLocale]="true"
                 [handTool]="false"
-                [showHandToolButton]="true"></ngx-extended-pdf-viewer>               
+                [showHandToolButton]="true"> </ngx-extended-pdf-viewer>
+                    
              </div>
-             <div class="example-box" cdkDrag>
-                Signer 1
+            
+             <div cdkDrag class="example-box" 
+             (cdkDragStarted)="dragStarted($event)"
+             (cdkDragEnded)="dragEnded($event)"
+             (cdkDragMoved)="dragMoved($event)">
+             <div *ngIf="isAuthenticated()" >
+             <span  *ngIf="account"  >
+                {{ account.firstName}}
+             </span>
+            </div>
              </div>
-              
+             <p>{{state}} {{position}}</p>
             </div>
             <button type="submit"
                     (click)="previousState()"
