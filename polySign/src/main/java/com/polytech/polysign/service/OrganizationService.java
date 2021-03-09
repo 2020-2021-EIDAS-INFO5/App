@@ -2,6 +2,7 @@ package com.polytech.polysign.service;
 
 import com.polytech.polysign.domain.Authorit;
 import com.polytech.polysign.domain.Organization;
+import com.polytech.polysign.domain.enumeration.Role;
 import com.polytech.polysign.repository.AuthoritRepository;
 import com.polytech.polysign.repository.OrganizationRepository;
 import org.slf4j.Logger;
@@ -87,7 +88,7 @@ public class OrganizationService {
      * Get organizations by  username.
      *
      * @param username the username to get his organizations.
-     * @return the organizations of the user.
+     * @return all the organizations of the user.
      */
     public List<Organization> getAllOrganizationsByUserName(String username) {
         log.debug("Request to get organization of : {}", username);
@@ -97,6 +98,28 @@ public class OrganizationService {
         for(Authorit authority : authorits){
             if(authority.getUser() != null){
              if(authority.getUser().getEmail() != username){
+                myOrganizations.add(authority.getOrganization());
+            }
+         }
+        }
+        return myOrganizations;
+    }
+
+
+          /**
+     * Get organizations by  username.
+     *
+     * @param username the username to get his organizations.
+     * @return the organizations of the user.
+     */
+    public List<Organization> getMyOrganizationByUserName(String username) {
+        log.debug("Request to get organization of : {}", username);
+        //List<Organization>  myOrganizations = organizationRepository.findAll().stream().filter(organization-> authoritRepository.findAll().stream().filter(auth-> auth.getHasRole())
+        List<Organization> myOrganizations = new ArrayList<Organization>();
+        List<Authorit> authorits = authoritRepository.findAll();
+        for(Authorit authority : authorits){
+            if(authority.getUser() != null){
+             if(authority.getUser().getEmail() != username && authority.getHasRole()==Role.ADMIN_ORGANIZATION){
                 myOrganizations.add(authority.getOrganization());
             }
          }

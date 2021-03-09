@@ -72,4 +72,5 @@ public class AuthoritService {
         log.debug("Request to delete Authorit : {}", id);
         authoritRepository.deleteById(id);
     }
+
 }
