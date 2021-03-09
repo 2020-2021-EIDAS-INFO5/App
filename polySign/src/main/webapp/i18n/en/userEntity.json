@@ -13,6 +13,14 @@
       "delete": {
         "question": "Are you sure you want to delete User Entity {{ id }}?"
       },
+      "button": {
+        "next": "Next",
+        "previous": "Previous",
+        "cancel": {
+          "question": "Are you sure you want to cancel the user creation"
+        },
+        "finish": "Finish"
+      },
       "detail": {
         "title": "User Entity"
       },

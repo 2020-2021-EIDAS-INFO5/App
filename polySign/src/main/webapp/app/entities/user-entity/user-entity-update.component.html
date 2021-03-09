@@ -1,7 +1,11 @@
+<nav class="nav nav-pills nav-justified">
+    <a  [ngClass]="{'nav-item nav-link disable': showUserForm === false, 'nav-item nav-link active': showUserForm === true}" >1. Créer un Utilisateur</a>
+    <a  [ngClass]="{'nav-item nav-link disable': showRoleForm === false, 'nav-item nav-link active': showRoleForm === true}" >2. Assigner son role à l'Organisation</a>
+</nav>
 <div class="row justify-content-center">
-    <div class="col-8">
+    <div class="col-8" *ngIf="showUserForm">
         <form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
-            <h2 id="jhi-user-entity-heading" jhiTranslate="polySignApp.userEntity.home.createOrEditLabel">Create or edit a User Entity</h2>
+            <!--<h2 id="jhi-user-entity-heading" jhiTranslate="polySignApp.userEntity.home.createOrEditLabel">Create or edit a User Entity</h2> -->
 
             <div>
                 <jhi-alert-error></jhi-alert-error>
@@ -66,25 +70,25 @@
                         </small>
                     </div>
                 </div>
-
+                  <!--
                 <div class="form-group">
                     <label class="form-control-label" jhiTranslate="polySignApp.userEntity.user" for="field_user">User</label>
                     <select class="form-control" id="field_user" name="user" formControlName="user">
                         <option [ngValue]="null"></option>
                         <option [ngValue]="userOption.id === editForm.get('user')!.value?.id ? editForm.get('user')!.value : userOption" *ngFor="let userOption of users; trackBy: trackById">{{ userOption.firstName }}</option>
                     </select>
-                </div>
+                </div>-->
             </div>
 
             <div>
-                <button type="button" id="cancel-save" class="btn btn-secondary" (click)="previousState()">
+                <button type="button" id="cancel-save" class="btn btn-danger" (click)="previousState()">
                     <fa-icon icon="ban"></fa-icon>&nbsp;<span jhiTranslate="entity.action.cancel">Cancel</span>
                 </button>
-
                 <button type="submit" id="save-entity" [disabled]="editForm.invalid || isSaving" class="btn btn-primary">
-                    <fa-icon icon="save"></fa-icon>&nbsp;<span jhiTranslate="entity.action.save">Save</span>
+                    &nbsp;<fa-icon icon="arrow-right"></fa-icon><span jhiTranslate="polySignApp.userEntity.button.next">Next</span>
                 </button>
             </div>
         </form>
     </div>
 </div>
+<jhi-user-organization-create *ngIf="showRoleForm" [userEntities]="this.userEntities" (showForm)="onShowForm($event)"></jhi-user-organization-create>
