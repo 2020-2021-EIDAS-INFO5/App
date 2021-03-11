@@ -144,5 +144,4 @@ public class OrganizationResource {
         List<Organization> myOrganizations = organizationService.getMyOrganizationByUserName(username);
         return myOrganizations;
     }
-
 }

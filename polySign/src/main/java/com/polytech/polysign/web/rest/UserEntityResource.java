@@ -1,6 +1,10 @@
 package com.polytech.polysign.web.rest;
 
+import com.polytech.polysign.domain.Authorit;
+import com.polytech.polysign.domain.Organization;
 import com.polytech.polysign.domain.UserEntity;
+import com.polytech.polysign.service.AuthoritService;
+import com.polytech.polysign.service.OrganizationService;
 import com.polytech.polysign.service.UserEntityService;
 import com.polytech.polysign.web.rest.errors.BadRequestAlertException;
 
@@ -34,13 +38,16 @@ public class UserEntityResource {
 
     private static final String ENTITY_NAME = "userEntity";
 
+    private final AuthoritService authoritService;
+
     @Value("${jhipster.clientApp.name}")
     private String applicationName;
 
     private final UserEntityService userEntityService;
 
-    public UserEntityResource(UserEntityService userEntityService) {
+    public UserEntityResource(UserEntityService userEntityService, AuthoritService authoritService) {
         this.userEntityService = userEntityService;
+        this.authoritService = authoritService;
     }
 
     /**
