@@ -12,7 +12,7 @@ import { IUserEntity } from '../../shared/model/user-entity.model';
 import { OrganizationService } from '../organization/organization.service';
 import { AccountService } from '../../core/auth/account.service';
 import { JhiEventManager } from 'ng-jhipster';
-import { filter } from 'rxjs/operators';
+import { Account } from 'app/core/user/account.model';
 
 type SelectableEntity = IOrganization | IUserEntity;
 
@@ -27,7 +27,7 @@ export class UserOrganizationCreateComponent implements OnInit {
 
   isSaving = false;
   organizations: IOrganization[] = [];
-  CurrentUser?: Account | null;
+  account?: Account | null;
   editForm = this.fb.group({
     id: [],
     hasRole: [null, [Validators.required]],
@@ -62,6 +62,7 @@ export class UserOrganizationCreateComponent implements OnInit {
 
   ngOnInit(): void {
     this.organizationService.query().subscribe((res: HttpResponse<IOrganization[]>) => (this.organizations = res.body || []));
+    this.accountService.identity().subscribe(account => (this.account = account));
   }
 
   updateForm(authorit: IAuthorit): void {
