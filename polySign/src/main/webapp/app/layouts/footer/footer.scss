@@ -1,0 +1,44 @@
+@import '~bootstrap/scss/functions';
+@import '~bootstrap/scss/variables';
+.footer-dark {
+  padding: 30px 5;
+  background-color: $black;
+  color: #b5b6b6;
+}
+
+.footer-dark ul {
+  padding: 0;
+  list-style: none;
+  text-align: center;
+  font-size: 18px;
+  line-height: 1.6;
+  margin-bottom: 0;
+  height: 20px;
+  color: #b5b6b6;
+}
+
+.footer-dark li {
+  padding: 0 10px;
+  color: #b5b6b6;
+}
+
+.footer-dark ul a {
+  color: #b5b6b6;
+  text-decoration: none;
+  opacity: 0.8;
+}
+
+.footer-dark ul a:hover {
+  opacity: 1;
+  color: #b5b6b6;
+}
+
+.footer-dark .copyright {
+  margin-top: 15px;
+  text-align: center;
+  font-size: 13px;
+  color: #f0f9ff;
+  margin-bottom: 0;
+}
+
+/* Credit to https://epicbootstrap.com/snippets/footer-basic */
