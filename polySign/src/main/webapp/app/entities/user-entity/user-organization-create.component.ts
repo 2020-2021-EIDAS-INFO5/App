@@ -61,8 +61,14 @@ export class UserOrganizationCreateComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.organizationService.query().subscribe((res: HttpResponse<IOrganization[]>) => (this.organizations = res.body || []));
-    this.accountService.identity().subscribe(account => (this.account = account));
+    // this.organizationService.query().subscribe((res: HttpResponse<IOrganization[]>) => (this.organizations = res.body || []));
+    this.accountService.identity().subscribe(account => {
+      this.account = account;
+      // we retrieve the organization of the authenticated User
+      this.organizationService
+        .getMyOrganization(this.account!.login)
+        .subscribe((res: HttpResponse<IOrganization[]>) => (this.organizations = res.body || []));
+    });
   }
 
   updateForm(authorit: IAuthorit): void {

@@ -32,6 +32,10 @@ export class OrganizationService {
     return this.http.get<IOrganization[]>(this.resourceUrl, { params: options, observe: 'response' });
   }
 
+  getMyOrganization(username: string): Observable<EntityArrayResponseType> {
+    return this.http.get<IOrganization[]>(`${this.resourceUrl}/my/${username}`, { observe: 'response' });
+  }
+
   delete(id: number): Observable<HttpResponse<{}>> {
     return this.http.delete(`${this.resourceUrl}/${id}`, { observe: 'response' });
   }
