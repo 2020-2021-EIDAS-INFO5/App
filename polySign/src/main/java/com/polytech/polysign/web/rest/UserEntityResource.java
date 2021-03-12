@@ -137,8 +137,10 @@ public class UserEntityResource {
      * @param id the id of the userEntity to delete.
      * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
      */
-    @DeleteMapping("/user-entities/idToDelete{id}/username/{username}")
-    public void deleteUserEntityByUsername(@PathVariable Long id, String username) {
+    @DeleteMapping("/user-entities/idToDelete/{id}/username/{username}")
+    public ResponseEntity<Void> deleteUserEntityByUsername(@PathVariable Long id, @PathVariable String username) {
         log.debug("REST request to delete UserEntity : {}", id);
-        userEntityService.deleteTest(id, username);    }
+        userEntityService.deleteTest(id, username);
+        return ResponseEntity.noContent().headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString())).build();
+    }
 }

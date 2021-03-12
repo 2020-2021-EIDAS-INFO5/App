@@ -12,7 +12,7 @@ import { IUserEntity } from '../../shared/model/user-entity.model';
 import { OrganizationService } from '../organization/organization.service';
 import { AccountService } from '../../core/auth/account.service';
 import { JhiEventManager } from 'ng-jhipster';
-import { filter } from 'rxjs/operators';
+import { Account } from 'app/core/user/account.model';
 
 type SelectableEntity = IOrganization | IUserEntity;
 
@@ -27,7 +27,7 @@ export class UserOrganizationCreateComponent implements OnInit {
 
   isSaving = false;
   organizations: IOrganization[] = [];
-  CurrentUser?: Account | null;
+  account?: Account | null;
   editForm = this.fb.group({
     id: [],
     hasRole: [null, [Validators.required]],
@@ -61,7 +61,13 @@ export class UserOrganizationCreateComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.organizationService.query().subscribe((res: HttpResponse<IOrganization[]>) => (this.organizations = res.body || []));
+    this.accountService.identity().subscribe(account => {
+      this.account = account;
+      // we retrieve the organization of the authenticated User
+      this.organizationService
+        .getMyOrganization(this.account!.login)
+        .subscribe((res: HttpResponse<IOrganization[]>) => (this.organizations = res.body || []));
+    });
   }
 
   updateForm(authorit: IAuthorit): void {
@@ -75,7 +81,8 @@ export class UserOrganizationCreateComponent implements OnInit {
 
   previousState(): void {
     if (this.userEntities) {
-      this.userEntityService.delete(this.userEntities[0].id!).subscribe(() => {
+      this.userEntityService.deleteUserEntityByUsername(this.userEntities[0].id!, this.account!.login).subscribe(() => {
+        // we alert subscribers that the userEntity has been modified in order they retrieve the latest change of that list
         this.eventManager.broadcast('userEntityListModification');
       });
     }
@@ -86,7 +93,8 @@ export class UserOrganizationCreateComponent implements OnInit {
   previousAction(): void {
     this.showForm.emit({ showUserForm: true, showRoleForm: false });
     if (this.userEntities) {
-      this.userEntityService.delete(this.userEntities[0].id!).subscribe(() => {
+      this.userEntityService.deleteUserEntityByUsername(this.userEntities[0].id!, this.account!.login).subscribe(() => {
+        // we alert subscribers that the userEntity has been modified in order they retrieve the latest change of that list
         this.eventManager.broadcast('userEntityListModification');
       });
     }
