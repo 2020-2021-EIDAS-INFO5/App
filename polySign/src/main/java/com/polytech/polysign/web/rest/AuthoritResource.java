@@ -124,7 +124,7 @@ public class AuthoritResource {
         return ResponseEntity.noContent().headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString())).build();
     }
 
-          /**
+    /**
      * {@code GET  /user-entities/:id} : get the "id" userEntity.
      *
      * @param id the id of the userEntity to retrieve.

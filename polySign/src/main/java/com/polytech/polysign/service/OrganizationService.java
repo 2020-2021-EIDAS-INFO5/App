@@ -30,6 +30,8 @@ public class OrganizationService {
 
     private final AuthoritRepository authoritRepository;
 
+    
+
     public OrganizationService(OrganizationRepository organizationRepository,AuthoritRepository authoritRepository) {
         this.organizationRepository = organizationRepository;
         this.authoritRepository=authoritRepository;
@@ -69,6 +71,19 @@ public class OrganizationService {
     public Optional<Organization> findOne(Long id) {
         log.debug("Request to get Organization : {}", id);
         return organizationRepository.findById(id);
+    }
+
+
+        /**
+     * Get one organization by id.
+     *
+     * @param id the id of the entity.
+     * @return the entity.
+     */
+    @Transactional(readOnly = true)
+    public Organization findOrganizationByAuthorit(Authorit authorit) {
+        
+        return authorit.getOrganization();
     }
     
 

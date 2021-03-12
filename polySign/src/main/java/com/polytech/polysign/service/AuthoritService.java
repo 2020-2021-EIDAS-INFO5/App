@@ -89,6 +89,8 @@ public class AuthoritService {
         return authority;
     }
 
+    
+
     /**
      * Delete the authorit by id.
      *

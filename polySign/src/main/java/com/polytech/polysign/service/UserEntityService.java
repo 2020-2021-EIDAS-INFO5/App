@@ -2,9 +2,11 @@ package com.polytech.polysign.service;
 
 import com.polytech.polysign.config.Constants;
 import com.polytech.polysign.config.KeycloakConfig;
+import com.polytech.polysign.domain.Authorit;
 import com.polytech.polysign.domain.Organization;
 import com.polytech.polysign.domain.UserEntity;
 import com.polytech.polysign.domain.UserKeycloak;
+import com.polytech.polysign.repository.AuthoritRepository;
 import com.polytech.polysign.repository.UserEntityRepository;
 
 import org.keycloak.KeycloakPrincipal;
@@ -21,6 +23,8 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import liquibase.pro.packaged.o;
 
 import java.util.List;
 import java.util.Optional;
@@ -41,11 +45,18 @@ public class UserEntityService {
 
     private final OrganizationService organizationService;
 
+    private final AuthoritService authoritService;
 
-    public UserEntityService(UserEntityRepository userEntityRepository,KeycloakAdminClientService kcAdminClient,OrganizationService organizationService) {
+    private final AuthoritRepository authoritRepository;
+
+
+
+    public UserEntityService(UserEntityRepository userEntityRepository,KeycloakAdminClientService kcAdminClient,OrganizationService organizationService, AuthoritService authoritService,AuthoritRepository authoritRepository) {
         this.userEntityRepository = userEntityRepository;
         this.kcAdminClient=kcAdminClient;
         this.organizationService=organizationService;
+        this.authoritService= authoritService;
+        this.authoritRepository=authoritRepository;
     }
 
     /**
@@ -108,6 +119,33 @@ public class UserEntityService {
        Optional<UserEntity> userOptional = userEntityRepository.findById(id);
         UserEntity userEntity = userOptional.get();
         String email = userEntity.getEmail();
+
+        removeUser(email);
+        userEntityRepository.deleteById(id);
+    }
+
+
+       /**
+     * Delete the userEntity by id.
+     *
+     * @param id the id of the entity.
+     */
+    public void deleteTest(Long id,String username) {
+        log.debug("Request to delete UserEntity : {}", id);
+
+       Optional<UserEntity> userOptional = userEntityRepository.findById(id);
+        UserEntity userEntity = userOptional.get();
+        String email = userEntity.getEmail();
+        List<Authorit> authorits = authoritRepository.findAll();
+        for(Authorit authorit : authorits){
+            if(authorit.getOrganization()!=null){
+                if(authorit.getUser()!=null){
+            if(authorit.getOrganization().equals(organizationService.findOrganizationByAuthorit(authoritService.findAdminAuhtoritByUsername(username)))&& authorit.getUser().getEmail().equals(userEntity.getEmail())){
+                authoritService.delete(authorit.getId());
+            }
+        }
+        }
+    }
 
         removeUser(email);
         userEntityRepository.deleteById(id);
