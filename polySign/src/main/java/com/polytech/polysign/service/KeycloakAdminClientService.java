@@ -128,9 +128,6 @@ public class KeycloakAdminClientService {
         user.roles().realmLevel().add(roleToAdd);
 
        }
-
-
-
   
 
 }

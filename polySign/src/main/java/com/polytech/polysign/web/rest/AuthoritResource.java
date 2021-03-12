@@ -123,4 +123,16 @@ public class AuthoritResource {
         authoritService.delete(id);
         return ResponseEntity.noContent().headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString())).build();
     }
+
+    /**
+     * {@code GET  /user-entities/:id} : get the "id" userEntity.
+     *
+     * @param id the id of the userEntity to retrieve.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the userEntity, or with status {@code 404 (Not Found)}.
+     */
+    @GetMapping("/user-entities/myAdminAuthorit/{username}")
+    public Authorit getMyAdminAuthorit(@PathVariable String username) {
+        log.debug("REST request to get UserEntity : {}");
+        return authoritService.findAdminAuhtoritByUsername(username);
+    }
 }
