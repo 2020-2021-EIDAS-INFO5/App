@@ -1,8 +1,12 @@
 @import '~bootstrap/scss/functions';
 @import '~bootstrap/scss/variables';
 .footer-dark {
+  margin: 0;
   padding: 30px 5;
   background-color: $black;
+  position: absolute;
+  bottom: 0;
+  width: 100%;
   color: #b5b6b6;
 }
 
