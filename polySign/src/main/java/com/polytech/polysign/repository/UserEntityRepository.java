@@ -1,5 +1,7 @@
 package com.polytech.polysign.repository;
 
+import java.util.List;
+
 import com.polytech.polysign.domain.UserEntity;
 
 import org.springframework.data.jpa.repository.*;

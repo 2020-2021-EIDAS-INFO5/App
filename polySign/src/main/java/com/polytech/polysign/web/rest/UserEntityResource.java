@@ -1,6 +1,10 @@
 package com.polytech.polysign.web.rest;
 
+import com.polytech.polysign.domain.Authorit;
+import com.polytech.polysign.domain.Organization;
 import com.polytech.polysign.domain.UserEntity;
+import com.polytech.polysign.service.AuthoritService;
+import com.polytech.polysign.service.OrganizationService;
 import com.polytech.polysign.service.UserEntityService;
 import com.polytech.polysign.web.rest.errors.BadRequestAlertException;
 
@@ -34,13 +38,16 @@ public class UserEntityResource {
 
     private static final String ENTITY_NAME = "userEntity";
 
+    private final AuthoritService authoritService;
+
     @Value("${jhipster.clientApp.name}")
     private String applicationName;
 
     private final UserEntityService userEntityService;
 
-    public UserEntityResource(UserEntityService userEntityService) {
+    public UserEntityResource(UserEntityService userEntityService, AuthoritService authoritService) {
         this.userEntityService = userEntityService;
+        this.authoritService = authoritService;
     }
 
     /**
@@ -122,4 +129,16 @@ public class UserEntityResource {
         userEntityService.delete(id);
         return ResponseEntity.noContent().headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString())).build();
     }
+
+
+        /**
+     * {@code DELETE  /user-entities/:id} : delete the "id" userEntity.
+     *
+     * @param id the id of the userEntity to delete.
+     * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
+     */
+    @DeleteMapping("/user-entities/idToDelete{id}/username/{username}")
+    public void deleteUserEntityByUsername(@PathVariable Long id, String username) {
+        log.debug("REST request to delete UserEntity : {}", id);
+        userEntityService.deleteTest(id, username);    }
 }
