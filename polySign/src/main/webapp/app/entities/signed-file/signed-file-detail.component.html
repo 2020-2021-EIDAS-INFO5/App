@@ -1,12 +1,13 @@
 <div class="row justify-content-center">
     <div class="col-8">
+        <!--<canvas #canvas></canvas>-->
         <div *ngIf="signedFile">
             <h2><span jhiTranslate="polySignApp.signedFile.detail.title">Signed File</span> {{ signedFile.id }}</h2>
 
             <hr>
 
             <jhi-alert-error></jhi-alert-error>
-             
+
             <dl class="row-md jh-entity-details">
                 <dt><span jhiTranslate="polySignApp.signedFile.filename">Filename</span></dt>
                 <dd>
@@ -32,22 +33,20 @@
                     <span>{{ signedFile.sha256 }}</span>
                 </dd>
             </dl>
-           
-            <canvas #canvas></canvas>
-            
+
             <div class="row">
                 <div class="col-md-12">
-                <ngx-extended-pdf-viewer 
+                <ngx-extended-pdf-viewer
                 [base64Src]="signedFile.fileBytes"
                 backgroundColor="#ffffff"
                 [height]="'80vh'"
                 [useBrowserLocale]="true"
                 [handTool]="false"
                 [showHandToolButton]="true"> </ngx-extended-pdf-viewer>
-                    
+
              </div>
-            
-             <div cdkDrag class="example-box" 
+
+             <div cdkDrag class="example-box"
              (cdkDragStarted)="dragStarted($event)"
              (cdkDragEnded)="dragEnded($event)"
              (cdkDragMoved)="dragMoved($event)">
@@ -71,5 +70,7 @@
                 <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit">Edit</span>
             </button>
         </div>
+        <canvas #canvas></canvas>
     </div>
 </div>
+

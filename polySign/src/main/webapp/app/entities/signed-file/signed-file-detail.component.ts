@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { JhiDataUtils } from 'ng-jhipster';
 import { LoginService } from 'app/core/login/login.service';
@@ -8,7 +8,7 @@ import { ISignedFile } from 'app/shared/model/signed-file.model';
 import { CdkDragEnd, CdkDragStart, CdkDragMove } from '@angular/cdk/drag-drop';
 import * as pdfjsLib from 'pdfjs-dist';
 if (pdfjsLib !== undefined) {
-  pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://npmcdn.com/pdfjs-dist@2.4.456/build/pdf.worker.js';
+  pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://npmcdn.com/pdfjs-dist@2.6.347/build/pdf.worker.js';
 }
 
 @Component({
@@ -16,7 +16,7 @@ if (pdfjsLib !== undefined) {
   templateUrl: './signed-file-detail.component.html',
   styleUrls: ['./rect.scss'],
 })
-export class SignedFileDetailComponent implements OnInit {
+export class SignedFileDetailComponent implements OnInit, AfterViewInit {
   signedFile: ISignedFile | null = null;
 
   account: Account | null = null;
@@ -24,8 +24,7 @@ export class SignedFileDetailComponent implements OnInit {
   state = '';
   position = '';
 
-  @ViewChild('canvas', { static: true })
-  public canvas!: ElementRef;
+  @ViewChild('canvas', { static: true }) canvas?: ElementRef<HTMLCanvasElement>;
   ctx!: CanvasRenderingContext2D;
 
   constructor(
@@ -38,7 +37,12 @@ export class SignedFileDetailComponent implements OnInit {
   ngOnInit(): void {
     this.activatedRoute.data.subscribe(({ signedFile }) => (this.signedFile = signedFile));
     this.accountService.identity().subscribe((account: Account | null) => (this.account = account));
-    this.ctx = this.canvas.nativeElement.getContext('2d') as CanvasRenderingContext2D;
+  }
+
+  ngAfterViewInit(): void {
+    // eslint-disable-next-line no-console
+    console.log('CAnvas: ', this.canvas);
+    this.ctx = this.canvas!.nativeElement.getContext('2d') as CanvasRenderingContext2D;
     this.loadPDF();
   }
 
@@ -76,25 +80,33 @@ export class SignedFileDetailComponent implements OnInit {
   loadPDF(): void {
     const pdfData = atob(this.signedFile?.fileBytes);
 
-    const loadingTask = pdfjsLib.getDocument(pdfData);
+    // const loadingTask = pdfjsLib.getDocument(pdfData);
+
+    const pdfUrl = encodeURI('https://raw.githubusercontent.com/mozilla/pdf.js/ba2edeae/examples/learning/helloworld.pdf');
+
+    const loadingTask = pdfjsLib.getDocument(pdfUrl);
 
     loadingTask.promise.then((pdf): void => {
+      // eslint-disable-next-line no-console
+      console.log('pdf: ', pdf);
+      // eslint-disable-next-line no-console
+      console.log('PDF loaded');
       // Fetch the first page
       const pageNumber = 1;
       pdf.getPage(pageNumber).then((page): void => {
         const scale = 1.5;
-        const viewport = page.getViewport({ scale });
+        const Viewport = page.getViewport({ scale });
 
         // Prepare canvas using PDF page dimensions
         // var canvas: any = document.getElementById('the-canvas');
         // var context = canvas.getContext('2d');
-        this.canvas.nativeElement.height = viewport.height;
-        this.canvas.nativeElement.width = viewport.width;
+        this.canvas!.nativeElement.height = Viewport.height;
+        this.canvas!.nativeElement.width = Viewport.width;
 
         // Render PDF page into canvas context
         const renderContext = {
           canvasContext: this.ctx,
-          viewport: page.getViewport({ scale }),
+          viewport: Viewport,
         };
         const renderTask = page.render(renderContext);
         renderTask.promise.then(() => {});
