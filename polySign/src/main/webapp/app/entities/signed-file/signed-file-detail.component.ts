@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { JhiDataUtils } from 'ng-jhipster';
 import { LoginService } from 'app/core/login/login.service';
@@ -6,24 +6,10 @@ import { AccountService } from 'app/core/auth/account.service';
 import { Account } from 'app/core/user/account.model';
 import { ISignedFile } from 'app/shared/model/signed-file.model';
 import { CdkDragEnd, CdkDragStart, CdkDragMove } from '@angular/cdk/drag-drop';
-
-/*const HummusRecipe = require('hummus-recipe');
-
-const pdfEditor = async () => {
-  const pdfDoc = new HummusRecipe("./pdf/demo.pdf", "./pdf/output.pdf");
-  pdfDoc
-    // edit 1st page
-    .editPage(1)
-    .text("Add some texts to an existing pdf file", 150, 500, {
-      color: "003240"
-    })
-    .image("../../../content/images/signature.png", 100, 600, {
-      width: 100,
-      keepAspectRatio: true
-    })
-    .endPage()
-    .endPDF();
-  }*/
+import * as pdfjsLib from 'pdfjs-dist';
+if (pdfjsLib !== undefined) {
+  pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://npmcdn.com/pdfjs-dist@2.4.456/build/pdf.worker.js';
+}
 
 @Component({
   selector: 'jhi-signed-file-detail',
@@ -38,6 +24,10 @@ export class SignedFileDetailComponent implements OnInit {
   state = '';
   position = '';
 
+  @ViewChild('canvas', { static: true })
+  public canvas!: ElementRef;
+  ctx!: CanvasRenderingContext2D;
+
   constructor(
     protected dataUtils: JhiDataUtils,
     protected activatedRoute: ActivatedRoute,
@@ -48,6 +38,8 @@ export class SignedFileDetailComponent implements OnInit {
   ngOnInit(): void {
     this.activatedRoute.data.subscribe(({ signedFile }) => (this.signedFile = signedFile));
     this.accountService.identity().subscribe((account: Account | null) => (this.account = account));
+    this.ctx = this.canvas.nativeElement.getContext('2d') as CanvasRenderingContext2D;
+    this.loadPDF();
   }
 
   isAuthenticated(): boolean {
@@ -79,5 +71,34 @@ export class SignedFileDetailComponent implements OnInit {
 
   public dragMoved(event: CdkDragMove): any {
     this.position = ` > Position X: ${event.pointerPosition.x} - Y: ${event.pointerPosition.y}`;
+  }
+
+  loadPDF(): void {
+    const pdfData = atob(this.signedFile?.fileBytes);
+
+    const loadingTask = pdfjsLib.getDocument(pdfData);
+
+    loadingTask.promise.then((pdf): void => {
+      // Fetch the first page
+      const pageNumber = 1;
+      pdf.getPage(pageNumber).then((page): void => {
+        const scale = 1.5;
+        const viewport = page.getViewport({ scale });
+
+        // Prepare canvas using PDF page dimensions
+        // var canvas: any = document.getElementById('the-canvas');
+        // var context = canvas.getContext('2d');
+        this.canvas.nativeElement.height = viewport.height;
+        this.canvas.nativeElement.width = viewport.width;
+
+        // Render PDF page into canvas context
+        const renderContext = {
+          canvasContext: this.ctx,
+          viewport: page.getViewport({ scale }),
+        };
+        const renderTask = page.render(renderContext);
+        renderTask.promise.then(() => {});
+      });
+    });
   }
 }
