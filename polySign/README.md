@@ -59,7 +59,7 @@ spring:
         registration:
           oidc:
             client-id: web_app
-            client-secret: 46a4608f-abdb-41f1-87ab-5687a1377714
+            client-secret: 451821f7-32da-47b9-81df-23c9fd59c318
 ```
 
 ### Okta

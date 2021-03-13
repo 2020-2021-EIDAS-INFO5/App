@@ -42,7 +42,7 @@ public class KeycloakUserRessource {
 
     @GetMapping("/getAccessToken")
     public void getAccessToken(){
-        String[] command = {"/usr/bin/curl","location","--request","POST","http://localhost:9080/auth/realms/jhipster/protocol/openid-connect/token","--header","Content-Type: application/x-www-form-urlencoded","--data-urlencode","grant_type=client_credentials","--data-urlencode","client_id=web_app","--data-urlencode","grant_type=password","--data-urlencode","client_secret=f6284326-017f-45d6-8f1d-696af00e83da"};
+        String[] command = {"/usr/bin/curl","location","--request","POST","http://localhost:9080/auth/realms/jhipster/protocol/openid-connect/token","--header","Content-Type: application/x-www-form-urlencoded","--data-urlencode","grant_type=client_credentials","--data-urlencode","client_id=web_app","--data-urlencode","grant_type=password","--data-urlencode","client_secret=451821f7-32da-47b9-81df-23c9fd59c318"};
 
         ProcessBuilder process = new ProcessBuilder(command);
         Process p;
@@ -121,7 +121,7 @@ public class KeycloakUserRessource {
             String realm = "jhipster"; // Realm
             String clientId = "web_app"; // Client
             Map<String, Object> clientCredentials = new LinkedHashMap<String, Object>();
-            clientCredentials.put("secret", "f6284326-017f-45d6-8f1d-696af00e83da"); // Client secret (Access Type: Confidential)
+            clientCredentials.put("secret", "451821f7-32da-47b9-81df-23c9fd59c318"); // Client secret (Access Type: Confidential)
 
             Configuration configuration = new Configuration(
                 authServerUrl,
