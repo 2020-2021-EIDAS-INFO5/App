@@ -5,7 +5,8 @@
         "title": "User Entities",
         "createLabel": "Create a new User Entity",
         "createOrEditLabel": "Create or edit a User Entity",
-        "notFound": "No User Entities found"
+        "notFound": "No User Entities found",
+        "exportCSV": "Download data"
       },
       "created": "A new User Entity is created with identifier {{ param }}",
       "updated": "A User Entity is updated with identifier {{ param }}",

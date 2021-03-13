@@ -115,4 +115,17 @@ export class UserEntityComponent implements OnInit, OnDestroy {
   protected onError(): void {
     this.ngbPaginationPage = this.page ?? 1;
   }
+
+  downloadData(): void {
+    this.userEntityService.export().subscribe(res => this.downloadFile(res));
+  }
+
+  downloadFile(data: any): void {
+    const blob = new Blob([data], { type: 'text/csv' });
+    const link = document.createElement('a');
+    link.href = window.URL.createObjectURL(blob);
+    link.setAttribute('download', 'data.csv');
+    document.body.appendChild(link);
+    link.click();
+  }
 }

@@ -78,4 +78,13 @@
             <ngb-pagination [collectionSize]="totalItems" [(page)]="ngbPaginationPage" [pageSize]="itemsPerPage" [maxSize]="5" [rotate]="true" [boundaryLinks]="true" (pageChange)="loadPage($event)"></ngb-pagination>
         </div>
     </div>
+
+    <button id="jh-create-entity">
+    <a  class="dropdown-item"  (click)="downloadData()">
+        <fa-icon icon="plus"></fa-icon>
+        <span  jhiTranslate="polySignApp.userEntity.home.exportCSV">
+            Download data
+        </span>
+    </a>
+    </button>
 </div>
