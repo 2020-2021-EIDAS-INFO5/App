@@ -19,8 +19,16 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+
+import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.security.GeneralSecurityException;
+import java.security.KeyPair;
+import java.security.KeyPairGenerator;
+import java.security.NoSuchAlgorithmException;
+import java.security.NoSuchProviderException;
+import java.security.SecureRandom;
 import java.util.List;
 import java.util.Optional;
 
@@ -30,6 +38,10 @@ import java.util.Optional;
 @RestController
 @RequestMapping("/api")
 public class SignedFileResource {
+
+    private static final int days = 365;
+
+    private static final String POLYSIGN = "CN=Test, L=London, C=GB";
 
     private final Logger log = LoggerFactory.getLogger(SignedFileResource.class);
 
@@ -120,7 +132,28 @@ public class SignedFileResource {
     @DeleteMapping("/signed-files/{id}")
     public ResponseEntity<Void> deleteSignedFile(@PathVariable Long id) {
         log.debug("REST request to delete SignedFile : {}", id);
-        signedFileService.delete(id);
+
+        KeyPair keyPair = null;
+        try {
+            KeyPairGenerator keyPairGenerator = KeyPairGenerator.getInstance("RSA");
+keyPairGenerator.initialize(1024);
+ keyPair = keyPairGenerator.genKeyPair();
+
+
+        } catch (NoSuchAlgorithmException e1) {
+            // TODO Auto-generated catch block
+            e1.printStackTrace();
+        }
+        
+        try {
+            signedFileService.generateCertificate(POLYSIGN, keyPair, days, "SHA1withRSA");
+        } catch (GeneralSecurityException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
         return ResponseEntity.noContent().headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString())).build();
     }
 }

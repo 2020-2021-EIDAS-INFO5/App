@@ -201,6 +201,21 @@
 			<artifactId>logstash-logback-encoder</artifactId>
 		</dependency>
 		<dependency>
+			<groupId>de.ohmesoftware</groupId>
+			<artifactId>keytool</artifactId>
+			<version>0.0.2</version>
+		</dependency>
+		<dependency>
+			<groupId>org.bouncycastle</groupId>
+			<artifactId>bcprov-jdk15on</artifactId>
+			<version>1.60</version>
+		</dependency>
+		<dependency>
+			<groupId>javax.security.enterprise</groupId>
+			<artifactId>javax.security.enterprise-api</artifactId>
+			<version>1.0-b07</version>
+		</dependency>				
+		<dependency>
 			<groupId>org.mapstruct</groupId>
 			<artifactId>mapstruct</artifactId>
 		</dependency>
