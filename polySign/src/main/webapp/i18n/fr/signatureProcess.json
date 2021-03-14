@@ -3,9 +3,14 @@
     "signatureProcess": {
       "home": {
         "title": "SignatureProcesses",
+        "creation": "Création",
         "createLabel": "Créer un nouveau Signature Process",
+        "createLabelCollection": "Nouvelle Collection",
         "createOrEditLabel": "Créer ou éditer un Signature Process",
         "notFound": "Aucun Signature Process trouvé"
+      },
+      "step1": {
+        "title": "Charger le Document PDF pour la signature"
       },
       "created": "Un nouveau Signature Process a été créé avec l'identifiant {{ param }}",
       "updated": "Le Signature Process avec l'identifiant {{ param }} a été mis à jour",

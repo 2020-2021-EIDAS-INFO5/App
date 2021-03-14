@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
-import { ActivatedRoute, NavigationStart, Event as NavigationEvent, Router, RouterEvent } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { UserEntityService } from './user-entity.service';
 import { UserService } from '../../core/user/user.service';
 import { Authorit, IAuthorit } from '../../shared/model/authorit.model';
