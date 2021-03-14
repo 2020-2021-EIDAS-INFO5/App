@@ -123,4 +123,12 @@ public class SignatureProcessResource {
         signatureProcessService.delete(id);
         return ResponseEntity.noContent().headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString())).build();
     }
+
+
+    @GetMapping("/signature-processes/signedFile/{id}/creator/{username}")
+    public ResponseEntity<Void> deleteSignatureProcess(@PathVariable Long id,@PathVariable String username ) {
+        log.debug("REST request to add SignatureProcess : {}", id);
+        signatureProcessService.saveSignatureProcess(id, username);;
+        return ResponseEntity.noContent().headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString())).build();
+    }
 }
