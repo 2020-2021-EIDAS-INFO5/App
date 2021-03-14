@@ -80,11 +80,7 @@ export class SignedFileDetailComponent implements OnInit, AfterViewInit {
   loadPDF(): void {
     const pdfData = atob(this.signedFile?.fileBytes);
 
-    // const loadingTask = pdfjsLib.getDocument(pdfData);
-
-    const pdfUrl = encodeURI('https://raw.githubusercontent.com/mozilla/pdf.js/ba2edeae/examples/learning/helloworld.pdf');
-
-    const loadingTask = pdfjsLib.getDocument(pdfUrl);
+    const loadingTask = pdfjsLib.getDocument({ data: pdfData });
 
     loadingTask.promise.then((pdf): void => {
       // eslint-disable-next-line no-console
