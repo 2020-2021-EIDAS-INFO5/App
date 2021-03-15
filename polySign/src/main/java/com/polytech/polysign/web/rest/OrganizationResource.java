@@ -144,4 +144,12 @@ public class OrganizationResource {
         List<Organization> myOrganizations = organizationService.getMyOrganizationByUserName(username);
         return myOrganizations;
     }
+
+
+    @GetMapping("/organizations/myUserAndAdmin/{username}")
+    public List<Organization> getMyOrganizationUserAndAdmin(@PathVariable String username) {
+        log.debug("REST request to get Organization : {}", username);
+        List<Organization> myOrganizations = organizationService.getMyOrganizationByUserName(username);
+        return myOrganizations;
+    }
 }

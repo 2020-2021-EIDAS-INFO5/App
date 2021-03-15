@@ -92,6 +92,32 @@ public class UserEntityService {
         return userEntityRepository.save(userEntity);
     }
 
+
+
+        /**
+     * Save a userEntity.
+     *
+     * @param userEntity the entity to save.
+     * @return the persisted entity.
+     */
+    public UserEntity saveSignature(UserEntity userEntity) {
+        log.debug("Request to save UserEntity : {}", userEntity);
+
+        UserKeycloak userKeycloak = new UserKeycloak();
+
+        userKeycloak.setEmail(userEntity.getEmail());
+
+        userKeycloak.setFirstName(userEntity.getFirstname());
+
+        userKeycloak.setPassword(new String(generatePassword(10))); // need password
+
+        userKeycloak.setLastName(userEntity.getLastname());
+
+        kcAdminClient.addUserSignature(userKeycloak);
+
+        return userEntityRepository.save(userEntity);
+    }
+
     /**
      * Get all the userEntities.
      *
