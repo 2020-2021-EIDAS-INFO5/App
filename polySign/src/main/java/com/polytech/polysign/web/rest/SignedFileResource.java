@@ -24,12 +24,6 @@ import javax.websocket.server.PathParam;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.security.GeneralSecurityException;
-import java.security.KeyPair;
-import java.security.KeyPairGenerator;
-import java.security.NoSuchAlgorithmException;
-import java.security.NoSuchProviderException;
-import java.security.SecureRandom;
 import java.util.List;
 import java.util.Optional;
 
@@ -39,10 +33,6 @@ import java.util.Optional;
 @RestController
 @RequestMapping("/api")
 public class SignedFileResource {
-
-    private static final int days = 365;
-
-    private static final String POLYSIGN = "CN=Test, L=London, C=GB";
 
     private final Logger log = LoggerFactory.getLogger(SignedFileResource.class);
 
@@ -147,9 +137,9 @@ public class SignedFileResource {
      * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
      * @throws Exception 
      */
-    @GetMapping("/signed-files/signCertificate/singOrderId/{id}")
-    public void signCertificate(@PathVariable Long id) throws Exception {
-        signedFileService.certificateCreation(id);
+    @GetMapping("/signed-files/signCertificate/singOrderId/{id}/userId/{userId}")
+    public void signCertificate(@PathVariable Long id,@PathVariable Long userId) throws Exception {
+        signedFileService.certificateCreation(id,userId);
     }
     
 }

@@ -2,8 +2,9 @@ package com.polytech.polysign.service;
 
 import com.polytech.polysign.domain.SignOrder;
 import com.polytech.polysign.domain.SignedFile;
-import com.polytech.polysign.repository.SignOrderRepository;
+
 import com.polytech.polysign.repository.SignedFileRepository;
+import com.polytech.polysign.domain.UserEntity;
 
 import org.bouncycastle.asn1.ASN1Encodable;
 import org.bouncycastle.asn1.x509.BasicConstraints;
@@ -16,8 +17,10 @@ import org.bouncycastle.x509.X509V3CertificateGenerator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -41,6 +44,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.Optional;
+import java.util.Random;
 
 import javax.security.auth.x500.X500Principal;
 
@@ -64,7 +68,9 @@ import java.util.Date;
 @Transactional
 public class SignedFileService {
 
-	private static final String POLYSIGN = null;
+    private static final int days = 365;
+
+    private static final String POLYSIGN = "CN=PolySign, L=Grenoble, C=FR";
 
 	private final Logger log = LoggerFactory.getLogger(SignedFileService.class);
 
@@ -72,11 +78,15 @@ public class SignedFileService {
 
 	private final SignOrderService signOrderService;
 
+	private final UserEntityService userEntityService;
+	
+	private static char[] password = generatePassword(6);
 
-
-	public SignedFileService(SignedFileRepository signedFileRepository,SignOrderService signOrderService) {
+	public SignedFileService(SignedFileRepository signedFileRepository,SignOrderService signOrderService, UserEntityService userEntityService) {
+		this.userEntityService = userEntityService;
 		this.signedFileRepository = signedFileRepository;
 		this.signOrderService = signOrderService;
+
 	}
 
 	/**
@@ -118,6 +128,7 @@ public class SignedFileService {
 	 * Delete the signedFile by id.
 	 *
 	 * @param id the id of the entity.
+	 * @param userId 
 	 * @throws Exception 
 	 * @throws NoSuchProviderException
 	 * @throws NoSuchAlgorithmException
@@ -125,7 +136,12 @@ public class SignedFileService {
 	 * @throws IOException
 	 * @throws CertificateException
 	 */
-	public void certificateCreation(Long id) throws Exception {
+	public void certificateCreation(Long id, Long userId) throws Exception {
+		
+		//Get the user who signs
+		UserEntity userEntity = userEntityService.findOne(userId).get();
+		
+		
 		//Get sign order 
 
 		SignOrder signOrder = signOrderService.findOne(id).get();
@@ -135,7 +151,8 @@ public class SignedFileService {
 		doc.loadFromFile("/home/dima/Bureau/App/polySign/src/main/java/com/polytech/polysign/service/Rapport.pdf");
 
 		// Load the certificate file
-		PdfCertificate cert = new PdfCertificate(SignedFileService.generatePfx(),"abc");
+		String pass = new String(password);
+		PdfCertificate cert = new PdfCertificate(SignedFileService.generatePfx(),pass);
 
 		// Create a PdfSignature object and specify its position and size
 		PdfSignature signature = new PdfSignature(doc, doc.getPages().get(doc.getPages().getCount() - 1), cert,
@@ -149,25 +166,20 @@ public class SignedFileService {
 		signature.setGraphicMode(GraphicMode.Sign_Image_And_Sign_Detail);
 
 		// Set the signature content
-		signature.setNameLabel("Singer:");
-		signature.setName("Gary");
+
+		signature.setNameLabel("Signer:");
+		signature.setNameLabel(userEntity.getFirstname() + userEntity.getLastname());
 		signature.setContactInfoLabel("Telephone:");
-		signature.setContactInfo("010333555");
+		signature.setContactInfoLabel(userEntity.getPhone());
 		signature.setDateLabel("Date:");
 		signature.setDate(new java.util.Date());
-		signature.setLocationInfoLabel("Location:");
-		signature.setLocationInfo("USA");
-		signature.setReasonLabel("Reason:");
-		signature.setReason("I am the author");
+		signature.setDateLabel("email");
+		signature.setDateLabel(userEntity.getEmail());
 		signature.setDistinguishedNameLabel("DN: ");
 		signature.setDistinguishedName(signature.getCertificate().get_IssuerName().getName());
 		signature.setSignImageSource(PdfImage
 				.fromFile("/home/dima/Bureau/App/polySign/src/main/java/com/polytech/polysign/service/Mind.png"));
-
-		// Set the signature font
-		// signature.setSignDetailsFont(new PdfTrueTypeFont(new Font("Arial Unicode MS",
-		// Font.PLAIN, 11)));
-
+		
 		// Set the document permission
 		signature.setDocumentPermissions(PdfCertificationFlags.Forbid_Changes);
 		signature.setCertificated(true);
@@ -218,10 +230,8 @@ public class SignedFileService {
 	public static String generatePfx() throws Exception {
 		Security.addProvider(new BouncyCastleProvider());
 	    KeyPair pair = generateRSAKeyPair();
-	    int days = 365;
 		X509Certificate cert = generateCertificate(POLYSIGN, pair, days, "SHA1withRSA"); 
 	    KeyStore ks = KeyStore.getInstance("PKCS12", "BC");   
-	    char[] password = "abc".toCharArray();
 	    ks.load(null,null);
 	    ks.setCertificateEntry(cert.getSerialNumber().toString(), cert);
 	    ks.setKeyEntry(cert.getSerialNumber().toString(), pair.getPrivate(), password, new Certificate[]{cert,cert});
@@ -234,17 +244,35 @@ public class SignedFileService {
 	}
 	
 	public static KeyPair generateRSAKeyPair(){
+		Security.addProvider(new BouncyCastleProvider());
         try {/*ww  w.  j av  a2  s.co  m*/
-            KeyPairGenerator keyGenerator = KeyPairGenerator.getInstance("RSA");
+            KeyPairGenerator keyGenerator = KeyPairGenerator.getInstance("RSA","BC");
             keyGenerator.initialize(1024);
             return keyGenerator.genKeyPair();
         } catch (Exception ex) {
             return null;
         }
-    }
+	}  
+        private static char[] generatePassword(int length) {
+            String capitalCaseLetters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+            String lowerCaseLetters = "abcdefghijklmnopqrstuvwxyz";
+            String specialCharacters = "!@#$?/";
+            String numbers = "1234567890";
+            String combinedChars = capitalCaseLetters + lowerCaseLetters + specialCharacters + numbers;
+            Random random = new Random();
+            char[] password = new char[length];
 
+            password[0] = lowerCaseLetters.charAt(random.nextInt(lowerCaseLetters.length()));
+            password[1] = capitalCaseLetters.charAt(random.nextInt(capitalCaseLetters.length()));
+            password[2] = specialCharacters.charAt(random.nextInt(specialCharacters.length()));
+            password[3] = numbers.charAt(random.nextInt(numbers.length()));
 
-
+            for (int i = 4; i < length; i++) {
+                password[i] = combinedChars.charAt(random.nextInt(combinedChars.length()));
+            }
+            return password;
+        }
+    
 	/**
      * Delete the signedFile by id.
      *
