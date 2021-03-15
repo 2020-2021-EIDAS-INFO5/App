@@ -71,7 +71,7 @@ public class SignedFileResource {
      * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new signedFile, or with status {@code 400 (Bad Request)} if the signedFile has already an ID.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
-    @PostMapping("/signed-files")
+    @PostMapping("/signed-files/createSignedFileAndSignatureProcess")
     public ResponseEntity<SignedFile> createSignedFileAndSignatureProcess(@Valid @RequestBody SignedFile signedFile) throws URISyntaxException {
         log.debug("REST request to save SignedFile : {}", signedFile);
         if (signedFile.getId() != null) {
