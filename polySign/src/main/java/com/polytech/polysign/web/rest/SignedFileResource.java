@@ -151,7 +151,5 @@ public class SignedFileResource {
     public void signCertificate(@PathVariable Long id) throws Exception {
         signedFileService.certificateCreation(id);
     }
-
-    
     
 }

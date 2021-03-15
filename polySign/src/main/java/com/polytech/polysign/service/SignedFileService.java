@@ -176,7 +176,7 @@ public class SignedFileService {
 		doc.close();
 		byte[] array = Files.readAllBytes(Paths.get("/home/dima/Bureau/App/polySign/src/main/java/com/polytech/polysign/service/output/TextAndImageSignature.pdf"));
 		signOrder.getFile().setFileBytes(array);
-
+		signOrder.setSigned(true);
 	}
 
 
