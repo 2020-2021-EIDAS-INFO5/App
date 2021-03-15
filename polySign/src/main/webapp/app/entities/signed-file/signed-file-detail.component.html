@@ -35,6 +35,7 @@
             </dl>
 
             <div class="row">
+            
                 <div class="col-md-12">
                 <ngx-extended-pdf-viewer
                 [base64Src]="signedFile.fileBytes"
@@ -45,20 +46,29 @@
                 [showHandToolButton]="true"> </ngx-extended-pdf-viewer>
 
              </div>
+            </div>
+           <div></div> 
+            <div>
+            <button class="btn btn-primary" mat-stroked-button color="primary" [disabled]="pageNum<=1" (click)="onClickPreviousePage()">Page précédente</button>
+            <span  mat-stroked-button>{{pageNum}}/{{totalPageNum}}</span>
+            <button class="btn btn-primary" color="accent" [disabled]="pageNum>=totalPageNum" (click)="onClickNextPage()">Page suivante</button>
+            </div> 
 
-             <div cdkDrag class="example-box"
-             (cdkDragStarted)="dragStarted($event)"
-             (cdkDragEnded)="dragEnded($event)"
-             (cdkDragMoved)="dragMoved($event)">
-             <div *ngIf="isAuthenticated()" >
-             <span  *ngIf="account"  >
-                {{ account.firstName}}
-             </span>
-            </div>
-             </div>
-             <p>{{state}} {{position}}</p>
-            </div>
-            <button type="submit"
+        </div>
+        <canvas #canvas></canvas>
+        <div cdkDrag class="example-box"
+        (cdkDragStarted)="dragStarted($event)"
+        (cdkDragEnded)="dragEnded($event)"
+        (cdkDragMoved)="dragMoved($event)">
+        <div *ngIf="isAuthenticated()" >
+        <span  *ngIf="account"  >
+           {{ account.firstName}}
+        </span>
+       </div>
+     </div>
+     <p>{{state}} {{position}}</p>
+
+        <button type="submit"
                     (click)="previousState()"
                     class="btn btn-info">
                 <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back">Back</span>
@@ -69,8 +79,6 @@
                     class="btn btn-primary">
                 <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit">Edit</span>
             </button>
-        </div>
-        <canvas #canvas></canvas>
     </div>
 </div>
 

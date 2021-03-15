@@ -14,7 +14,7 @@ if (pdfjsLib !== undefined) {
 @Component({
   selector: 'jhi-signed-file-detail',
   templateUrl: './signed-file-detail.component.html',
-  styleUrls: ['./rect.scss'],
+  styleUrls: ['./signed-file-details.scss'],
 })
 export class SignedFileDetailComponent implements OnInit, AfterViewInit {
   signedFile: ISignedFile | null = null;
@@ -26,6 +26,13 @@ export class SignedFileDetailComponent implements OnInit, AfterViewInit {
 
   @ViewChild('canvas', { static: true }) canvas?: ElementRef<HTMLCanvasElement>;
   ctx!: CanvasRenderingContext2D;
+
+  private pageRendering!: boolean;
+  private pdfDoc: any;
+  private pdfScale = 1;
+  private pageNumPending = null;
+  public pageNum = 1;
+  public totalPageNum = 0;
 
   constructor(
     protected dataUtils: JhiDataUtils,
@@ -87,10 +94,13 @@ export class SignedFileDetailComponent implements OnInit, AfterViewInit {
       console.log('pdf: ', pdf);
       // eslint-disable-next-line no-console
       console.log('PDF loaded');
+
+      this.pdfDoc = pdf;
+      this.totalPageNum = this.pdfDoc.numPages;
       // Fetch the first page
       const pageNumber = 1;
       pdf.getPage(pageNumber).then((page): void => {
-        const scale = 1.5;
+        const scale = 1;
         const Viewport = page.getViewport({ scale });
 
         // Prepare canvas using PDF page dimensions
@@ -108,5 +118,65 @@ export class SignedFileDetailComponent implements OnInit, AfterViewInit {
         renderTask.promise.then(() => {});
       });
     });
+  }
+
+  renderPage(num: number): void {
+    this.pageRendering = true;
+
+    // Using promise to fetch the page
+    this.pdfDoc
+      .getPage(num)
+      .then(
+        (page: {
+          getViewport: (arg0: { scale: number }) => any;
+          render: (arg0: { canvasContext: CanvasRenderingContext2D; viewport: any }) => any;
+        }): void => {
+          const scale = 1;
+          const Viewport = page.getViewport({ scale });
+
+          this.canvas!.nativeElement.height = Viewport.height;
+          this.canvas!.nativeElement.width = Viewport.width;
+
+          // Render PDF page into canvas context
+          const renderContext = {
+            canvasContext: this.ctx,
+            viewport: Viewport,
+          };
+          const renderTask = page.render(renderContext);
+
+          // Wait for rendering to finish
+          renderTask.promise.then(() => {
+            this.pageRendering = false;
+            if (this.pageNumPending !== null) {
+              // New page rendering is pending
+              this.renderPage(this.pageNumPending!);
+              this.pageNumPending = null;
+            }
+          });
+        }
+      );
+  }
+
+  queueRenderPage(num: any): void {
+    if (this.pageRendering) {
+      this.pageNumPending = num;
+    } else {
+      this.renderPage(num);
+    }
+  }
+  onClickPreviousePage(): void {
+    if (this.pageNum <= 1) {
+      return;
+    }
+    this.pageNum--;
+    this.queueRenderPage(this.pageNum);
+  }
+
+  onClickNextPage(): void {
+    if (this.pageNum >= this.pdfDoc.numPages) {
+      return;
+    }
+    this.pageNum++;
+    this.queueRenderPage(this.pageNum);
   }
 }
