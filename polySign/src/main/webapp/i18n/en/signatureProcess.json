@@ -12,6 +12,9 @@
       "step1": {
         "title": "Load the PDF Document for signature"
       },
+      "step2": {
+        "title": "Enter signers"
+      },
       "created": "A new Signature Process is created with identifier {{ param }}",
       "updated": "A Signature Process is updated with identifier {{ param }}",
       "deleted": "A Signature Process is deleted with identifier {{ param }}",

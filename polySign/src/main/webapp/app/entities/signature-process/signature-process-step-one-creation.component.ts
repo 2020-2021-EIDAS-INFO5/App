@@ -93,7 +93,7 @@ export class SignatureProcessStepOneCreationComponent implements OnInit {
     const signedFile = this.createFromForm();
     // eslint-disable-next-line no-console
     console.log(signedFile);
-    if (signedFile.id !== undefined) {
+    if (signedFile.id !== undefined && signedFile.id !== null) {
       this.subscribeToSaveResponse(this.signedFileService.update(signedFile));
     } else {
       this.subscribeToSaveResponse(this.signedFileService.create(signedFile));

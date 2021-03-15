@@ -8,6 +8,7 @@ import { SignatureProcessUpdateComponent } from './signature-process-update.comp
 import { SignatureProcessDeleteDialogComponent } from './signature-process-delete-dialog.component';
 import { signatureProcessRoute } from './signature-process.route';
 import { SignatureProcessStepOneCreationComponent } from './signature-process-step-one-creation.component';
+import { SignatureProcessStepTwoCreationComponent } from './signature-process-step-two-creation.component';
 
 @NgModule({
   imports: [PolySignSharedModule, RouterModule.forChild(signatureProcessRoute)],
@@ -15,6 +16,7 @@ import { SignatureProcessStepOneCreationComponent } from './signature-process-st
     SignatureProcessComponent,
     SignatureProcessDetailComponent,
     SignatureProcessStepOneCreationComponent,
+    SignatureProcessStepTwoCreationComponent,
     SignatureProcessUpdateComponent,
     SignatureProcessDeleteDialogComponent,
   ],

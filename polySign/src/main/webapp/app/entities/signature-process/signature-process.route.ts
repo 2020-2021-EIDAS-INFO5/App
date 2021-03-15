@@ -72,7 +72,7 @@ export const signatureProcessRoute: Routes = [
   },
   {
     path: 'new',
-    component: /* SignatureProcessStepOneCreationComponent,// */ SignatureProcessUpdateComponent,
+    component: SignatureProcessUpdateComponent,
     resolve: {
       signatureProcess: SignatureProcessResolve,
     },

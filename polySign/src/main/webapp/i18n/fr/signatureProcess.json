@@ -12,6 +12,9 @@
       "step1": {
         "title": "Charger le Document PDF pour la signature"
       },
+      "step2": {
+        "title": "Saisir les signataires"
+      },
       "created": "Un nouveau Signature Process a été créé avec l'identifiant {{ param }}",
       "updated": "Le Signature Process avec l'identifiant {{ param }} a été mis à jour",
       "deleted": "Le Signature Process avec l'identifiant {{ param }} a été supprimé",
