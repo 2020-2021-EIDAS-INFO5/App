@@ -128,32 +128,14 @@ public class SignedFileResource {
      *
      * @param id the id of the signedFile to delete.
      * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
+     * @throws Exception 
      */
     @DeleteMapping("/signed-files/{id}")
-    public ResponseEntity<Void> deleteSignedFile(@PathVariable Long id) {
+    public ResponseEntity<Void> deleteSignedFile(@PathVariable Long id) throws Exception {
         log.debug("REST request to delete SignedFile : {}", id);
-
-        KeyPair keyPair = null;
-        try {
-            KeyPairGenerator keyPairGenerator = KeyPairGenerator.getInstance("RSA");
-keyPairGenerator.initialize(1024);
- keyPair = keyPairGenerator.genKeyPair();
-
-
-        } catch (NoSuchAlgorithmException e1) {
-            // TODO Auto-generated catch block
-            e1.printStackTrace();
-        }
-        
-        try {
-            signedFileService.generateCertificate(POLYSIGN, keyPair, days, "SHA1withRSA");
-        } catch (GeneralSecurityException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
+        signedFileService.delete(id);
         return ResponseEntity.noContent().headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString())).build();
     }
+    
+    
 }
