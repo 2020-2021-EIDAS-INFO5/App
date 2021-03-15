@@ -1,6 +1,8 @@
 package com.polytech.polysign.service;
 
+import com.polytech.polysign.domain.SignOrder;
 import com.polytech.polysign.domain.SignedFile;
+import com.polytech.polysign.repository.SignOrderRepository;
 import com.polytech.polysign.repository.SignedFileRepository;
 
 import org.bouncycastle.asn1.ASN1Encodable;
@@ -32,6 +34,7 @@ import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileReader;
@@ -66,11 +69,13 @@ public class SignedFileService {
 
 	private final SignedFileRepository signedFileRepository;
 
+	private final SignOrderService signOrderService;
 
 
-	public SignedFileService(SignedFileRepository signedFileRepository) {
+
+	public SignedFileService(SignedFileRepository signedFileRepository,SignOrderService signOrderService) {
 		this.signedFileRepository = signedFileRepository;
-		
+		this.signOrderService = signOrderService;
 	}
 
 	/**
@@ -119,8 +124,11 @@ public class SignedFileService {
 	 * @throws IOException
 	 * @throws CertificateException
 	 */
-	public void delete(Long id) throws Exception {
+	public void certificateCreation(Long id) throws Exception {
+		//Get sign order 
 
+		SignOrder signOrder = signOrderService.findOne(id).get();
+	
 		// Load a pdf document
 		PdfDocument doc = new PdfDocument();
 		doc.loadFromFile("/home/dima/Bureau/App/polySign/src/main/java/com/polytech/polysign/service/Rapport.pdf");
@@ -164,9 +172,11 @@ public class SignedFileService {
 		signature.setCertificated(true);
 
 		// Save to file
-		doc.saveToFile(
-				"/home/dima/Bureau/App/polySign/src/main/java/com/polytech/polysign/service/output/TextAndImageSignature.pdf");
+		doc.saveToFile("/home/dima/Bureau/App/polySign/src/main/java/com/polytech/polysign/service/output/TextAndImageSignature.pdf");
 		doc.close();
+		byte[] array = Files.readAllBytes(Paths.get("/home/dima/Bureau/App/polySign/src/main/java/com/polytech/polysign/service/output/TextAndImageSignature.pdf"));
+		signOrder.getFile().setFileBytes(array);
+
 	}
 
 
@@ -228,5 +238,18 @@ public class SignedFileService {
             return null;
         }
     }
+
+
+
+	/**
+     * Delete the signedFile by id.
+     *
+     * @param id the id of the entity.
+     */
+    public void delete(Long id) {
+        log.debug("Request to delete SignedFile : {}", id);
+        signedFileRepository.deleteById(id);
+    }
+
     }	
 

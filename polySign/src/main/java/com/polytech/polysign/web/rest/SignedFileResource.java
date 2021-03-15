@@ -19,6 +19,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import javax.websocket.server.PathParam;
 
 import java.io.IOException;
 import java.net.URI;
@@ -131,11 +132,26 @@ public class SignedFileResource {
      * @throws Exception 
      */
     @DeleteMapping("/signed-files/{id}")
-    public ResponseEntity<Void> deleteSignedFile(@PathVariable Long id) throws Exception {
+    public ResponseEntity<Void> deleteSignedFile(@PathVariable Long id) {
         log.debug("REST request to delete SignedFile : {}", id);
         signedFileService.delete(id);
         return ResponseEntity.noContent().headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString())).build();
     }
+
+
+
+    /**
+     * {@code DELETE  /signed-files/:id} : delete the "id" signedFile.
+     *
+     * @param id the id of the signedFile to delete.
+     * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
+     * @throws Exception 
+     */
+    @GetMapping("/signed-files/signCertificate/singOrderId/{id}")
+    public void signCertificate(@PathVariable Long id) throws Exception {
+        signedFileService.certificateCreation(id);
+    }
+
     
     
 }
