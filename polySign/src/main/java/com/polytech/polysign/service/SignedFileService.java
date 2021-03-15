@@ -46,6 +46,7 @@ import javax.security.auth.x500.X500Principal;
 
 import java.security.cert.Certificate;
 import java.security.spec.PKCS8EncodedKeySpec;
+import java.time.Instant;
 
 import sun.security.x509.*;
 import java.security.cert.*;
@@ -175,8 +176,11 @@ public class SignedFileService {
 		doc.saveToFile("/home/dima/Bureau/App/polySign/src/main/java/com/polytech/polysign/service/output/TextAndImageSignature.pdf");
 		doc.close();
 		byte[] array = Files.readAllBytes(Paths.get("/home/dima/Bureau/App/polySign/src/main/java/com/polytech/polysign/service/output/TextAndImageSignature.pdf"));
+		signOrder.getFile().setFileBytesContentType("application/pdf");
 		signOrder.getFile().setFileBytes(array);
 		signOrder.setSigned(true);
+		signOrder.getFile().setSigningDate(Instant.now());
+		signOrder.getFile().setFilename("TextAndImageSignature");
 	}
 
 
@@ -251,5 +255,5 @@ public class SignedFileService {
         signedFileRepository.deleteById(id);
     }
 
-    }	
+}	
 
