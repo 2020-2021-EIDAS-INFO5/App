@@ -138,7 +138,8 @@ export class SignatureProcessStepTwoCreationComponent implements OnInit, OnDestr
     }
   }
 
-  trackById(index: number, item: IUser): any {
+  trackById(index: number, item: IUserEntity): any {
+    // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
     return item.id;
   }
   /*

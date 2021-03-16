@@ -100,7 +100,7 @@
             </tr>
             </thead>
             <tbody>
-            <tr *ngFor="let signer of signers; index as i">
+            <tr *ngFor="let signer of signers ;trackBy: trackById">
                 <th scope="row">{{ i + 1 }}</th>
                 <td>{{signer.firstname}}</td>
                 <td>{{signer.lastname}}</td>
