@@ -2,9 +2,12 @@ package com.polytech.polysign.web.rest;
 
 import com.polytech.polysign.domain.Authorit;
 import com.polytech.polysign.domain.Organization;
+import com.polytech.polysign.domain.SignOrder;
 import com.polytech.polysign.domain.UserEntity;
 import com.polytech.polysign.service.AuthoritService;
 import com.polytech.polysign.service.OrganizationService;
+import com.polytech.polysign.service.SignOrderService;
+import com.polytech.polysign.service.SignedFileService;
 import com.polytech.polysign.service.UserEntityService;
 import com.polytech.polysign.web.rest.errors.BadRequestAlertException;
 
@@ -40,15 +43,19 @@ public class UserEntityResource {
 
     private final AuthoritService authoritService;
 
+    private final SignOrderService signOrderService;
+
     @Value("${jhipster.clientApp.name}")
     private String applicationName;
 
     private final UserEntityService userEntityService;
 
-    public UserEntityResource(UserEntityService userEntityService, AuthoritService authoritService) {
+    public UserEntityResource(UserEntityService userEntityService, AuthoritService authoritService,SignOrderService signOrderService) {
         this.userEntityService = userEntityService;
         this.authoritService = authoritService;
+        this.signOrderService =signOrderService;
     }
+
 
     /**
      * {@code POST  /user-entities} : Create a new userEntity.
@@ -57,7 +64,7 @@ public class UserEntityResource {
      * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new userEntity, or with status {@code 400 (Bad Request)} if the userEntity has already an ID.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
-    @PostMapping("/user-entities")
+   @PostMapping("/user-entities")
     public ResponseEntity<UserEntity> createUserEntity(@Valid @RequestBody UserEntity userEntity) throws URISyntaxException {
         log.debug("REST request to save UserEntity : {}", userEntity);
         if (userEntity.getId() != null) {
@@ -68,6 +75,8 @@ public class UserEntityResource {
             .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getId().toString()))
             .body(result);
     }
+    
+
 
     /**
      * {@code PUT  /user-entities} : Updates an existing userEntity.

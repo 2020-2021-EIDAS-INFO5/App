@@ -63,6 +63,26 @@ public class SignedFileResource {
             .body(result);
     }
 
+
+        /**
+     * {@code POST  /signed-files} : Create a new signedFile.
+     *
+     * @param signedFile the signedFile to create.
+     * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new signedFile, or with status {@code 400 (Bad Request)} if the signedFile has already an ID.
+     * @throws URISyntaxException if the Location URI syntax is incorrect.
+     */
+    @PostMapping("/signed-files/createSignedFileAndSignatureProcess")
+    public ResponseEntity<SignedFile> createSignedFileAndSignatureProcess(@Valid @RequestBody SignedFile signedFile) throws URISyntaxException {
+        log.debug("REST request to save SignedFile : {}", signedFile);
+        if (signedFile.getId() != null) {
+            throw new BadRequestAlertException("A new signedFile cannot already have an ID", ENTITY_NAME, "idexists");
+        }
+        SignedFile result = signedFileService.saveSignedFileAndSignatureProcess(signedFile);
+        return ResponseEntity.created(new URI("/api/signed-files/" + result.getId()))
+            .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getId().toString()))
+            .body(result);
+    }
+
     /**
      * {@code PUT  /signed-files} : Updates an existing signedFile.
      *
@@ -123,4 +143,5 @@ public class SignedFileResource {
         signedFileService.delete(id);
         return ResponseEntity.noContent().headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString())).build();
     }
+    
 }
