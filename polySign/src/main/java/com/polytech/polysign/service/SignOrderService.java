@@ -157,8 +157,8 @@ public class SignOrderService {
              userEntity = userEntityService.findOne(userEntity.getId()).get();
         }
 
-        //create role in oranization   
-        
+        //create role in oranization
+
         Organization organization = organizationService.findOne(organizationID).get();
 
 
@@ -179,7 +179,7 @@ public class SignOrderService {
         SignedFile signedFile = signedFileService.findOne(signedFileID).get();
 
 
-        //Create new Signed File for user 
+        //Create new Signed File for user
 
         SignedFile signedFileUser = new SignedFile();
 

@@ -13,7 +13,6 @@ import { JhiEventManager } from 'ng-jhipster';
 import { Account } from 'app/core/user/account.model';
 import { AccountService } from '../../core/auth/account.service';
 import { SignOrderService } from '../sign-order/sign-order.service';
-import { UserEntityDeleteDialogComponent } from '../user-entity/user-entity-delete-dialog.component';
 import { ISignOrder } from '../../shared/model/sign-order.model';
 
 @Component({
@@ -60,6 +59,7 @@ export class SignatureProcessStepTwoCreationComponent implements OnInit, OnDestr
 
       this.userService.query().subscribe((res: HttpResponse<IUser[]>) => (this.users = res.body || []));
     });*/
+    this.accountService.identity().subscribe(account => (this.account = account));
   }
 
   updateForm(userEntity: IUserEntity): void {
@@ -153,7 +153,10 @@ export class SignatureProcessStepTwoCreationComponent implements OnInit, OnDestr
   }
 
   delete(userEntity: IUserEntity): void {
-    this.userEntityService.deleteUserEntityByUsername(userEntity.id!, this.account!.email);
+    this.userEntityService.deleteUserEntityByUsername(userEntity.id!, this.account!.email).subscribe(() => {
+      this.eventManager.broadcast('userEntityListModification');
+    });
+
     this.signers = this.signers.filter(signer => signer.id !== userEntity.id);
   }
   /*
