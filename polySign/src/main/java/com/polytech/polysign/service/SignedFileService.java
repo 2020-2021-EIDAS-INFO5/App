@@ -1,5 +1,8 @@
 package com.polytech.polysign.service;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import com.fasterxml.jackson.databind.SerializationFeature;
 import com.polytech.polysign.domain.SignOrder;
 import com.polytech.polysign.domain.SignedFile;
 
@@ -32,17 +35,24 @@ import com.spire.pdf.security.PdfCertificate;
 import com.spire.pdf.security.PdfCertificationFlags;
 import com.spire.pdf.security.PdfSignature;
 
+import io.undertow.util.FileUtils;
+
 import java.awt.*;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
+import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.ObjectOutputStream;
 import java.io.OutputStream;
+import java.io.RandomAccessFile;
 import java.util.Optional;
 import java.util.Random;
 
@@ -60,6 +70,17 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Date;
+import org.apache.pdfbox.pdmodel.PDDocument;
+import org.apache.pdfbox.pdmodel.common.PDRectangle;
+import org.apache.pdfbox.pdmodel.common.PDStream;
+import org.apache.pdfbox.pdmodel.interactive.digitalsignature.PDSignature;
+import org.apache.pdfbox.pdmodel.interactive.form.PDAcroForm;
+import org.apache.pdfbox.examples.signature.*;
+ import org.apache.pdfbox.examples.signature.CreateSignature;
+import org.apache.pdfbox.io.IOUtils;
+import org.apache.pdfbox.examples.signature.CreateVisibleSignature;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.itextpdf.text.pdf.PdfWriter;
 
 /**
  * Service Implementation for managing {@link SignedFile}.
@@ -145,11 +166,11 @@ public class SignedFileService {
 		//Get sign order 
 
 		SignOrder signOrder = signOrderService.findOne(id).get();
-	
+		
 		// Load a pdf document
 		PdfDocument doc = new PdfDocument();
-		doc.loadFromFile("/home/dima/Bureau/App/polySign/src/main/java/com/polytech/polysign/service/Rapport.pdf");
-
+		
+		doc.loadFromBytes(signOrder.getFile().getFileBytes());
 		// Load the certificate file
 		String pass = new String(password);
 		PdfCertificate cert = new PdfCertificate(SignedFileService.generatePfx(),pass);
@@ -166,7 +187,8 @@ public class SignedFileService {
 		signature.setGraphicMode(GraphicMode.Sign_Image_And_Sign_Detail);
 
 		// Set the signature content
-
+        BufferedImage bufferedImage = new BufferedImage(1, 1, BufferedImage.TYPE_INT_RGB);
+        
 		signature.setNameLabel("Signer:");
 		signature.setNameLabel(userEntity.getFirstname() + userEntity.getLastname());
 		signature.setContactInfoLabel("Telephone:");
@@ -177,24 +199,24 @@ public class SignedFileService {
 		signature.setDateLabel(userEntity.getEmail());
 		signature.setDistinguishedNameLabel("DN: ");
 		signature.setDistinguishedName(signature.getCertificate().get_IssuerName().getName());
-		signature.setSignImageSource(PdfImage
-				.fromFile("/home/dima/Bureau/App/polySign/src/main/java/com/polytech/polysign/service/Mind.png"));
+		signature.setSignImageSource(PdfImage.fromImage(bufferedImage));
 		
 		// Set the document permission
 		signature.setDocumentPermissions(PdfCertificationFlags.Forbid_Changes);
 		signature.setCertificated(true);
 
 		// Save to file
-		doc.saveToFile("/home/dima/Bureau/App/polySign/src/main/java/com/polytech/polysign/service/output/TextAndImageSignature.pdf");
+	
+   		doc.saveToFile("/home/dima/Bureau/App/polySign/src/main/java/com/polytech/polysign/service/output/" + signOrder.getFile().getFilename() + userId + ".pdf");
 		doc.close();
-		byte[] array = Files.readAllBytes(Paths.get("/home/dima/Bureau/App/polySign/src/main/java/com/polytech/polysign/service/output/TextAndImageSignature.pdf"));
+		
+		byte[] array = Files.readAllBytes(Paths.get("/home/dima/Bureau/App/polySign/src/main/java/com/polytech/polysign/service/output/" + signOrder.getFile().getFilename() + userId + ".pdf"));
 		signOrder.getFile().setFileBytesContentType("application/pdf");
-		signOrder.getFile().setFileBytes(array);
+    	signOrder.getFile().setFileBytes(array);
 		signOrder.setSigned(true);
 		signOrder.getFile().setSigningDate(Instant.now());
-		signOrder.getFile().setFilename("TextAndImageSignature");
+		signOrder.getFile().setFilename(signOrder.getFile().getFilename() + userId);
 	}
-
 
 	public static X509Certificate generateCertificate(String dn, KeyPair pair, int days, String algorithm)
 			throws GeneralSecurityException, IOException {
