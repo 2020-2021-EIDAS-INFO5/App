@@ -63,7 +63,9 @@
 
         </div>
         <div>
-        <canvas #canvas></canvas>
+        <canvas #canvas (click)="storeGuess($event)"></canvas>
+        <p>{{mouse}}</p>
+
 
         <button type="submit"
                     (click)="previousState()"

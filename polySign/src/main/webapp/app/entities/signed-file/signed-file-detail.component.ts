@@ -24,6 +24,10 @@ export class SignedFileDetailComponent implements OnInit, AfterViewInit {
   state = '';
   position = '';
 
+  guessX = 0;
+  guessY = 0;
+  mouse = '';
+
   @ViewChild('canvas', { static: true }) canvas?: ElementRef<HTMLCanvasElement>;
   ctx!: CanvasRenderingContext2D;
 
@@ -178,5 +182,13 @@ export class SignedFileDetailComponent implements OnInit, AfterViewInit {
     }
     this.pageNum++;
     this.queueRenderPage(this.pageNum);
+  }
+
+  public storeGuess(event: { offsetX: any; offsetY: any }): any {
+    const x = event.offsetX;
+    const y = event.offsetY;
+    this.guessX = x;
+    this.guessY = y;
+    this.mouse = `x coords: " + ${this.guessX}+ ", y coords: " + ${this.guessY})`;
   }
 }
