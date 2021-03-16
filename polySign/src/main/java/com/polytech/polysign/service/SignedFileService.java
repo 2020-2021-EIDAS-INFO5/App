@@ -26,6 +26,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
@@ -103,16 +104,28 @@ public class SignedFileService {
     private final UserEntityRepository userEntityRepository;
 
     private final SignatureProcessRepository signatureProcessRepository;
+    
+    private final UserEntityService userEntityService;
 
-    public SignedFileService(SignedFileRepository signedFileRepository, UserEntityRepository userEntityRepository, SignatureProcessRepository signatureProcessRepository) {
-        this.signedFileRepository = signedFileRepository;
+    private final SignOrderService signOrderService;
+    
+	private final SignedFileRepository signedFileRepository;
+	
+	private final Logger log = LoggerFactory.getLogger(SignatureProcessService.class);
+	
+	private final static char[] password = generatePassword(6);
+
+	
+    public SignedFileService(SignedFileRepository signedFileRepository,@Lazy SignOrderService signOrderService,@Lazy UserEntityRepository userEntityRepository,UserEntityService userEntityService, SignatureProcessRepository signatureProcessRepository) {
+        this.userEntityService = userEntityService;
+		this.signedFileRepository = signedFileRepository;
         this.userEntityRepository = userEntityRepository;
         this.signatureProcessRepository = signatureProcessRepository;
+        this.signOrderService = signOrderService;
     }
 
-	private final SignedFileRepository signedFileRepository;
 
-	private final SignOrderService signOrderService;
+
     /**
      * Save a signedFile.
      *
@@ -143,26 +156,7 @@ public class SignedFileService {
 
     }
 
-    /**
-     * Get all the signedFiles.
-     *
-     * @param pageable the pagination information.
-     * @return the list of entities.
-     */
-    @Transactional(readOnly = true)
-    public Page<SignedFile> findAll(Pageable pageable) {
-        log.debug("Request to get all SignedFiles");
-        return signedFileRepository.findAll(pageable);
-    }
 
-	private final UserEntityService userEntityService;
-	
-	private static char[] password = generatePassword(6);
-
-	public SignedFileService(SignedFileRepository signedFileRepository,SignOrderService signOrderService, UserEntityService userEntityService) {
-		this.userEntityService = userEntityService;
-		this.signedFileRepository = signedFileRepository;
-		this.signOrderService = signOrderService;
     /**
      * Get one signedFile by id.
      *
@@ -175,7 +169,7 @@ public class SignedFileService {
         return signedFileRepository.findById(id);
     }
 
-	}
+	
 
 	/**
 	 * Save a signedFile.
@@ -200,17 +194,6 @@ public class SignedFileService {
 		return signedFileRepository.findAll(pageable);
 	}
 
-	/**
-	 * Get one signedFile by id.
-	 *
-	 * @param id the id of the entity.
-	 * @return the entity.
-	 */
-	@Transactional(readOnly = true)
-	public Optional<SignedFile> findOne(Long id) {
-		log.debug("Request to get SignedFile : {}", id);
-		return signedFileRepository.findById(id);
-	}
 
 	/**
 	 * Delete the signedFile by id.

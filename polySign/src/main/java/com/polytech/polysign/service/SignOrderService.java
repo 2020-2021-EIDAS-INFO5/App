@@ -52,7 +52,7 @@ public class SignOrderService {
 
     private final AuthoritService authoritService;
 
-    public SignOrderService(SignOrderRepository signOrderRepository, SignedFileService signedFileService,
+    public SignOrderService(SignOrderRepository signOrderRepository, @Lazy SignedFileService signedFileService,
             SignatureProcessRepository signatureProcessRepository, UserEntityRepository userEntityRepository,
             @Lazy UserEntityService userEntityService,OrganizationService organizationService,AuthoritService authoritService) {
         this.signOrderRepository = signOrderRepository;
