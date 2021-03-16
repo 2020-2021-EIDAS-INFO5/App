@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, AfterViewInit, HostListener } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { JhiDataUtils } from 'ng-jhipster';
 import { LoginService } from 'app/core/login/login.service';
@@ -30,6 +30,8 @@ export class SignedFileDetailComponent implements OnInit, AfterViewInit {
 
   @ViewChild('canvas', { static: true }) canvas?: ElementRef<HTMLCanvasElement>;
   ctx!: CanvasRenderingContext2D;
+
+  @ViewChild('sign', { static: true }) sign?: ElementRef<HTMLCanvasElement>;
 
   private pageRendering!: boolean;
   private pdfDoc: any;
@@ -190,5 +192,8 @@ export class SignedFileDetailComponent implements OnInit, AfterViewInit {
     this.guessX = x;
     this.guessY = y;
     this.mouse = `x coords: " + ${this.guessX}+ ", y coords: " + ${this.guessY})`;
+    this.ctx.strokeStyle = 'green';
+    this.ctx.strokeRect(this.guessX, this.guessY, 100, 50);
+    this.ctx.save();
   }
 }
