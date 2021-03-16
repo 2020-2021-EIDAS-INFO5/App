@@ -1,6 +1,7 @@
 package com.polytech.polysign.web.rest;
 
 import com.polytech.polysign.domain.SignOrder;
+import com.polytech.polysign.domain.UserEntity;
 import com.polytech.polysign.service.SignOrderService;
 import com.polytech.polysign.web.rest.errors.BadRequestAlertException;
 
@@ -38,6 +39,8 @@ public class SignOrderResource {
     private String applicationName;
 
     private final SignOrderService signOrderService;
+
+
 
     public SignOrderResource(SignOrderService signOrderService) {
         this.signOrderService = signOrderService;
@@ -153,5 +156,21 @@ public class SignOrderResource {
         return  signOrderService.findAllSignatureOfSigner(username);
     }
 
+    /**
+     * {@code POST  /sign-orders} : Create a new signOrder.
+     *
+     * @param signOrder the signOrder to create.
+     * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new signOrder, or with status {@code 400 (Bad Request)} if the signOrder has already an ID.
+     * @throws URISyntaxException if the Location URI syntax is incorrect.
+     */
+    @PostMapping("/sign-orders/createSignOrderForUserEntity/{signedFileID}/organizationID/{organizationID}")
+    public ResponseEntity<SignOrder> createSignOrderForUserEntity(@RequestBody UserEntity userEntity, @PathVariable Long signedFileID, @PathVariable Long organizationID) throws URISyntaxException {
+
+        SignOrder result = signOrderService.createSignOrderForUser(signedFileID, userEntity,organizationID);
+
+        return ResponseEntity.created(new URI("/api/sign-orders/" + result.getId()))
+            .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getId().toString()))
+            .body(result);
+    }
 
 }
