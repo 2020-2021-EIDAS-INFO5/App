@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { HttpResponse } from '@angular/common/http';
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { FormBuilder, Validators } from '@angular/forms';
@@ -12,6 +12,9 @@ import { UserService } from 'app/core/user/user.service';
 import { JhiEventManager } from 'ng-jhipster';
 import { Account } from 'app/core/user/account.model';
 import { AccountService } from '../../core/auth/account.service';
+import { SignOrderService } from '../sign-order/sign-order.service';
+import { UserEntityDeleteDialogComponent } from '../user-entity/user-entity-delete-dialog.component';
+import { ISignOrder } from '../../shared/model/sign-order.model';
 
 @Component({
   selector: 'jhi-signature-process-step-two-creation',
@@ -26,6 +29,9 @@ export class SignatureProcessStepTwoCreationComponent implements OnInit, OnDestr
   signers: IUserEntity[] = [];
   users: IUser[] = [];
   userEntities: IUserEntity[] = [];
+
+  @Input() signedFileID?: number;
+  @Input() organisationID?: number;
 
   account?: Account | null;
 
@@ -42,18 +48,18 @@ export class SignatureProcessStepTwoCreationComponent implements OnInit, OnDestr
     protected userEntityService: UserEntityService,
     protected userService: UserService,
     protected activatedRoute: ActivatedRoute,
+    private signOrderService: SignOrderService,
     private fb: FormBuilder,
-    private fbRole: FormBuilder,
     private accountService: AccountService,
     private eventManager: JhiEventManager
   ) {}
 
   ngOnInit(): void {
-    this.activatedRoute.data.subscribe(({ userEntity }) => {
+    /* this.activatedRoute.data.subscribe(({ userEntity }) => {
       this.updateForm(userEntity);
 
       this.userService.query().subscribe((res: HttpResponse<IUser[]>) => (this.users = res.body || []));
-    });
+    });*/
   }
 
   updateForm(userEntity: IUserEntity): void {
@@ -80,10 +86,13 @@ export class SignatureProcessStepTwoCreationComponent implements OnInit, OnDestr
     const userEntity = this.createFromForm();
     /* eslint-disable no-console */
     console.log(userEntity);
+
     if (userEntity.id !== undefined && userEntity.id !== null) {
       this.subscribeToSaveResponse(this.userEntityService.update(userEntity));
     } else {
-      this.subscribeToSaveResponse(this.userEntityService.create(userEntity));
+      this.subscribeToSaveResponse(
+        this.signOrderService.createSignOrderForUserEntity(userEntity, this.signedFileID!, this.organisationID!)
+      );
     }
 
     // this.showForm();
@@ -101,11 +110,11 @@ export class SignatureProcessStepTwoCreationComponent implements OnInit, OnDestr
     };
   }
 
-  protected subscribeToSaveResponse(result: Observable<HttpResponse<IUserEntity>>): void {
+  protected subscribeToSaveResponse(result: Observable<HttpResponse<ISignOrder>>): void {
     result.subscribe(
       res => {
         // we retrieve the userEntity that has been created and we put it the signers array
-        this.signers.push(res.body!);
+        this.signers.push(res.body!.signer!);
         this.onSaveSuccess();
       },
       () => this.onSaveError()
@@ -141,6 +150,11 @@ export class SignatureProcessStepTwoCreationComponent implements OnInit, OnDestr
   trackById(index: number, item: IUserEntity): any {
     // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
     return item.id;
+  }
+
+  delete(userEntity: IUserEntity): void {
+    this.userEntityService.deleteUserEntityByUsername(userEntity.id!, this.account!.email);
+    this.signers = this.signers.filter(signer => signer.id !== userEntity.id);
   }
   /*
   showForm(): void {

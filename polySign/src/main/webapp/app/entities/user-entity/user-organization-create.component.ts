@@ -65,7 +65,7 @@ export class UserOrganizationCreateComponent implements OnInit {
       this.account = account;
       // we retrieve the organization of the authenticated User
       this.organizationService
-        .getMyOrganization(this.account!.login)
+        .getMyOrganizationUserAndAdmin(this.account!.login)
         .subscribe((res: HttpResponse<IOrganization[]>) => (this.organizations = res.body || []));
     });
   }

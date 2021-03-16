@@ -13,6 +13,8 @@ import { SignedFileService } from '../signed-file/signed-file.service';
 import { AlertError } from 'app/shared/alert/alert-error.model';
 import { AccountService } from '../../core/auth/account.service';
 import { Account } from 'app/core/user/account.model';
+import { IOrganization } from '../../shared/model/organization.model';
+import { OrganizationService } from '../organization/organization.service';
 
 @Component({
   selector: 'jhi-signature-process-step-one-creation',
@@ -22,8 +24,16 @@ import { Account } from 'app/core/user/account.model';
 export class SignatureProcessStepOneCreationComponent implements OnInit {
   isSaving = false;
 
+  organizations: IOrganization[] = [];
+  selectedOrganization?: IOrganization;
   signedFileCreated?: ISignedFile;
   protected account?: Account | null;
+
+  selectedValue?: IOrganization = undefined;
+  /*
+  organizationForm = this.fbOrganization.group({
+    organization: [null, [Validators.required]],
+  }); */
 
   editForm = this.fb.group({
     id: [],
@@ -41,19 +51,30 @@ export class SignatureProcessStepOneCreationComponent implements OnInit {
     protected signedFileService: SignedFileService,
     protected activatedRoute: ActivatedRoute,
     protected accountService: AccountService,
+    private organisationService: OrganizationService,
     private fb: FormBuilder
   ) {}
 
   ngOnInit(): void {
-    this.activatedRoute.data.subscribe(({ signedFile }) => {
+    /* this.activatedRoute.data.subscribe(({ signedFile }) => {
       if (!signedFile.id) {
         const today = moment().startOf('day');
         signedFile.signingDate = today;
       }
 
-      this.updateForm(signedFile);
-      this.accountService.identity().subscribe(account => (this.account = account));
+      this.updateForm(signedFile);*/
+    this.accountService.identity().subscribe(account => {
+      this.account = account;
+      this.organisationService.getMyOrganizationUserAndAdmin(this.account!.email).subscribe((res: HttpResponse<IOrganization[]>) => {
+        this.organizations = res.body || [];
+        // eslint-disable-next-line no-console
+        console.log(res);
+      });
     });
+  }
+
+  selected(): void {
+    this.selectedOrganization = this.selectedValue;
   }
 
   updateForm(signedFile: ISignedFile): void {
@@ -93,11 +114,8 @@ export class SignatureProcessStepOneCreationComponent implements OnInit {
     const signedFile = this.createFromForm();
     // eslint-disable-next-line no-console
     console.log(signedFile);
-    if (signedFile.id !== undefined && signedFile.id !== null) {
-      this.subscribeToSaveResponse(this.signedFileService.update(signedFile));
-    } else {
-      this.subscribeToSaveResponse(this.signedFileService.create(signedFile));
-    }
+
+    this.subscribeToSaveResponse(this.signedFileService.createSignedFileAndSignatureProcess(signedFile));
   }
 
   private createFromForm(): ISignedFile {
@@ -127,7 +145,7 @@ export class SignatureProcessStepOneCreationComponent implements OnInit {
 
   protected onSaveSuccess(): void {
     this.isSaving = false;
-    this.previousState();
+    //this.previousState();
   }
 
   protected onSaveError(): void {

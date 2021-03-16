@@ -6,6 +6,14 @@
 </nav>
 <div class="row justify-content-center">
     <div class="col-8">
+        <!--<div class="md-form">
+            <input placeholder="Choose your organization of the signature" label="Example label" (ngModelChange)="getSelectedValue($event)" [ngModel]="selectedValue">
+                <mdb-select-option *ngFor="let organizationOption of organizations" [value]="organizationOption">{{ organizationOption.name }}</mdb-select-option>
+
+        </div>-->
+        <select class="form-control" name="organization" [(ngModel)]="selectedValue" (change)="selected() ">
+            <option *ngFor="let organizationOption of organizations" [ngValue]="organizationOption">{{organizationOption.name}}</option>
+        </select>
         <form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
             <h4 class="text-info" id="jhi-signature-process-step1-heading" jhiTranslate="polySignApp.signatureProcess.step1.title">Load the PDF Document for signature</h4>
 
@@ -80,4 +88,8 @@
         </form>
     </div>
 </div>
-<jhi-signature-process-step-two-creation></jhi-signature-process-step-two-creation>
+<div *ngIf="signedFileCreated && selectedOrganization">
+<jhi-signature-process-step-two-creation
+    [signedFileID]="signedFileCreated.id"
+    [organisationID]="selectedOrganization.id"></jhi-signature-process-step-two-creation>
+</div>
