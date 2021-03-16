@@ -179,8 +179,22 @@ public class SignOrderService {
         SignedFile signedFile = signedFileService.findOne(signedFileID).get();
 
 
+        //Create new Signed File for user 
+
+        SignedFile signedFileUser = new SignedFile();
+
+        signedFileUser.setSigningDate(signedFile.getSigningDate());
+
+        signedFileUser.setFileBytes(signedFile.getFileBytes());
+
+        signedFileUser.setFilename(signedFile.getFilename());
+
+        signedFileUser.setFileBytesContentType(signedFile.getFileBytesContentType());
+
+        SignedFile signedFileUser1 = signedFileService.save(signedFileUser);
+
         SignOrder signOrder = new SignOrder();
-        signOrder.setFile(signedFile);
+        signOrder.setFile(signedFileUser1);
 
         SignatureProcess mySignature = new SignatureProcess();
 
