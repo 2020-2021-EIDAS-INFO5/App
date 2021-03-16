@@ -11,6 +11,16 @@
                     <input type="text" class="form-control" id="id" name="id" formControlName="id" readonly />
                 </div>
 
+
+
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="polySignApp.authorit.organization" for="field_organization">Organization</label>
+                    <select class="form-control" id="field_organization" name="organization" formControlName="organization">
+                        <option [ngValue]="null"></option>
+                        <option [ngValue]="organizationOption.id === editForm.get('organization')!.value?.id ? editForm.get('organization')!.value : organizationOption" *ngFor="let organizationOption of organizations; trackBy: trackById">{{ organizationOption.name }}</option>
+                    </select>
+                </div>
+
                 <div class="form-group">
                     <label class="form-control-label" jhiTranslate="polySignApp.authorit.hasRole" for="field_hasRole">Has Role</label>
                     <select class="form-control" name="hasRole" formControlName="hasRole" id="field_hasRole">
@@ -24,14 +34,6 @@
                             This field is required.
                         </small>
                     </div>
-                </div>
-
-                <div class="form-group">
-                    <label class="form-control-label" jhiTranslate="polySignApp.authorit.organization" for="field_organization">Organization</label>
-                    <select class="form-control" id="field_organization" name="organization" formControlName="organization">
-                        <option [ngValue]="null"></option>
-                        <option [ngValue]="organizationOption.id === editForm.get('organization')!.value?.id ? editForm.get('organization')!.value : organizationOption" *ngFor="let organizationOption of organizations; trackBy: trackById">{{ organizationOption.name }}</option>
-                    </select>
                 </div>
 
                 <div class="form-group">
