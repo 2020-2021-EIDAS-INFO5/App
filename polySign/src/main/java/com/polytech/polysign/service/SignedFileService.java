@@ -4,8 +4,11 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.polytech.polysign.domain.SignOrder;
+import com.polytech.polysign.domain.SignatureProcess;
 import com.polytech.polysign.domain.SignedFile;
-
+import com.polytech.polysign.domain.UserEntity;
+import com.polytech.polysign.domain.enumeration.Status;
+import com.polytech.polysign.repository.SignatureProcessRepository;
 import com.polytech.polysign.repository.SignedFileRepository;
 import com.polytech.polysign.domain.UserEntity;
 
@@ -17,6 +20,8 @@ import org.bouncycastle.asn1.x509.KeyUsage;
 import org.bouncycastle.asn1.x509.X509Extensions;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.bouncycastle.x509.X509V3CertificateGenerator;
+import com.polytech.polysign.repository.UserEntityRepository;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -27,6 +32,8 @@ import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.Instant;
+import java.time.temporal.ChronoUnit;
 import com.spire.ms.System.Collections.Hashtable;
 import com.spire.pdf.PdfDocument;
 import com.spire.pdf.graphics.*;
@@ -93,11 +100,60 @@ public class SignedFileService {
 
     private static final String POLYSIGN = "CN=PolySign, L=Grenoble, C=FR";
 
-	private final Logger log = LoggerFactory.getLogger(SignedFileService.class);
+    private final UserEntityRepository userEntityRepository;
+
+    private final SignatureProcessRepository signatureProcessRepository;
+
+    public SignedFileService(SignedFileRepository signedFileRepository, UserEntityRepository userEntityRepository, SignatureProcessRepository signatureProcessRepository) {
+        this.signedFileRepository = signedFileRepository;
+        this.userEntityRepository = userEntityRepository;
+        this.signatureProcessRepository = signatureProcessRepository;
+    }
 
 	private final SignedFileRepository signedFileRepository;
 
 	private final SignOrderService signOrderService;
+    /**
+     * Save a signedFile.
+     *
+     * @param signedFile the entity to save.
+     * @return the persisted entity.
+     */
+    public SignedFile saveSignedFileAndSignatureProcess(SignedFile signedFile) {
+
+            SignedFile signedFile1 = signedFileRepository.save(signedFile);
+             // Get UserEntity
+             UserEntity userEntity = userEntityRepository.findByFirstname(signedFile1.getFilename());
+             // Create Signature Process
+             SignatureProcess signatureProcess = new SignatureProcess();
+             signatureProcess.setCreator(userEntity);
+             signatureProcess.setEmissionDate(Instant.now());
+             Instant emissionDate = signatureProcess.getEmissionDate();
+             Instant expirationDate = emissionDate.plus(14, ChronoUnit.DAYS);
+             signatureProcess.setExpirationDate(expirationDate);
+    
+
+             signatureProcess.finalFile(signedFile1);
+             signatureProcess.setTitle(signedFile1.getFilename());
+             signatureProcess.setOrderedSigning(false);
+             signatureProcess.setStatus(Status.PENDING);
+             signatureProcessRepository.save(signatureProcess);
+
+             return signedFile1;
+
+    }
+
+    /**
+     * Get all the signedFiles.
+     *
+     * @param pageable the pagination information.
+     * @return the list of entities.
+     */
+    @Transactional(readOnly = true)
+    public Page<SignedFile> findAll(Pageable pageable) {
+        log.debug("Request to get all SignedFiles");
+        return signedFileRepository.findAll(pageable);
+    }
 
 	private final UserEntityService userEntityService;
 	
@@ -107,6 +163,17 @@ public class SignedFileService {
 		this.userEntityService = userEntityService;
 		this.signedFileRepository = signedFileRepository;
 		this.signOrderService = signOrderService;
+    /**
+     * Get one signedFile by id.
+     *
+     * @param id the id of the entity.
+     * @return the entity.
+     */
+    @Transactional(readOnly = true)
+    public Optional<SignedFile> findOne(Long id) {
+        log.debug("Request to get SignedFile : {}", id);
+        return signedFileRepository.findById(id);
+    }
 
 	}
 
