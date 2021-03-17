@@ -59,7 +59,7 @@ spring:
         registration:
           oidc:
             client-id: web_app
-            client-secret: fe5d8e14-ae96-4559-91b1-1ec389d00580
+            client-secret: 4c3b7cc5-3680-47aa-968d-441629401824
 
 ```
 

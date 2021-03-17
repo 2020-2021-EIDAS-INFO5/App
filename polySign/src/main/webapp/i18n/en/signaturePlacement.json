@@ -1,0 +1,25 @@
+{
+  "polySignApp": {
+    "signaturePlacement": {
+      "home": {
+        "title": "Signature Placements",
+        "createLabel": "Create a new Signature Placement",
+        "createOrEditLabel": "Create or edit a Signature Placement",
+        "notFound": "No Signature Placements found"
+      },
+      "created": "A new Signature Placement is created with identifier {{ param }}",
+      "updated": "A Signature Placement is updated with identifier {{ param }}",
+      "deleted": "A Signature Placement is deleted with identifier {{ param }}",
+      "delete": {
+        "question": "Are you sure you want to delete Signature Placement {{ id }}?"
+      },
+      "detail": {
+        "title": "Signature Placement"
+      },
+      "pageNumber": "Page Number",
+      "coordinateX": "Coordinate X",
+      "coordinateY": "Coordinate Y",
+      "placement": "Placement"
+    }
+  }
+}

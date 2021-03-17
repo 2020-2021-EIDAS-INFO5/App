@@ -62,7 +62,7 @@ public class SignatureProcessService {
 
         log.debug("Request to create and save SignatureProcess : {}", signedFileId, username);
         //Get UserEntity
-        UserEntity userEntity = userEntityRepository.findByFirstname(username);
+        UserEntity userEntity = userEntityRepository.findByEmail(username);
         //Create Signature Process
         SignatureProcess signatureProcess = new SignatureProcess();
         signatureProcess.setCreator(userEntity);

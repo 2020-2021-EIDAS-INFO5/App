@@ -20,11 +20,13 @@
     <include file="config/liquibase/changelog/20210301095052_added_entity_SignatureProcess.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20210301095152_added_entity_SignedFile.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20210301095252_added_entity_SignOrder.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20210316171224_added_entity_SignaturePlacement.xml" relativeToChangelogFile="false"/>
     <!-- jhipster-needle-liquibase-add-changelog - JHipster will add liquibase changelogs here -->
     <include file="config/liquibase/changelog/20210301094752_added_entity_constraints_UserEntity.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20210301094952_added_entity_constraints_Authorit.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20210301095052_added_entity_constraints_SignatureProcess.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20210301095252_added_entity_constraints_SignOrder.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20210316171224_added_entity_constraints_SignaturePlacement.xml" relativeToChangelogFile="false"/>
     <!-- jhipster-needle-liquibase-add-constraints-changelog - JHipster will add liquibase constraints changelogs here -->
     <!-- jhipster-needle-liquibase-add-incremental-changelog - JHipster will add incremental liquibase changelogs here -->
 </databaseChangeLog>

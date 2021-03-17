@@ -15,7 +15,7 @@ public final class Constants {
     public final static String serverUrl = "http://localhost:9080/auth";
     public final static String realm = "jhipster";
     public final static String clientId = "web_app";
-    public final static String clientSecret = "fe5d8e14-ae96-4559-91b1-1ec389d00580";
+    public final static String clientSecret = "4c3b7cc5-3680-47aa-968d-441629401824";
     public final static String userName = "admin";
     public final static String password = "admin";
 

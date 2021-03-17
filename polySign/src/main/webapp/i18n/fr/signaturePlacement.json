@@ -1,0 +1,25 @@
+{
+  "polySignApp": {
+    "signaturePlacement": {
+      "home": {
+        "title": "SignaturePlacements",
+        "createLabel": "Créer un nouveau Signature Placement",
+        "createOrEditLabel": "Créer ou éditer un Signature Placement",
+        "notFound": "Aucun Signature Placement trouvé"
+      },
+      "created": "Un nouveau Signature Placement a été créé avec l'identifiant {{ param }}",
+      "updated": "Le Signature Placement avec l'identifiant {{ param }} a été mis à jour",
+      "deleted": "Le Signature Placement avec l'identifiant {{ param }} a été supprimé",
+      "delete": {
+        "question": "Etes-vous certain de vouloir supprimer le Signature Placement {{ id }} ?"
+      },
+      "detail": {
+        "title": "Signature Placement"
+      },
+      "pageNumber": "Page Number",
+      "coordinateX": "Coordinate X",
+      "coordinateY": "Coordinate Y",
+      "placement": "Placement"
+    }
+  }
+}
