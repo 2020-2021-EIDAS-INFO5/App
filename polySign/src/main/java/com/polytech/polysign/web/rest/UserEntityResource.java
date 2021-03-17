@@ -77,7 +77,7 @@ public class UserEntityResource {
             .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getId().toString()))
             .body(result);
     }
-    
+
 
 
     /**
@@ -99,6 +99,20 @@ public class UserEntityResource {
         return ResponseEntity.ok()
             .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, userEntity.getId().toString()))
             .body(result);
+    }
+
+    /**
+     * {@code GET  /user-entities} : get all the userEntities.
+     *
+     * @param pageable the pagination information.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of userEntities in body.
+     */
+    @GetMapping("/user-entities")
+    public ResponseEntity<List<UserEntity>> getAllUserEntities(Pageable pageable) {
+        log.debug("REST request to get a page of UserEntities");
+        Page<UserEntity> page = userEntityService.findAll(pageable);
+        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
+        return ResponseEntity.ok().headers(headers).body(page.getContent());
     }
 
     /**

@@ -30,10 +30,6 @@ export class SignatureProcessStepOneCreationComponent implements OnInit {
   protected account?: Account | null;
 
   selectedValue?: IOrganization = undefined;
-  /*
-  organizationForm = this.fbOrganization.group({
-    organization: [null, [Validators.required]],
-  }); */
 
   editForm = this.fb.group({
     id: [],
@@ -145,7 +141,7 @@ export class SignatureProcessStepOneCreationComponent implements OnInit {
 
   protected onSaveSuccess(): void {
     this.isSaving = false;
-    //this.previousState();
+    // this.previousState();
   }
 
   protected onSaveError(): void {
