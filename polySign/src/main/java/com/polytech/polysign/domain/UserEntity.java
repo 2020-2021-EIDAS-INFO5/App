@@ -235,4 +235,8 @@ public class UserEntity implements Serializable {
             ", phone='" + getPhone() + "'" +
             "}";
     }
+
+
+    public String toCSV() {return"\"" + getFirstname() + "\"," +"\"" + getLastname() + "\"," +"\"" + getEmail() + "\","
+        +"\"" + getPhone() + "\"";}
 }

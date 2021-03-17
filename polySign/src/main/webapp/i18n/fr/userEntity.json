@@ -5,7 +5,8 @@
         "title": "UserEntities",
         "createLabel": "Créer un nouveau User Entity",
         "createOrEditLabel": "Créer ou éditer un User Entity",
-        "notFound": "Aucun User Entity trouvé"
+        "notFound": "Aucun User Entity trouvé",
+        "exportCSV": "Télécharger données"
       },
       "created": "Un nouveau User Entity a été créé avec l'identifiant {{ param }}",
       "updated": "Le User Entity avec l'identifiant {{ param }} a été mis à jour",
@@ -14,6 +15,7 @@
         "question": "Etes-vous certain de vouloir supprimer le User Entity {{ id }} ?"
       },
       "button": {
+        "add": "ajouter",
         "next": "Suivant",
         "previous": "Précédent",
         "cancel": {
