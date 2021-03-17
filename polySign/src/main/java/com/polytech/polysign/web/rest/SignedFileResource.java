@@ -151,10 +151,9 @@ public class SignedFileResource {
 
 
     /**
-     * {@code DELETE  /signed-files/:id} : delete the "id" signedFile.
+     * {@code GET  /signed-files/signCertificate/singOrderId/{id}/userId/{userId}: sign the file of the given signOrder by the user given by his id 
      *
-     * @param id the id of the signedFile to delete.
-     * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
+     * @param id the id of the signOrder to sign and the id of the user who signs
      * @throws Exception 
      */
     @GetMapping("/signed-files/signCertificate/singOrderId/{id}/userId/{userId}")

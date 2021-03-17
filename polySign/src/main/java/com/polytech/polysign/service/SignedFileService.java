@@ -97,8 +97,10 @@ import com.itextpdf.text.pdf.PdfWriter;
 @Transactional
 public class SignedFileService {
 
+	//Certificate validity time
     private static final int days = 365;
 
+    // Information concerning the certificate used to sign 
     private static final String POLYSIGN = "CN=PolySign, L=Grenoble, C=FR";
 
     private final UserEntityRepository userEntityRepository;
@@ -113,6 +115,7 @@ public class SignedFileService {
 	
 	private final Logger log = LoggerFactory.getLogger(SignatureProcessService.class);
 	
+	//Keys password
 	private final static char[] password = generatePassword(6);
 
 	
@@ -209,18 +212,16 @@ public class SignedFileService {
 	 */
 	public void certificateCreation(Long id, Long userId) throws Exception {
 		
-		//Get the user who signs
+		//Get user to sign by id
 		UserEntity userEntity = userEntityService.findOne(userId).get();
-		
-		
-		//Get sign order 
 
+		//Get sign order by id
 		SignOrder signOrder = signOrderService.findOne(id).get();
 		
-		// Load a pdf document
+		// Load a pdf document from database 
 		PdfDocument doc = new PdfDocument();
-		
 		doc.loadFromBytes(signOrder.getFile().getFileBytes());
+		
 		// Load the certificate file
 		String pass = new String(password);
 		PdfCertificate cert = new PdfCertificate(SignedFileService.generatePfx(),pass);
@@ -236,7 +237,7 @@ public class SignedFileService {
 		// Set the graphics mode
 		signature.setGraphicMode(GraphicMode.Sign_Image_And_Sign_Detail);
 
-		// Set the signature content
+		// Set the signature content refering the user
         BufferedImage bufferedImage = new BufferedImage(1, 1, BufferedImage.TYPE_INT_RGB);
         
 		signature.setNameLabel("Signer:");
@@ -256,10 +257,10 @@ public class SignedFileService {
 		signature.setCertificated(true);
 
 		// Save to file
-	
    		doc.saveToFile("/home/dima/Bureau/App/polySign/src/main/java/com/polytech/polysign/service/output/" + signOrder.getFile().getFilename() + userId + ".pdf");
 		doc.close();
 		
+		// Load file and replace the old one in database
 		byte[] array = Files.readAllBytes(Paths.get("/home/dima/Bureau/App/polySign/src/main/java/com/polytech/polysign/service/output/" + signOrder.getFile().getFilename() + userId + ".pdf"));
 		signOrder.getFile().setFileBytesContentType("application/pdf");
     	signOrder.getFile().setFileBytes(array);
@@ -268,6 +269,11 @@ public class SignedFileService {
 		signOrder.getFile().setFilename(signOrder.getFile().getFilename() + userId);
 	}
 
+	
+	/** 
+	 * Generate X509Certificate
+	 * with a random password
+	 */
 	public static X509Certificate generateCertificate(String dn, KeyPair pair, int days, String algorithm)
 			throws GeneralSecurityException, IOException {
 		PrivateKey privkey = pair.getPrivate();
@@ -291,14 +297,18 @@ public class SignedFileService {
 		X509CertImpl cert = new X509CertImpl(info);
 		cert.sign(privkey, algorithm);
 
-		// Update the algorith, and resign.
+		// Update the algorithm and resign.
 		algo = (AlgorithmId) cert.get(X509CertImpl.SIG_ALG);
 		info.set(CertificateAlgorithmId.NAME + "." + CertificateAlgorithmId.ALGORITHM, algo);
 		cert = new X509CertImpl(info);
 		cert.sign(privkey, algorithm);
 		return cert;
 	}
-
+	
+	
+	/**
+	 * Generate pfx file containing generated keystore 
+	 */
 	public static String generatePfx() throws Exception {
 		Security.addProvider(new BouncyCastleProvider());
 	    KeyPair pair = generateRSAKeyPair();
@@ -315,6 +325,9 @@ public class SignedFileService {
 	    return absolutePath;
 	}
 	
+	/**
+	 * Generate RSA keypair 
+	 */
 	public static KeyPair generateRSAKeyPair(){
 		Security.addProvider(new BouncyCastleProvider());
         try {/*ww  w.  j av  a2  s.co  m*/
@@ -325,6 +338,11 @@ public class SignedFileService {
             return null;
         }
 	}  
+	
+	/*
+	 * Random password to be used with created certificate 
+	 * (our password has length=6)
+	 */
         private static char[] generatePassword(int length) {
             String capitalCaseLetters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
             String lowerCaseLetters = "abcdefghijklmnopqrstuvwxyz";
