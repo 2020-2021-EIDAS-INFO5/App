@@ -120,9 +120,8 @@ spring:
         registration:
           oidc:
             client-id: web_app
-            client-secret: fe5d8e14-ae96-4559-91b1-1ec389d00580
-
-
+            client-secret: 451821f7-32da-47b9-81df-23c9fd59c318
+            
 server:
   servlet:
     session:

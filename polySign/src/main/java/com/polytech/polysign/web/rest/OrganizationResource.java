@@ -1,6 +1,7 @@
 package com.polytech.polysign.web.rest;
 
 import com.polytech.polysign.domain.Organization;
+import com.polytech.polysign.repository.OrganizationRepository;
 import com.polytech.polysign.service.OrganizationService;
 import com.polytech.polysign.web.rest.errors.BadRequestAlertException;
 
@@ -40,8 +41,11 @@ public class OrganizationResource {
 
     private final OrganizationService organizationService;
 
-    public OrganizationResource(OrganizationService organizationService) {
+    private final OrganizationRepository organizationRepository;
+
+    public OrganizationResource(OrganizationService organizationService, OrganizationRepository organizationRepository) {
         this.organizationService = organizationService;
+        this.organizationRepository = organizationRepository;
     }
 
     /**
@@ -146,10 +150,25 @@ public class OrganizationResource {
     }
 
 
+
+            /**
+     * {@code GET  /students/export} : Return a CSV containeing Students informations.
+     *
+     * @return the {@link ResponseEntity} with status {@code 200 (OK) and with body a String containg the student list in CSV}
+     */
+    @GetMapping("/organizations/export")
+    public String exportAllUserEntities() {
+        log.debug("GET request to export Students");
+        String exportString = "\"name\",\"street_address\",\"postal_code\",\"city\",\"country\",\"vatNumber\"\n";
+        List<Organization> organizations = organizationRepository.findAll();
+        for (Organization organization: organizations)
+            exportString += organization.toCSV() + "\n";
+        return exportString;
     @GetMapping("/organizations/myUserAndAdmin/{username}")
     public List<Organization> getMyOrganizationUserAndAdmin(@PathVariable String username) {
         log.debug("REST request to get Organization : {}", username);
         List<Organization> myOrganizations = organizationService.getMyOrganizationByUserName(username);
         return myOrganizations;
+
     }
 }
