@@ -15,6 +15,7 @@
         "question": "Etes-vous certain de vouloir supprimer le User Entity {{ id }} ?"
       },
       "button": {
+        "add": "ajouter",
         "next": "Suivant",
         "previous": "Précédent",
         "cancel": {

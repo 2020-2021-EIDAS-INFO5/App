@@ -11,6 +11,7 @@ import { SignatureProcessService } from './signature-process.service';
 import { SignatureProcessComponent } from './signature-process.component';
 import { SignatureProcessDetailComponent } from './signature-process-detail.component';
 import { SignatureProcessUpdateComponent } from './signature-process-update.component';
+import { SignatureProcessStepOneCreationComponent } from './signature-process-step-one-creation.component';
 
 @Injectable({ providedIn: 'root' })
 export class SignatureProcessResolve implements Resolve<ISignatureProcess> {
@@ -54,6 +55,18 @@ export const signatureProcessRoute: Routes = [
     data: {
       authorities: [Authority.USER],
       pageTitle: 'polySignApp.signatureProcess.home.title',
+    },
+    canActivate: [UserRouteAccessService],
+  },
+  {
+    path: 'creation',
+    component: SignatureProcessStepOneCreationComponent,
+    resolve: {
+      signatureProcess: SignatureProcessResolve,
+    },
+    data: {
+      authorities: [Authority.USER],
+      pageTitle: 'polySignApp.signatureProcess.home.creation',
     },
     canActivate: [UserRouteAccessService],
   },

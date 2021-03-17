@@ -29,7 +29,7 @@ public class SignatureProcessService {
     private final Logger log = LoggerFactory.getLogger(SignatureProcessService.class);
 
     private final SignatureProcessRepository signatureProcessRepository;
-    
+
     private final SignedFileService signedFileService;
 
     private final UserEntityRepository userEntityRepository;
@@ -62,13 +62,14 @@ public class SignatureProcessService {
 
         log.debug("Request to create and save SignatureProcess : {}", signedFileId, username);
         //Get UserEntity
-        UserEntity userEntity = userEntityRepository.findByFirstname(username);
+        UserEntity userEntity = userEntityRepository.findByEmail(username);
         //Create Signature Process
         SignatureProcess signatureProcess = new SignatureProcess();
+        userEntity.getSignatures().add(signatureProcess);
         signatureProcess.setCreator(userEntity);
         signatureProcess.setEmissionDate(Instant.now());
         Instant emissionDate = signatureProcess.getEmissionDate();
-        Instant expirationDate = emissionDate.plus(14, ChronoUnit.DAYS); 
+        Instant expirationDate = emissionDate.plus(14, ChronoUnit.DAYS);
         signatureProcess.setExpirationDate(expirationDate);
 
         //Get file associated to signature
@@ -81,7 +82,6 @@ public class SignatureProcessService {
         signatureProcess.setOrderedSigning(false);
         signatureProcess.setStatus(Status.PENDING);
         signatureProcessRepository.save(signatureProcess);
-
     }
 
 

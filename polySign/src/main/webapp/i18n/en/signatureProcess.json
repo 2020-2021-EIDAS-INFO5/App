@@ -3,9 +3,17 @@
     "signatureProcess": {
       "home": {
         "title": "Signature Processes",
+        "creation": "Creation",
         "createLabel": "Create a new Signature Process",
+        "createLabelCollection": "New Collection",
         "createOrEditLabel": "Create or edit a Signature Process",
         "notFound": "No Signature Processes found"
+      },
+      "step1": {
+        "title": "Load the PDF Document for signature"
+      },
+      "step2": {
+        "title": "Enter signers"
       },
       "created": "A new Signature Process is created with identifier {{ param }}",
       "updated": "A Signature Process is updated with identifier {{ param }}",

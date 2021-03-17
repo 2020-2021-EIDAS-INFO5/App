@@ -132,7 +132,7 @@ public class OrganizationResource {
       /**
      * {@code GET  /organizations/:username} : get the "username" organization.
      *
-     * @param id the id of the organization to retrieve.
+     * @param username the id of the organization to retrieve.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the organization, or with status {@code 404 (Not Found)}.
      */
     @GetMapping("/organizations/all/{username}")
@@ -167,7 +167,7 @@ public class OrganizationResource {
     @GetMapping("/organizations/myUserAndAdmin/{username}")
     public List<Organization> getMyOrganizationUserAndAdmin(@PathVariable String username) {
         log.debug("REST request to get Organization : {}", username);
-        List<Organization> myOrganizations = organizationService.getMyOrganizationByUserName(username);
+        List<Organization> myOrganizations = organizationService.getMyOrganizationsUserAndAdminByUserName(username);
         return myOrganizations;
 
     }

@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { HttpResponse } from '@angular/common/http';
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { FormBuilder, Validators } from '@angular/forms';
@@ -6,24 +6,33 @@ import { ActivatedRoute } from '@angular/router';
 import { Observable, Subscription } from 'rxjs';
 
 import { IUserEntity, UserEntity } from 'app/shared/model/user-entity.model';
-import { UserEntityService } from './user-entity.service';
+import { UserEntityService } from '../user-entity/user-entity.service';
 import { IUser } from 'app/core/user/user.model';
 import { UserService } from 'app/core/user/user.service';
-import { AuthoritService } from '../authorit/authorit.service';
 import { JhiEventManager } from 'ng-jhipster';
+import { Account } from 'app/core/user/account.model';
+import { AccountService } from '../../core/auth/account.service';
+import { SignOrderService } from '../sign-order/sign-order.service';
+import { ISignOrder } from '../../shared/model/sign-order.model';
 
 @Component({
-  selector: 'jhi-user-entity-update',
-  templateUrl: './user-entity-update.component.html',
+  selector: 'jhi-signature-process-step-two-creation',
+  templateUrl: './signature-process-step-two-creation.html',
+  styleUrls: ['./signature-process-step-two-creation.scss'],
 })
-export class UserEntityUpdateComponent implements OnInit, OnDestroy {
+export class SignatureProcessStepTwoCreationComponent implements OnInit, OnDestroy {
   isSaving = false;
-  isSavingRole = false;
-  showUserForm = true;
-  showRoleForm = false;
+  /* showUserForm = true;
+  showRoleForm = false;*/
   eventSubscriber?: Subscription;
+  signers: IUserEntity[] = [];
   users: IUser[] = [];
   userEntities: IUserEntity[] = [];
+
+  @Input() signedFileID?: number;
+  @Input() organisationID?: number;
+
+  account?: Account | null;
 
   editForm = this.fb.group({
     id: [],
@@ -37,18 +46,20 @@ export class UserEntityUpdateComponent implements OnInit, OnDestroy {
   constructor(
     protected userEntityService: UserEntityService,
     protected userService: UserService,
-    private authoritService: AuthoritService,
     protected activatedRoute: ActivatedRoute,
+    private signOrderService: SignOrderService,
     private fb: FormBuilder,
+    private accountService: AccountService,
     private eventManager: JhiEventManager
   ) {}
 
   ngOnInit(): void {
-    this.activatedRoute.data.subscribe(({ userEntity }) => {
+    /* this.activatedRoute.data.subscribe(({ userEntity }) => {
       this.updateForm(userEntity);
 
       this.userService.query().subscribe((res: HttpResponse<IUser[]>) => (this.users = res.body || []));
-    });
+    });*/
+    this.accountService.identity().subscribe(account => (this.account = account));
   }
 
   updateForm(userEntity: IUserEntity): void {
@@ -73,14 +84,18 @@ export class UserEntityUpdateComponent implements OnInit, OnDestroy {
   save(): void {
     this.isSaving = true;
     const userEntity = this.createFromForm();
+    /* eslint-disable no-console */
+    console.log(userEntity);
 
-    if (userEntity.id !== undefined) {
+    if (userEntity.id !== undefined && userEntity.id !== null) {
       this.subscribeToSaveResponse(this.userEntityService.update(userEntity));
     } else {
-      this.subscribeToSaveResponse(this.userEntityService.create(userEntity));
+      this.subscribeToSaveResponse(
+        this.signOrderService.createSignOrderForUserEntity(userEntity, this.signedFileID!, this.organisationID!)
+      );
     }
 
-    this.showForm();
+    // this.showForm();
   }
 
   private createFromForm(): IUserEntity {
@@ -91,27 +106,31 @@ export class UserEntityUpdateComponent implements OnInit, OnDestroy {
       lastname: this.editForm.get(['lastname'])!.value,
       email: this.editForm.get(['email'])!.value,
       phone: this.editForm.get(['phone'])!.value,
-      user: this.editForm.get(['user'])!.value,
+      user: undefined,
     };
   }
 
-  protected subscribeToSaveResponse(result: Observable<HttpResponse<IUserEntity>>): void {
+  protected subscribeToSaveResponse(result: Observable<HttpResponse<ISignOrder>>): void {
     result.subscribe(
-      () => this.onSaveSuccess(),
+      res => {
+        // we retrieve the userEntity that has been created and we put it the signers array
+        this.signers.push(res.body!.signer!);
+        this.onSaveSuccess();
+      },
       () => this.onSaveError()
     );
   }
 
   protected onSaveSuccess(): void {
     this.isSaving = false;
-    // this.previousState();
+    this.editForm.reset();
     // retrieve the array of users after we added a user with the user creation step
-    this.userEntityService.query().subscribe((res: HttpResponse<IUserEntity[]>) => {
+    /* this.userEntityService.query().subscribe((res: HttpResponse<IUserEntity[]>) => {
       this.userEntities = res.body || [];
       this.userEntities = this.userEntities.filter(
         u => u.firstname === this.editForm.get(['firstname'])!.value && u.phone === this.editForm.get(['phone'])!.value
       );
-    });
+    });*/
   }
 
   protected onSaveError(): void {
@@ -128,10 +147,19 @@ export class UserEntityUpdateComponent implements OnInit, OnDestroy {
     }
   }
 
-  trackById(index: number, item: IUser): any {
+  trackById(index: number, item: IUserEntity): any {
+    // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
     return item.id;
   }
 
+  delete(userEntity: IUserEntity): void {
+    this.userEntityService.deleteUserEntityByUsername(userEntity.id!, this.account!.email).subscribe(() => {
+      this.eventManager.broadcast('userEntityListModification');
+    });
+
+    this.signers = this.signers.filter(signer => signer.id !== userEntity.id);
+  }
+  /*
   showForm(): void {
     this.showUserForm = !this.showUserForm;
     this.showRoleForm = !this.showRoleForm;
@@ -140,5 +168,5 @@ export class UserEntityUpdateComponent implements OnInit, OnDestroy {
   onShowForm(showForm: { showUserForm: boolean; showRoleForm: boolean }): void {
     this.showUserForm = showForm.showUserForm;
     this.showRoleForm = showForm.showRoleForm;
-  }
+  }*/
 }
