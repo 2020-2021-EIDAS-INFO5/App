@@ -45,16 +45,18 @@
                         [showHandToolButton]="true"> </ngx-extended-pdf-viewer>
                 </div>
                </div>
-            <div cdkDrag class="example-box"
+            <!--div cdkDrag class="example-box"
             (cdkDragStarted)="dragStarted($event)"
             (cdkDragEnded)="dragEnded($event)"
             (cdkDragMoved)="dragMoved($event)" >
             <div *ngIf="isAuthenticated()" >
                  <span  *ngIf="account"  > {{ account.firstName}} </span>
             </div>
-        </div>
+        </div-->
 
-        <p>{{state}} {{position}}</p>
+        <!--p>{{state}} {{position}}</p-->
+
+        <div id="yes-drop" class="drag-drop"> #yes-drop </div>
             <div>
             <button class="btn btn-primary" mat-stroked-button color="primary" [disabled]="pageNum<=1" (click)="onClickPreviousePage()">Page précédente</button>
             <span  mat-stroked-button>{{pageNum}}/{{totalPageNum}}</span>
@@ -62,9 +64,25 @@
             </div> 
 
         </div>
+    <div class="row">
+        <div class="col-md-12" style="padding:10px">
+        <button class="btn btn-primary btn-block" onClick="showCoordinates()">Show PDF Placeholders Coordinates</button>
+    </div>
+    </div>
+        <div class="row">
+            <div class="row" id="selectorContainer">
+            <div class="col-fixed-240" id="parametriContainer">
+            </div>
+        <div class="col-fixed-605">
+
+        <div id="pageContainer" class="pdfViewer singlePageView dropzone nopadding" style="background-color:transparent">
+            <canvas #canvas class="dropzone" (dblclick)="storeGuess($event)" ></canvas>
+            <p>{{mouse}}</p>
+        </div>
+        </div>
+        </div>
+    </div>  
         <div>
-        <canvas #canvas (dblclick)="storeGuess($event)" ></canvas>
-        <p>{{mouse}}</p>
 
 
         <button type="submit"
