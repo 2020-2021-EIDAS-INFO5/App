@@ -87,6 +87,36 @@ public class KeycloakAdminClientService {
     }
 
 
+    public UserRepresentation addUserSignature(UserKeycloak user) {
+
+        UsersResource usersResource = KeycloakConfig.getInstance().realm(Constants.realm).users();
+        //CredentialRepresentation credentialRepresentation = createPasswordCredentials(user.getPassword());
+        CredentialRepresentation credentialRepresentation=new CredentialRepresentation();
+        credentialRepresentation.setTemporary(true);
+        credentialRepresentation.setType(CredentialRepresentation.PASSWORD);
+        credentialRepresentation.setValue(user.getPassword());
+        UserRepresentation kcUser = new UserRepresentation();
+        List<String> requiredAction= new ArrayList<String>();
+        requiredAction.add("CONFIGURE_TOTP");
+        requiredAction.add("VERIFY_EMAIL");
+        kcUser.setRequiredActions(requiredAction);
+        kcUser.setUsername(user.getEmail());
+        kcUser.setCredentials(Collections.singletonList(credentialRepresentation));
+        kcUser.setFirstName(user.getFirstName());
+        kcUser.setLastName(user.getLastName());
+        kcUser.setEmail(user.getEmail());
+        kcUser.setEnabled(true);
+        kcUser.setEmailVerified(false);
+
+        usersResource.create(kcUser);
+
+        addRealmRoleToUser(user.getEmail(), "ROLE_USER");
+
+        return kcUser;
+
+    }
+
+
     public void addRealmRoleToUser(String userName, String role_name){
         Keycloak keycloak = KeycloakConfig.getInstance();
 

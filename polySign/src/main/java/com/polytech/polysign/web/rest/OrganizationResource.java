@@ -150,6 +150,7 @@ public class OrganizationResource {
     }
 
 
+
             /**
      * {@code GET  /students/export} : Return a CSV containeing Students informations.
      *
@@ -163,5 +164,11 @@ public class OrganizationResource {
         for (Organization organization: organizations)
             exportString += organization.toCSV() + "\n";
         return exportString;
+    @GetMapping("/organizations/myUserAndAdmin/{username}")
+    public List<Organization> getMyOrganizationUserAndAdmin(@PathVariable String username) {
+        log.debug("REST request to get Organization : {}", username);
+        List<Organization> myOrganizations = organizationService.getMyOrganizationByUserName(username);
+        return myOrganizations;
+
     }
 }

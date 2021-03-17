@@ -142,4 +142,27 @@ public class OrganizationService {
         return myOrganizations;
     }
 
+
+            /**
+     * Get organizations by  username.
+     *
+     * @param username the username to get his organizations.
+     * @return the organizations of the user.
+     */
+    public List<Organization> getMyOrganizationsUserAndAdminByUserName(String username) {
+        log.debug("Request to get organization of : {}", username);
+        //List<Organization>  myOrganizations = organizationRepository.findAll().stream().filter(organization-> authoritRepository.findAll().stream().filter(auth-> auth.getHasRole())
+        List<Organization> myOrganizations = new ArrayList<Organization>();
+        List<Authorit> authorits = authoritRepository.findAll();
+        for(Authorit authority : authorits){
+            if(authority.getUser() != null){
+             if(authority.getUser().getEmail() != username && (authority.getHasRole()==Role.ADMIN_ORGANIZATION || authority.getHasRole()==Role.USER_ORGANIZATION)){
+                myOrganizations.add(authority.getOrganization());
+            }
+         }
+        }
+        return myOrganizations;
+    }
+
+
 }

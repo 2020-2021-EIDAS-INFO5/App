@@ -56,7 +56,7 @@ spring:
     host: smtp.gmail.com
     port: 587
     username: polysign.contact@gmail.com
-    password: 123456789oZ
+    password: polySign1234PolytechGrenobleadmincontact
     protocol: smtp
     properties.mail.smtp.auth: true
     properties.mail.smtp.starttls.enable: true

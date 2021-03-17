@@ -16,6 +16,7 @@ public final class Constants {
     public final static String realm = "jhipster";
     public final static String clientId = "web_app";
     public final static String clientSecret = "451821f7-32da-47b9-81df-23c9fd59c318";
+
     public final static String userName = "admin";
     public final static String password = "admin";
 
