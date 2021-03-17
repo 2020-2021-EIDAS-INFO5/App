@@ -9,7 +9,7 @@ services:
       - SPRING_DATASOURCE_URL=jdbc:mysql://polysign-mysql:3306/polysign?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true
       - SPRING_SECURITY_OAUTH2_CLIENT_PROVIDER_OIDC_ISSUER_URI=http://keycloak:9080/auth/realms/jhipster
       - SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_OIDC_CLIENT_ID=web_app
-      - SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_OIDC_CLIENT_SECRET=2f5c43bb-2c67-4fa2-b7a0-f17b318df725
+      - SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_OIDC_CLIENT_SECRET=4c3b7cc5-3680-47aa-968d-441629401824
 
       - JHIPSTER_SLEEP=30 # gives time for other services to boot before the application
     ports:

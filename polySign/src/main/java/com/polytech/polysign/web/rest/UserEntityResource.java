@@ -46,14 +46,17 @@ public class UserEntityResource {
 
     private final SignOrderService signOrderService;
 
+    private final AuthoritService authoritService;
+
     @Value("${jhipster.clientApp.name}")
     private String applicationName;
 
     private final UserEntityService userEntityService;
-    public UserEntityResource(UserEntityService userEntityService, AuthoritService authoritService,SignOrderService signOrderService) {
+    public UserEntityResource(UserEntityService userEntityService, AuthoritService authoritService,SignOrderService signOrderService,UserEntityRepository userEntityRepository) {
         this.userEntityService = userEntityService;
         this.authoritService = authoritService;
         this.signOrderService =signOrderService;
+        this.userEntityRepository=userEntityRepository;
     }
 
     /**
@@ -103,20 +106,6 @@ public class UserEntityResource {
      *
      * @param pageable the pagination information.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of userEntities in body.
-     */
-    @GetMapping("/user-entities")
-    public ResponseEntity<List<UserEntity>> getAllUserEntities(Pageable pageable) {
-        log.debug("REST request to get a page of UserEntities");
-        Page<UserEntity> page = userEntityService.findAll(pageable);
-        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
-        return ResponseEntity.ok().headers(headers).body(page.getContent());
-    }
-
-    /**
-     * {@code GET  /user-entities/:id} : get the "id" userEntity.
-     *
-     * @param id the id of the userEntity to retrieve.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the userEntity, or with status {@code 404 (Not Found)}.
      */
     @GetMapping("/user-entities/{id}")
     public ResponseEntity<UserEntity> getUserEntity(@PathVariable Long id) {

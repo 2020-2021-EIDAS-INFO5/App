@@ -164,7 +164,9 @@ public class OrganizationResource {
         for (Organization organization: organizations)
             exportString += organization.toCSV() + "\n";
         return exportString;
-    @GetMapping("/organizations/myUserAndAdmin/{username}")
+    }
+    
+        @GetMapping("/organizations/myUserAndAdmin/{username}")
     public List<Organization> getMyOrganizationUserAndAdmin(@PathVariable String username) {
         log.debug("REST request to get Organization : {}", username);
         List<Organization> myOrganizations = organizationService.getMyOrganizationsUserAndAdminByUserName(username);

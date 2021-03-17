@@ -47,7 +47,7 @@ docker-compose -f src/main/docker/keycloak.yml up
 
 The security settings in `src/main/resources/config/application.yml` are configured for this image.
 
-```yaml
+````yaml
 spring:
   ...
   security:
@@ -60,7 +60,7 @@ spring:
           oidc:
             client-id: web_app
 
-            client-secret: 451821f7-32da-47b9-81df-23c9fd59c318
+            client-secret: 4c3b7cc5-3680-47aa-968d-441629401824
 
 ### Okta
 
@@ -83,7 +83,7 @@ spring:
             client-: {clientSecret}
 security:
 
-```
+````
 
 Create an OIDC App in Okta to get a `{clientId}` and `{clientSecret}`. To do this, log in to your Okta Developer account and navigate to **Applications** > **Add Application**. Click **Web** and click the **Next** button. Give the app a name you’ll remember, specify `http://localhost:8080` as a Base URI, and `http://localhost:8080/login/oauth2/code/oidc` as a Login Redirect URI. Click **Done**, then Edit and add `http://localhost:8080` as a Logout redirect URI. Copy and paste the client ID and secret into your `application.yml` file.
 
