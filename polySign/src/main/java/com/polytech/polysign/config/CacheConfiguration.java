@@ -59,6 +59,7 @@ public class CacheConfiguration {
             createCache(cm, com.polytech.polysign.domain.SignatureProcess.class.getName() + ".signOrders");
             createCache(cm, com.polytech.polysign.domain.SignedFile.class.getName());
             createCache(cm, com.polytech.polysign.domain.SignOrder.class.getName());
+            createCache(cm, com.polytech.polysign.domain.SignaturePlacement.class.getName());
             // jhipster-needle-ehcache-add-entry
         };
     }

@@ -55,9 +55,8 @@ export class SignatureProcessStepTwoCreationComponent implements OnInit, OnDestr
     private signOrderService: SignOrderService,
     private fb: FormBuilder,
     private accountService: AccountService,
-    private eventManager: JhiEventManager
-  ) // pipe: DecimalPipe
-  {}
+    private eventManager: JhiEventManager // pipe: DecimalPipe
+  ) {}
 
   ngOnInit(): void {
     /* this.activatedRoute.data.subscribe(({ userEntity }) => {

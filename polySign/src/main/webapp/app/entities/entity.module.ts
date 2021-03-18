@@ -28,6 +28,10 @@ import { RouterModule } from '@angular/router';
         path: 'sign-order',
         loadChildren: () => import('./sign-order/sign-order.module').then(m => m.PolySignSignOrderModule),
       },
+      {
+        path: 'signature-placement',
+        loadChildren: () => import('./signature-placement/signature-placement.module').then(m => m.PolySignSignaturePlacementModule),
+      },
       /* jhipster-needle-add-entity-route - JHipster will add entity modules routes here */
     ]),
   ],

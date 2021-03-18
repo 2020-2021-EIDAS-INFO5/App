@@ -36,7 +36,8 @@
     "entitySuffix": "",
     "dtoSuffix": "DTO",
     "otherModules": [],
-    "blueprints": []
+    "blueprints": [],
+    "lastLiquibaseTimestamp": 1615914744000
   },
   "entities": ["UserEntity", "Organization", "Authorit", "SignatureProcess", "SignedFile", "SignOrder"]
 }
