@@ -22,15 +22,20 @@ import { ISignOrder } from '../../shared/model/sign-order.model';
 })
 export class SignatureProcessStepTwoCreationComponent implements OnInit, OnDestroy {
   isSaving = false;
-  /* showUserForm = true;
-  showRoleForm = false;*/
+  showUserForm = true;
+  showRoleForm = false;
   eventSubscriber?: Subscription;
   signers: IUserEntity[] = [];
   users: IUser[] = [];
   userEntities: IUserEntity[] = [];
+  /*
+  userEntities$?: Observable<IUserEntity[]>;
+  filter = new FormControl('');*/
 
   @Input() signedFileID?: number;
   @Input() organisationID?: number;
+
+  // @Output() showForm = new EventEmitter<{ showUserForm: boolean; showRoleForm: boolean }>();
 
   account?: Account | null;
 
@@ -51,7 +56,8 @@ export class SignatureProcessStepTwoCreationComponent implements OnInit, OnDestr
     private fb: FormBuilder,
     private accountService: AccountService,
     private eventManager: JhiEventManager
-  ) {}
+  ) // pipe: DecimalPipe
+  {}
 
   ngOnInit(): void {
     /* this.activatedRoute.data.subscribe(({ userEntity }) => {
@@ -59,6 +65,7 @@ export class SignatureProcessStepTwoCreationComponent implements OnInit, OnDestr
 
       this.userService.query().subscribe((res: HttpResponse<IUser[]>) => (this.users = res.body || []));
     });*/
+    // this.userEntityService.query().subscribe((res: HttpResponse<IUserEntity[]>) => (this.userEntities = res.body || []));
     this.accountService.identity().subscribe(account => (this.account = account));
   }
 
@@ -159,14 +166,15 @@ export class SignatureProcessStepTwoCreationComponent implements OnInit, OnDestr
 
     this.signers = this.signers.filter(signer => signer.id !== userEntity.id);
   }
+  // we processing the passing from step 2 to step 3
+  next(): void {}
   /*
-  showForm(): void {
-    this.showUserForm = !this.showUserForm;
-    this.showRoleForm = !this.showRoleForm;
-  }
-
-  onShowForm(showForm: { showUserForm: boolean; showRoleForm: boolean }): void {
-    this.showUserForm = showForm.showUserForm;
-    this.showRoleForm = showForm.showRoleForm;
+  search(text: string, pipe: PipeTransform): IUserEntity[] {
+    return this.userEntities.filter(user => {
+      const term = text.toLowerCase();
+      return user.firstname!.toLowerCase().includes(term)
+        || pipe.transform(user.lastname).includes(term)
+        || pipe.transform(user.email).includes(term);
+    });
   }*/
 }
