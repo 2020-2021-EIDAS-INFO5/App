@@ -1,21 +1,26 @@
 <nav class="nav nav-pills nav-justified">
-    <a  class="nav-item nav-link active" >1. Charger le document </a>
-    <a  class="nav-item nav-link" >2. Lister les signataires </a>
-    <a  class="nav-item nav-link" >3. Positionner les champs de signature</a>
-    <a  class="nav-item nav-link" >4. Envoyer </a>
+    <a  [ngClass]="{'nav-item nav-link disable': showUploadForm === false, 'nav-item nav-link active': showUploadForm === true}" jhiTranslate="polySignApp.signatureProcess.creation.step1.title">1. Charger le document </a>
+    <a  [ngClass]="{'nav-item nav-link disable': showSignersForm === false, 'nav-item nav-link active': showSignersForm === true}" jhiTranslate="polySignApp.signatureProcess.creation.step2.title">2. Lister les signataires </a>
+    <a  class="nav-item nav-link" jhiTranslate="polySignApp.signatureProcess.creation.step3.title">3. Positionner les champs de signature</a>
+    <a  class="nav-item nav-link" jhiTranslate="polySignApp.signatureProcess.creation.step4.title">4. Envoyer </a>
 </nav>
 <div class="row justify-content-center">
-    <div class="col-8">
+    <div class="col-8" *ngIf="showUploadForm">
         <!--<div class="md-form">
             <input placeholder="Choose your organization of the signature" label="Example label" (ngModelChange)="getSelectedValue($event)" [ngModel]="selectedValue">
                 <mdb-select-option *ngFor="let organizationOption of organizations" [value]="organizationOption">{{ organizationOption.name }}</mdb-select-option>
 
         </div>-->
-        <select class="form-control" name="organization" [(ngModel)]="selectedValue" (change)="selected() ">
-            <option *ngFor="let organizationOption of organizations" [ngValue]="organizationOption">{{organizationOption.name}}</option>
-        </select>
+        <h4 class="text-info" id="jhi-signature-process-step1-heading" jhiTranslate="polySignApp.signatureProcess.step1.title">Load the PDF Document for signature</h4>
+        <br>
+        <div> <p jhiTranslate="polySignApp.signatureProcess.selectOrganization"> Select the organization for the signature process</p>
+            <select class="form-control" name="organization" [(ngModel)]="selectedValue" (change)="selected() ">
+                <option *ngFor="let organizationOption of organizations" [ngValue]="organizationOption">{{organizationOption.name}}</option>
+            </select>
+        </div>
+        <br>
         <form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
-            <h4 class="text-info" id="jhi-signature-process-step1-heading" jhiTranslate="polySignApp.signatureProcess.step1.title">Load the PDF Document for signature</h4>
+
 
             <div>
                 <jhi-alert-error></jhi-alert-error>
@@ -57,9 +62,9 @@
                 </div>
 
                 <div class="form-group">
-                    <label class="form-control-label" jhiTranslate="polySignApp.signedFile.signingDate" for="field_signingDate">Signing Date</label>
+                    <label class="form-control-label" jhiTranslate="polySignApp.signedFile.startingDate" for="field_signingDate">Starting Date</label>
                     <div class="d-flex">
-                        <input id="field_signingDate" type="datetime-local" class="form-control" name="signingDate" formControlName="signingDate" placeholder="YYYY-MM-DD HH:mm"/>
+                        <input id="field_signingDate" type="datetime-local" class="form-control" name="signingDate" formControlName="signingDate" placeholder="YYYY-MM-DD HH:mm" readonly/>
                     </div>
                     <div *ngIf="editForm.get('signingDate')!.invalid && (editForm.get('signingDate')!.dirty || editForm.get('signingDate')!.touched)">
                         <small class="form-text text-danger"
@@ -82,7 +87,7 @@
                 </button>
 
                 <button type="submit" id="save-entity" [disabled]="editForm.invalid || isSaving" class="btn btn-primary">
-                    <fa-icon icon="save"></fa-icon>&nbsp;<span jhiTranslate="entity.action.save">Save</span>
+                    <span jhiTranslate="polySignApp.userEntity.button.next">Next</span>
                 </button>
             </div>
         </form>

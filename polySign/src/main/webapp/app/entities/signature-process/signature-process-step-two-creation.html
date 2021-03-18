@@ -87,15 +87,28 @@
             </div>
         </form>
     </div>
+    <!--<br>
+    <form>
+        <div class="form-group form-inline">
+            Search signer in the organization: <input class="form-control ml-2" type="text" [formControl]="filter"/>
+        </div>
+        <ul>
+            <li *ngFor="let USER of userEntities$ | async">
+                <p> {{ USER.firstname }}+" "+{{ USER.lastname}}</p>
+            </li>
+        </ul>
+    </form>
+    <br>-->
+
     <div class="col-8">
         <table class="table">
             <thead class="thead-dark">
             <tr>
                 <th> </th>
-                <th scope="col">Firstname</th>
-                <th scope="col">Lastname</th>
-                <th scope="col">Email</th>
-                <th scope="col">Phone</th>
+                <th scope="col" ><span jhiTranslate="polySignApp.userEntity.firstname">Firstname</span></th>
+                <th scope="col"><span jhiTranslate="polySignApp.userEntity.lastname">Lastname</span></th>
+                <th scope="col"><span jhiTranslate="polySignApp.userEntity.email">Email</span></th>
+                <th scope="col"><span jhiTranslate="polySignApp.userEntity.phone">Phone</span></th>
                 <th scope="col"> </th>
             </tr>
             </thead>
@@ -118,5 +131,11 @@
             </tr>
             </tbody>
         </table>
+        <div class="btn-group" (click)="next()">
+            <button type="button"
+                    class="btn btn-primary btn-sm pull-right">
+                <span class="d-none d-md-inline" jhiTranslate="polySignApp.userEntity.button.next">Next</span>
+            </button>
+        </div>
     </div>
 </div>

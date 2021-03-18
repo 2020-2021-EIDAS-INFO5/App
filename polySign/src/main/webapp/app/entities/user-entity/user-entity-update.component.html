@@ -1,6 +1,6 @@
 <nav class="nav nav-pills nav-justified">
-    <a  [ngClass]="{'nav-item nav-link disable': showUserForm === false, 'nav-item nav-link active': showUserForm === true}" >1. Créer un Utilisateur</a>
-    <a  [ngClass]="{'nav-item nav-link disable': showRoleForm === false, 'nav-item nav-link active': showRoleForm === true}" >2. Assigner son role à l'Organisation</a>
+    <a  [ngClass]="{'nav-item nav-link disable': showUserForm === false, 'nav-item nav-link active': showUserForm === true}" jhiTranslate="polySignApp.userEntity.creation.step1.title">1. Créer un Utilisateur</a>
+    <a  [ngClass]="{'nav-item nav-link disable': showRoleForm === false, 'nav-item nav-link active': showRoleForm === true}" jhiTranslate="polySignApp.userEntity.creation.step2.title">2. Assigner son role à l'Organisation</a>
 </nav>
 <div class="row justify-content-center">
     <div class="col-8" *ngIf="showUserForm">

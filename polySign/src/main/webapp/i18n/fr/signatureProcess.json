@@ -9,11 +9,26 @@
         "createOrEditLabel": "Créer ou éditer un Signature Process",
         "notFound": "Aucun Signature Process trouvé"
       },
+      "selectOrganization": "Sélectionner l'organisation pour le circuit de signature",
       "step1": {
         "title": "Charger le Document PDF pour la signature"
       },
       "step2": {
         "title": "Saisir les signataires"
+      },
+      "creation": {
+        "step1": {
+          "title": "1. Charger le document "
+        },
+        "step2": {
+          "title": "2. Lister les signataires"
+        },
+        "step3": {
+          "title": "3. Positionner les champs de signature"
+        },
+        "step4": {
+          "title": "4. Envoyer"
+        }
       },
       "created": "Un nouveau Signature Process a été créé avec l'identifiant {{ param }}",
       "updated": "Le Signature Process avec l'identifiant {{ param }} a été mis à jour",

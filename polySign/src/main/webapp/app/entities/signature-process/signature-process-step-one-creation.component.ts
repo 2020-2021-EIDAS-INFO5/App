@@ -23,7 +23,8 @@ import { OrganizationService } from '../organization/organization.service';
 })
 export class SignatureProcessStepOneCreationComponent implements OnInit {
   isSaving = false;
-
+  showUploadForm = true;
+  showSignersForm = false;
   organizations: IOrganization[] = [];
   selectedOrganization?: IOrganization;
   signedFileCreated?: ISignedFile;
@@ -52,19 +53,12 @@ export class SignatureProcessStepOneCreationComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    /* this.activatedRoute.data.subscribe(({ signedFile }) => {
-      if (!signedFile.id) {
-        const today = moment().startOf('day');
-        signedFile.signingDate = today;
-      }
-
-      this.updateForm(signedFile);*/
+    const today = moment().startOf('day');
+    this.updateForm(today);
     this.accountService.identity().subscribe(account => {
       this.account = account;
       this.organisationService.getMyOrganizationUserAndAdmin(this.account!.email).subscribe((res: HttpResponse<IOrganization[]>) => {
         this.organizations = res.body || [];
-        // eslint-disable-next-line no-console
-        console.log(res);
       });
     });
   }
@@ -73,15 +67,15 @@ export class SignatureProcessStepOneCreationComponent implements OnInit {
     this.selectedOrganization = this.selectedValue;
   }
 
-  updateForm(signedFile: ISignedFile): void {
+  updateForm(today: any): void {
     this.editForm.patchValue({
-      id: signedFile.id,
-      filename: signedFile.filename,
-      fileBytes: signedFile.fileBytes,
-      fileBytesContentType: signedFile.fileBytesContentType,
-      signingDate: signedFile.signingDate ? signedFile.signingDate.format(DATE_TIME_FORMAT) : null,
-      size: signedFile.size,
-      sha256: signedFile.sha256,
+      id: null,
+      filename: undefined,
+      fileBytes: null,
+      fileBytesContentType: undefined,
+      signingDate: today ? today.format(DATE_TIME_FORMAT) : null,
+      size: null,
+      sha256: undefined,
     });
   }
 
@@ -112,6 +106,7 @@ export class SignatureProcessStepOneCreationComponent implements OnInit {
     console.log(signedFile);
 
     this.subscribeToSaveResponse(this.signedFileService.createSignedFileAndSignatureProcess(signedFile));
+    this.showForm();
   }
 
   private createFromForm(): ISignedFile {
@@ -146,5 +141,15 @@ export class SignatureProcessStepOneCreationComponent implements OnInit {
 
   protected onSaveError(): void {
     this.isSaving = false;
+  }
+
+  showForm(): void {
+    this.showUploadForm = !this.showUploadForm;
+    this.showSignersForm = !this.showSignersForm;
+  }
+
+  onShowForm(showForm: { showUploadForm: boolean; showSignersForm: boolean }): void {
+    this.showUploadForm = showForm.showUploadForm;
+    this.showSignersForm = showForm.showSignersForm;
   }
 }

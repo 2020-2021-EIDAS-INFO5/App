@@ -23,13 +23,21 @@
         },
         "finish": "Terminer"
       },
+      "creation": {
+        "step1": {
+          "title": "1. Créer un Utilisateur"
+        },
+        "step2": {
+          "title": "2. Assigner son role à l'Organisation"
+        }
+      },
       "detail": {
         "title": "User Entity"
       },
-      "firstname": "Firstname",
-      "lastname": "Lastname",
-      "email": "Email",
-      "phone": "Phone",
+      "firstname": "Prénom",
+      "lastname": "Nom",
+      "email": "Mail",
+      "phone": "Téléphone",
       "user": "User",
       "signature": "Signature",
       "order": "Order",
