@@ -52,7 +52,7 @@ public class SignOrderService {
 
     private final AuthoritService authoritService;
 
-    public SignOrderService(SignOrderRepository signOrderRepository, SignedFileService signedFileService,
+    public SignOrderService(SignOrderRepository signOrderRepository, @Lazy SignedFileService signedFileService,
             SignatureProcessRepository signatureProcessRepository, UserEntityRepository userEntityRepository,
             @Lazy UserEntityService userEntityService,OrganizationService organizationService,AuthoritService authoritService) {
         this.signOrderRepository = signOrderRepository;
@@ -145,16 +145,13 @@ public class SignOrderService {
     public SignOrder createSignOrderForUser(Long signedFileID, UserEntity userEntity1, Long organizationID) {
 
 
-        UserEntity userEntity=userEntity1;
+    	
 
-        String email = userEntity.getEmail();
-
-        if (userEntityRepository.findByEmail(email) == null) {
-            userEntity = userEntityService.saveSignature(userEntity);
-        }
-
-        else{
-             userEntity = userEntityService.findOne(userEntity.getId()).get();
+        String email = userEntity1.getEmail();
+        UserEntity userEntity = userEntityRepository.findByEmail(email);
+        
+        if (userEntity == null) {
+            userEntity = userEntityService.saveSignature(userEntity1);
         }
 
         //create role in oranization
