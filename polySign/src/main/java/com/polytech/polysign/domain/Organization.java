@@ -194,4 +194,7 @@ public class Organization implements Serializable {
             ", vatNumber='" + getVatNumber() + "'" +
             "}";
     }
+
+    public String toCSV() {return"\"" + getName() + "\"," +"\"" + getStreetAddress() + "\"," +"\"" + getPostalCode() + "\","
+    +"\"" + getCity() + "\","+"\"" + getCountry() + "\","+"\"" + getVatNumber()+ "\"";}
 }

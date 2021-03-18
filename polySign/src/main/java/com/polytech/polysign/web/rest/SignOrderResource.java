@@ -1,6 +1,7 @@
 package com.polytech.polysign.web.rest;
 
 import com.polytech.polysign.domain.SignOrder;
+import com.polytech.polysign.domain.UserEntity;
 import com.polytech.polysign.service.SignOrderService;
 import com.polytech.polysign.web.rest.errors.BadRequestAlertException;
 
@@ -38,6 +39,8 @@ public class SignOrderResource {
     private String applicationName;
 
     private final SignOrderService signOrderService;
+
+
 
     public SignOrderResource(SignOrderService signOrderService) {
         this.signOrderService = signOrderService;
@@ -122,4 +125,51 @@ public class SignOrderResource {
         signOrderService.delete(id);
         return ResponseEntity.noContent().headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString())).build();
     }
+
+
+      /**
+     * {@code GET  /sign-orders} : get all the signOrders by username.
+     *
+     * @param pageable the pagination information.
+     * @param username the pagination information.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of signOrders in body.
+     */
+  /*  @GetMapping("/sign-orders/ofUser/{username}")
+    public ResponseEntity<List<SignOrder>> getAllSignOrdersOfUser(Pageable pageable, @PathVariable String username) {
+        log.debug("REST request to get a page of SignOrders");
+        Page<SignOrder> page = signOrderService.findAllSignatureOfSigner(pageable, username);
+        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
+        return ResponseEntity.ok().headers(headers).body(page.getContent());
+    }*/
+
+
+      /**
+     * {@code GET  /sign-orders} : get all the signOrders by username.
+     *
+     * @param username the pagination information.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of signOrders in body.
+     */
+    @GetMapping("/sign-orders/ofUser/{username}")
+    public List<SignOrder> getAllSignOrdersOfUserTest(@PathVariable String username) {
+        log.debug("REST request to get a page of SignOrders");
+        return  signOrderService.findAllSignatureOfSigner(username);
+    }
+
+    /**
+     * {@code POST  /sign-orders} : Create a new signOrder.
+     *
+     * @param signOrder the signOrder to create.
+     * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new signOrder, or with status {@code 400 (Bad Request)} if the signOrder has already an ID.
+     * @throws URISyntaxException if the Location URI syntax is incorrect.
+     */
+    @PostMapping("/sign-orders/createSignOrderForUserEntity/{signedFileID}/organizationID/{organizationID}")
+    public ResponseEntity<SignOrder> createSignOrderForUserEntity(@RequestBody UserEntity userEntity, @PathVariable Long signedFileID, @PathVariable Long organizationID) throws URISyntaxException {
+
+        SignOrder result = signOrderService.createSignOrderForUser(signedFileID, userEntity,organizationID);
+
+        return ResponseEntity.created(new URI("/api/sign-orders/" + result.getId()))
+            .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getId().toString()))
+            .body(result);
+    }
+
 }

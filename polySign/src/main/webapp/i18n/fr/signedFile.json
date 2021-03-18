@@ -16,9 +16,10 @@
       "detail": {
         "title": "Signed File"
       },
-      "filename": "Filename",
-      "fileBytes": "File Bytes",
+      "filename": "Nom",
+      "fileBytes": "Taille du fichier",
       "signingDate": "Signing Date",
+      "startingDate": "Date de Début",
       "size": "Size",
       "sha256": "Sha 256"
     }

@@ -1,6 +1,14 @@
 package com.polytech.polysign.web.rest;
 
+import com.polytech.polysign.domain.Authorit;
+import com.polytech.polysign.domain.Organization;
+import com.polytech.polysign.domain.SignOrder;
 import com.polytech.polysign.domain.UserEntity;
+import com.polytech.polysign.repository.UserEntityRepository;
+import com.polytech.polysign.service.AuthoritService;
+import com.polytech.polysign.service.OrganizationService;
+import com.polytech.polysign.service.SignOrderService;
+import com.polytech.polysign.service.SignedFileService;
 import com.polytech.polysign.service.UserEntityService;
 import com.polytech.polysign.web.rest.errors.BadRequestAlertException;
 
@@ -13,7 +21,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -35,13 +42,21 @@ public class UserEntityResource {
 
     private static final String ENTITY_NAME = "userEntity";
 
+    private final UserEntityRepository userEntityRepository;
+
+    private final SignOrderService signOrderService;
+
+    private final AuthoritService authoritService;
+
     @Value("${jhipster.clientApp.name}")
     private String applicationName;
 
     private final UserEntityService userEntityService;
-
-    public UserEntityResource(UserEntityService userEntityService) {
+    public UserEntityResource(UserEntityService userEntityService, AuthoritService authoritService,SignOrderService signOrderService,UserEntityRepository userEntityRepository) {
         this.userEntityService = userEntityService;
+        this.authoritService = authoritService;
+        this.signOrderService =signOrderService;
+        this.userEntityRepository=userEntityRepository;
     }
 
     /**
@@ -51,7 +66,7 @@ public class UserEntityResource {
      * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new userEntity, or with status {@code 400 (Bad Request)} if the userEntity has already an ID.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
-    @PostMapping("/user-entities")
+   @PostMapping("/user-entities")
     public ResponseEntity<UserEntity> createUserEntity(@Valid @RequestBody UserEntity userEntity) throws URISyntaxException {
         log.debug("REST request to save UserEntity : {}", userEntity);
         if (userEntity.getId() != null) {
@@ -62,6 +77,8 @@ public class UserEntityResource {
             .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getId().toString()))
             .body(result);
     }
+
+
 
     /**
      * {@code PUT  /user-entities} : Updates an existing userEntity.
@@ -99,10 +116,10 @@ public class UserEntityResource {
     }
 
     /**
-     * {@code GET  /user-entities/:id} : get the "id" userEntity.
+     * {@code GET  /user-entities} : get all the userEntities.
      *
-     * @param id the id of the userEntity to retrieve.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the userEntity, or with status {@code 404 (Not Found)}.
+     * @param pageable the pagination information.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of userEntities in body.
      */
     @GetMapping("/user-entities/{id}")
     public ResponseEntity<UserEntity> getUserEntity(@PathVariable Long id) {
@@ -122,5 +139,34 @@ public class UserEntityResource {
         log.debug("REST request to delete UserEntity : {}", id);
         userEntityService.delete(id);
         return ResponseEntity.noContent().headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString())).build();
+    }
+
+
+        /**
+     * {@code DELETE  /user-entities/:id} : delete the "id" userEntity.
+     *
+     * @param id the id of the userEntity to delete.
+     * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
+     */
+    @DeleteMapping("/user-entities/idToDelete/{id}/username/{username}")
+    public ResponseEntity<Void> deleteUserEntityByUsername(@PathVariable Long id, @PathVariable String username) {
+        log.debug("REST request to delete UserEntity : {}", id);
+        userEntityService.deleteTest(id, username);
+        return ResponseEntity.noContent().headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString())).build();
+    }
+
+        /**
+     * {@code GET  /students/export} : Return a CSV containeing Students informations.
+     *
+     * @return the {@link ResponseEntity} with status {@code 200 (OK) and with body a String containg the student list in CSV}
+     */
+    @GetMapping("/user-entities/export")
+    public String exportAllUserEntities() {
+        log.debug("GET request to export Students");
+        String exportString = "\"first_name\",\"last_name\",\"email\",\"phone\"\n";
+        List<UserEntity> userEntities = userEntityRepository.findAll();
+        for (UserEntity userEntity: userEntities)
+            exportString += userEntity.toCSV() + "\n";
+        return exportString;
     }
 }

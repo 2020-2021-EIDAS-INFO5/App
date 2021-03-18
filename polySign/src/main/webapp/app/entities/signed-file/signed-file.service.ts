@@ -14,13 +14,20 @@ type EntityArrayResponseType = HttpResponse<ISignedFile[]>;
 @Injectable({ providedIn: 'root' })
 export class SignedFileService {
   public resourceUrl = SERVER_API_URL + 'api/signed-files';
-
+  public resourceUrlSignature = SERVER_API_URL + 'api/signed-files/createSignedFileAndSignatureProcess';
   constructor(protected http: HttpClient) {}
 
   create(signedFile: ISignedFile): Observable<EntityResponseType> {
     const copy = this.convertDateFromClient(signedFile);
     return this.http
       .post<ISignedFile>(this.resourceUrl, copy, { observe: 'response' })
+      .pipe(map((res: EntityResponseType) => this.convertDateFromServer(res)));
+  }
+
+  createSignedFileAndSignatureProcess(signedFile: ISignedFile): Observable<EntityResponseType> {
+    const copy = this.convertDateFromClient(signedFile);
+    return this.http
+      .post<ISignedFile>(this.resourceUrlSignature, copy, { observe: 'response' })
       .pipe(map((res: EntityResponseType) => this.convertDateFromServer(res)));
   }
 

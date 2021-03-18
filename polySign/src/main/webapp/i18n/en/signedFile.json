@@ -19,6 +19,7 @@
       "filename": "Filename",
       "fileBytes": "File Bytes",
       "signingDate": "Signing Date",
+      "startingDate": "Starting Date",
       "size": "Size",
       "sha256": "Sha 256"
     }

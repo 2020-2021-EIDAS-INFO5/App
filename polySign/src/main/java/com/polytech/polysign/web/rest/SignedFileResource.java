@@ -19,6 +19,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import javax.websocket.server.PathParam;
+
+import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
@@ -58,6 +61,26 @@ public class SignedFileResource {
             throw new BadRequestAlertException("A new signedFile cannot already have an ID", ENTITY_NAME, "idexists");
         }
         SignedFile result = signedFileService.save(signedFile);
+        return ResponseEntity.created(new URI("/api/signed-files/" + result.getId()))
+            .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getId().toString()))
+            .body(result);
+    }
+
+
+        /**
+     * {@code POST  /signed-files} : Create a new signedFile.
+     *
+     * @param signedFile the signedFile to create.
+     * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new signedFile, or with status {@code 400 (Bad Request)} if the signedFile has already an ID.
+     * @throws URISyntaxException if the Location URI syntax is incorrect.
+     */
+    @PostMapping("/signed-files/createSignedFileAndSignatureProcess")
+    public ResponseEntity<SignedFile> createSignedFileAndSignatureProcess(@Valid @RequestBody SignedFile signedFile) throws URISyntaxException {
+        log.debug("REST request to save SignedFile : {}", signedFile);
+        if (signedFile.getId() != null) {
+            throw new BadRequestAlertException("A new signedFile cannot already have an ID", ENTITY_NAME, "idexists");
+        }
+        SignedFile result = signedFileService.saveSignedFileAndSignatureProcess(signedFile);
         return ResponseEntity.created(new URI("/api/signed-files/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getId().toString()))
             .body(result);
@@ -116,6 +139,7 @@ public class SignedFileResource {
      *
      * @param id the id of the signedFile to delete.
      * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
+     * @throws Exception 
      */
     @DeleteMapping("/signed-files/{id}")
     public ResponseEntity<Void> deleteSignedFile(@PathVariable Long id) {
@@ -123,4 +147,18 @@ public class SignedFileResource {
         signedFileService.delete(id);
         return ResponseEntity.noContent().headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString())).build();
     }
+
+
+
+    /**
+     * {@code GET  /signed-files/signCertificate/singOrderId/{id}/userId/{userId}: sign the file of the given signOrder by the user given by his id 
+     *
+     * @param id the id of the signOrder to sign and the id of the user who signs
+     * @throws Exception 
+     */
+    @GetMapping("/signed-files/signCertificate/singOrderId/{id}/userId/{userId}")
+    public void signCertificate(@PathVariable Long id,@PathVariable Long userId) throws Exception {
+        signedFileService.certificateCreation(id,userId);
+    }
+    
 }

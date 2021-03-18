@@ -1,22 +1,29 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { HttpResponse } from '@angular/common/http';
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
-import { Observable } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 
 import { IUserEntity, UserEntity } from 'app/shared/model/user-entity.model';
 import { UserEntityService } from './user-entity.service';
 import { IUser } from 'app/core/user/user.model';
 import { UserService } from 'app/core/user/user.service';
+import { AuthoritService } from '../authorit/authorit.service';
+import { JhiEventManager } from 'ng-jhipster';
 
 @Component({
   selector: 'jhi-user-entity-update',
   templateUrl: './user-entity-update.component.html',
 })
-export class UserEntityUpdateComponent implements OnInit {
+export class UserEntityUpdateComponent implements OnInit, OnDestroy {
   isSaving = false;
+  isSavingRole = false;
+  showUserForm = true;
+  showRoleForm = false;
+  eventSubscriber?: Subscription;
   users: IUser[] = [];
+  userEntities: IUserEntity[] = [];
 
   editForm = this.fb.group({
     id: [],
@@ -30,8 +37,10 @@ export class UserEntityUpdateComponent implements OnInit {
   constructor(
     protected userEntityService: UserEntityService,
     protected userService: UserService,
+    private authoritService: AuthoritService,
     protected activatedRoute: ActivatedRoute,
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    private eventManager: JhiEventManager
   ) {}
 
   ngOnInit(): void {
@@ -57,14 +66,21 @@ export class UserEntityUpdateComponent implements OnInit {
     window.history.back();
   }
 
+  registerChangeInUserEntities(): void {
+    this.eventSubscriber = this.eventManager.subscribe('userEntityListModification', () => {});
+  }
+
   save(): void {
     this.isSaving = true;
     const userEntity = this.createFromForm();
+
     if (userEntity.id !== undefined) {
       this.subscribeToSaveResponse(this.userEntityService.update(userEntity));
     } else {
       this.subscribeToSaveResponse(this.userEntityService.create(userEntity));
     }
+
+    this.showForm();
   }
 
   private createFromForm(): IUserEntity {
@@ -88,14 +104,41 @@ export class UserEntityUpdateComponent implements OnInit {
 
   protected onSaveSuccess(): void {
     this.isSaving = false;
-    this.previousState();
+    // this.previousState();
+    // retrieve the array of users after we added a user with the user creation step
+    this.userEntityService.query().subscribe((res: HttpResponse<IUserEntity[]>) => {
+      this.userEntities = res.body || [];
+      this.userEntities = this.userEntities.filter(
+        u => u.firstname === this.editForm.get(['firstname'])!.value && u.phone === this.editForm.get(['phone'])!.value
+      );
+    });
   }
 
   protected onSaveError(): void {
     this.isSaving = false;
   }
 
+  /* trackById(index: number, item: IUser): any {
+    return item.id;
+  } */
+
+  ngOnDestroy(): void {
+    if (this.eventSubscriber) {
+      this.eventManager.destroy(this.eventSubscriber);
+    }
+  }
+
   trackById(index: number, item: IUser): any {
     return item.id;
+  }
+
+  showForm(): void {
+    this.showUserForm = !this.showUserForm;
+    this.showRoleForm = !this.showRoleForm;
+  }
+
+  onShowForm(showForm: { showUserForm: boolean; showRoleForm: boolean }): void {
+    this.showUserForm = showForm.showUserForm;
+    this.showRoleForm = showForm.showRoleForm;
   }
 }

@@ -8,6 +8,7 @@ import com.polytech.polysign.repository.UserRepository;
 import com.polytech.polysign.security.SecurityUtils;
 import com.polytech.polysign.service.dto.UserDTO;
 
+import net.minidev.json.JSONArray;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.cache.CacheManager;
@@ -138,7 +139,7 @@ public class UserService {
      * @return the user from the authentication.
      */
     @Transactional
-    public UserDTO getUserFromAuthentication(AbstractAuthenticationToken authToken) {
+    public UserDTO getUserFromAuthentication(final AbstractAuthenticationToken authToken) {
         Map<String, Object> attributes;
         if (authToken instanceof OAuth2AuthenticationToken) {
             attributes = ((OAuth2AuthenticationToken) authToken).getPrincipal().getAttributes();
@@ -148,16 +149,19 @@ public class UserService {
             throw new IllegalArgumentException("AuthenticationToken is not OAuth2 or JWT!");
         }
         User user = getUser(attributes);
-        user.setAuthorities(authToken.getAuthorities().stream()
-            .map(GrantedAuthority::getAuthority)
-            .map(authority -> {
-                Authority auth = new Authority();
-                auth.setName(authority);
-                return auth;
-            })
-            .collect(Collectors.toSet()));
+
+        JSONArray auths =  (JSONArray) attributes.get("groups");
+        Set<Authority> authorities = new HashSet<Authority>();
+        for(int i=0; i<auths.size(); i++){
+            Authority  au = new Authority();
+            au.setName(auths.get(i).toString());
+            authorities.add(au);
+        }
+
+        user.setAuthorities(authorities);
         return new UserDTO(syncUserWithIdP(attributes, user));
     }
+
 
     private static User getUser(Map<String, Object> details) {
         User user = new User();

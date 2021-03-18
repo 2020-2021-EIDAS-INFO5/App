@@ -5,7 +5,8 @@
         "title": "UserEntities",
         "createLabel": "Créer un nouveau User Entity",
         "createOrEditLabel": "Créer ou éditer un User Entity",
-        "notFound": "Aucun User Entity trouvé"
+        "notFound": "Aucun User Entity trouvé",
+        "exportCSV": "Télécharger données"
       },
       "created": "Un nouveau User Entity a été créé avec l'identifiant {{ param }}",
       "updated": "Le User Entity avec l'identifiant {{ param }} a été mis à jour",
@@ -13,13 +14,30 @@
       "delete": {
         "question": "Etes-vous certain de vouloir supprimer le User Entity {{ id }} ?"
       },
+      "button": {
+        "add": "ajouter",
+        "next": "Suivant",
+        "previous": "Précédent",
+        "cancel": {
+          "question": "Êtes-vous certain de vouloir annuler la création de l'utilisateur"
+        },
+        "finish": "Terminer"
+      },
+      "creation": {
+        "step1": {
+          "title": "1. Créer un Utilisateur"
+        },
+        "step2": {
+          "title": "2. Assigner son role à l'Organisation"
+        }
+      },
       "detail": {
         "title": "User Entity"
       },
-      "firstname": "Firstname",
-      "lastname": "Lastname",
-      "email": "Email",
-      "phone": "Phone",
+      "firstname": "Prénom",
+      "lastname": "Nom",
+      "email": "Mail",
+      "phone": "Téléphone",
       "user": "User",
       "signature": "Signature",
       "order": "Order",

@@ -35,4 +35,12 @@ export class UserEntityService {
   delete(id: number): Observable<HttpResponse<{}>> {
     return this.http.delete(`${this.resourceUrl}/${id}`, { observe: 'response' });
   }
+
+  deleteUserEntityByUsername(id: number, username: string): Observable<HttpResponse<{}>> {
+    return this.http.delete(`${this.resourceUrl}/idToDelete/${id}/username/${username}`, { observe: 'response' });
+  }
+
+  export(): Observable<Blob> {
+    return this.http.get(`${this.resourceUrl}/export`, { responseType: 'blob' });
+  }
 }
