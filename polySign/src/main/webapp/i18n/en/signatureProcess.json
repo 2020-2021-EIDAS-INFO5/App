@@ -3,9 +3,32 @@
     "signatureProcess": {
       "home": {
         "title": "Signature Processes",
+        "creation": "Creation",
         "createLabel": "Create a new Signature Process",
+        "createLabelCollection": "New Collection",
         "createOrEditLabel": "Create or edit a Signature Process",
         "notFound": "No Signature Processes found"
+      },
+      "selectOrganization": "Select the organization for the signature process",
+      "step1": {
+        "title": "Load the PDF Document for signature"
+      },
+      "step2": {
+        "title": "Enter signers"
+      },
+      "creation": {
+        "step1": {
+          "title": "1. Load the Document"
+        },
+        "step2": {
+          "title": "2. Add signers "
+        },
+        "step3": {
+          "title": "3. Place signing fields for the signature"
+        },
+        "step4": {
+          "title": "4. Send"
+        }
       },
       "created": "A new Signature Process is created with identifier {{ param }}",
       "updated": "A Signature Process is updated with identifier {{ param }}",

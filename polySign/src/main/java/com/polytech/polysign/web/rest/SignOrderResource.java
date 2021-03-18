@@ -126,7 +126,7 @@ public class SignOrderResource {
         return ResponseEntity.noContent().headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString())).build();
     }
 
-    
+
       /**
      * {@code GET  /sign-orders} : get all the signOrders by username.
      *
@@ -146,7 +146,6 @@ public class SignOrderResource {
       /**
      * {@code GET  /sign-orders} : get all the signOrders by username.
      *
-     * @param pageable the pagination information.
      * @param username the pagination information.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of signOrders in body.
      */

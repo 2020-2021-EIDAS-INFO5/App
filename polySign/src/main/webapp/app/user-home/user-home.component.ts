@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { HttpHeaders, HttpResponse } from '@angular/common/http';
-import { ActivatedRoute, ParamMap, Router, Data } from '@angular/router';
-import { Subscription, combineLatest } from 'rxjs';
+import { HttpResponse } from '@angular/common/http';
+import { ActivatedRoute, Router } from '@angular/router';
+import { Subscription } from 'rxjs';
 import { JhiEventManager } from 'ng-jhipster';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
@@ -94,13 +94,7 @@ export class UserHomeComponent implements OnInit, OnDestroy {
   }
 
   retrieveAllSignatureProcess(): void {
-    this.signatureProcessService.query().subscribe(
-      (res: HttpResponse<ISignatureProcess[]>) => (
-        (this.signatureProcesses = res.body || []),
-        // eslint-disable-next-line no-console
-        console.log(this.signatureProcesses)
-      )
-    );
+    this.signatureProcessService.query().subscribe((res: HttpResponse<ISignatureProcess[]>) => (this.signatureProcesses = res.body || []));
   }
 
   sort(): string[] {
@@ -132,11 +126,5 @@ export class UserHomeComponent implements OnInit, OnDestroy {
 
   protected onError(): void {
     this.ngbPaginationPage = this.page ?? 1;
-  }
-
-  // check if data used for the display are not empty
-
-  notEmpty(data: ISignatureProcess[]): boolean {
-    return data.length !== 0;
   }
 }

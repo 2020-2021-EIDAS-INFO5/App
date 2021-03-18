@@ -1,5 +1,6 @@
 <div class="row justify-content-center">
     <div class="col-8">
+        <!--<canvas #canvas></canvas>-->
         <div *ngIf="signedFile">
             <h2><span jhiTranslate="polySignApp.signedFile.detail.title">Signed File</span> {{ signedFile.id }}</h2>
 
@@ -33,17 +34,61 @@
                 </dd>
             </dl>
 
-            <button type="submit"
+            <div class="row">
+                <div class="col-md-12">
+                    <ngx-extended-pdf-viewer
+                        [base64Src]="signedFile.fileBytes"
+                        backgroundColor="#ffffff"
+                        [height]="'80vh'"
+                        [useBrowserLocale]="true"
+                        [handTool]="false"
+                        [showHandToolButton]="true"> </ngx-extended-pdf-viewer>
+                </div>
+               </div>
+            
+
+
+            <div>
+            <button class="btn btn-primary" mat-stroked-button color="primary" [disabled]="pageNum<=1" (click)="onClickPreviousePage()">Page précédente</button>
+            <span  mat-stroked-button>{{pageNum}}/{{totalPageNum}}</span>
+            <button class="btn btn-primary" color="accent" [disabled]="pageNum>=totalPageNum" (click)="onClickNextPage()">Page suivante</button>
+            </div> 
+
+        </div>
+  
+        <div class="row">
+
+        <div >
+            <canvas #canvas class="dropzone" (dblclick)="storeGuess($event)" ></canvas>
+            <p>{{mouse}}</p>
+        </div>
+
+        <div cdkDrag class="example-box"
+        (cdkDragStarted)="dragStarted($event)"
+        (cdkDragEnded)="dragEnded($event)"
+        (cdkDragMoved)="dragMoved($event)" >
+        <div *ngIf="isAuthenticated()" >
+             <span  *ngIf="account"  > {{ account.firstName}} </span>
+        </div>
+    </div>
+    <p>{{state}} {{position}}</p>
+    </div>  
+        <div>
+
+
+        <button type="submit"
                     (click)="previousState()"
                     class="btn btn-info">
                 <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back">Back</span>
-            </button>
+         </button>
 
             <button type="button"
-                    [routerLink]="['/signed-file', signedFile.id, 'edit']"
+                    [routerLink]="['/signed-file', 'signedFile.id', 'edit']"
                     class="btn btn-primary">
                 <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit">Edit</span>
             </button>
         </div>
+
     </div>
 </div>
+

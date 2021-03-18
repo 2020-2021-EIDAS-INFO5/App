@@ -5,7 +5,8 @@
         "title": "User Entities",
         "createLabel": "Create a new User Entity",
         "createOrEditLabel": "Create or edit a User Entity",
-        "notFound": "No User Entities found"
+        "notFound": "No User Entities found",
+        "exportCSV": "Download data"
       },
       "created": "A new User Entity is created with identifier {{ param }}",
       "updated": "A User Entity is updated with identifier {{ param }}",
@@ -14,12 +15,21 @@
         "question": "Are you sure you want to delete User Entity {{ id }}?"
       },
       "button": {
+        "add": "add",
         "next": "Next",
         "previous": "Previous",
         "cancel": {
           "question": "Are you sure you want to cancel the user creation"
         },
         "finish": "Finish"
+      },
+      "creation": {
+        "step1": {
+          "title": "Create a user"
+        },
+        "step2": {
+          "title": "Assign role to organization"
+        }
       },
       "detail": {
         "title": "User Entity"

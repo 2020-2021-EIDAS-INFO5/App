@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
-import { ActivatedRoute, NavigationStart, Event as NavigationEvent, Router, RouterEvent } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { UserEntityService } from './user-entity.service';
 import { UserService } from '../../core/user/user.service';
 import { Authorit, IAuthorit } from '../../shared/model/authorit.model';
@@ -65,7 +65,7 @@ export class UserOrganizationCreateComponent implements OnInit {
       this.account = account;
       // we retrieve the organization of the authenticated User
       this.organizationService
-        .getMyOrganization(this.account!.login)
+        .getMyOrganizationUserAndAdmin(this.account!.login)
         .subscribe((res: HttpResponse<IOrganization[]>) => (this.organizations = res.body || []));
     });
   }
