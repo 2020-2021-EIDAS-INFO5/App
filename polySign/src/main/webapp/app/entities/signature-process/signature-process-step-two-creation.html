@@ -132,8 +132,7 @@
             </tbody>
         </table>
         <div class="btn-group" (click)="next()">
-            <button type="button"
-                    class="btn btn-primary btn-sm pull-right">
+            <button type="button" class="btn btn-primary btn-sm pull-right" [routerLink]="['/signed-file/1/view']" >
                 <span class="d-none d-md-inline" jhiTranslate="polySignApp.userEntity.button.next">Next</span>
             </button>
         </div>
